@@ -6,9 +6,7 @@ package com.spbstu.android.game.states;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.Stack;
 
-
 public class GameStateManager {
-
     private Stack<State> states;
 
     public GameStateManager(){
