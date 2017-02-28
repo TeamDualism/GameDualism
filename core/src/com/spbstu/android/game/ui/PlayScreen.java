@@ -80,7 +80,7 @@ public class PlayScreen extends ScreenAdapter {
         leftButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("leftbutton.png"))));
         upButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("upbutton.png"))));
+                new TextureRegion(new Texture("upButton.png"))));
         pauseButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("pausebutton.png"))));
 
