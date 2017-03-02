@@ -6,10 +6,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -19,13 +24,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.Player;
 
 /**
  * @author shabalina-av
  */
 
 public class PlayScreen extends ScreenAdapter {
-    private final Game game;
+
+    private final GameDualism game;
     private final Stage stage = new Stage();
     private final Label label;
     private Button rightButton;
@@ -33,9 +40,22 @@ public class PlayScreen extends ScreenAdapter {
     private Button upButton;
     private Button pauseButton;
 
-    public PlayScreen(Game game) {
+    private SpriteBatch batch;
+    private World world;
+    //public Box2DDebugRenderer box2DDebugRenderer;
+    private Player player;
+
+    public PlayScreen(GameDualism game) {
         this.game = game;
-        stage.addActor(new Image(new Texture("back12.png")));
+
+        game.assetManager.load("Textures/character.png", Texture.class);
+        game.assetManager.finishLoading();
+
+        batch = new SpriteBatch();
+        world = new World(new Vector2(0, -9.8f), false);
+        player = new Player(3.2f, 3.2f * 12, 2.1f, world, game.assetManager);
+
+        //stage.addActor(new Image(new Texture("back12.png")));
         label = new Label("This is play mode", new Label.LabelStyle(new BitmapFont(), Color.RED));
         label.addListener(new ClickListener() {
             @Override
@@ -53,14 +73,14 @@ public class PlayScreen extends ScreenAdapter {
         actionButtons();
     }
 
-    public void actionButtons(){
+    public void actionButtons() {
 
         rightButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("rightbutton.png"))));
         leftButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("leftbutton.png"))));
-        upButton  = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("upbutton.png"))));
+        upButton = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("upButton.png"))));
         pauseButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("pausebutton.png"))));
 
@@ -106,8 +126,24 @@ public class PlayScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
+        world.step(1 / 60, 6, 2);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
         stage.act(delta);
         stage.draw();
+
+        batch.begin();
+        batch.draw(player.texture,
+                player.body.getPosition().x * 10 - player.texture.getWidth() / 2,
+                player.body.getPosition().y * 10 - player.texture.getHeight() / 2);
+        batch.end();
+    }
+
+    @Override
+    public void dispose() {
+        world.dispose();
+        //box2DDebugRenderer.dispose();
+        batch.dispose();
+        stage.dispose();
     }
 }
