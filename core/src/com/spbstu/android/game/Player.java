@@ -2,6 +2,7 @@ package com.spbstu.android.game;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -26,5 +27,21 @@ public class Player {
         shape.dispose();
 
         texture = assetManager.get("Textures/character.png", Texture.class);
+    }
+
+    public void moveRight() {
+        body.applyLinearImpulse(5f, 0, body.getPosition().x, body.getPosition().y, false);
+    }
+
+    public void moveLeft() {
+        body.applyLinearImpulse(-5f, 0, body.getPosition().x, body.getPosition().y, false);
+    }
+
+    public void jump() {
+        body.applyLinearImpulse(0, body.getMass() * 13.5f, body.getPosition().x, body.getPosition().y, false);
+    }
+
+    public void stop() {
+        body.setLinearVelocity(body.getLinearVelocity().x * 0.9f, body.getLinearVelocity().y);
     }
 }
