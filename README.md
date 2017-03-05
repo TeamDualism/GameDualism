@@ -4,4 +4,4 @@
 Стандартная установка.
 После установки выбрать "Открыть проект" и указать build.gradle.
 
-[Grotto Escape II - Environment](http://opengameart.org/content/grotto-escape-ii-environment) created by [Luis Zuno](ansimuz.com) is licensed under CC-BY-3.0
+[Grotto Escape II - Environment](http://opengameart.org/content/grotto-escape-ii-environment) created by [Luis Zuno](http://ansimuz.com) is licensed under CC-BY-3.0
