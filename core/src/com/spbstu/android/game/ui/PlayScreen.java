@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -32,6 +35,9 @@ import com.spbstu.android.game.Player;
 
 public class PlayScreen extends ScreenAdapter {
 
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+
     private final GameDualism game;
     private final Stage stage = new Stage();
     private final Label label;
@@ -47,6 +53,9 @@ public class PlayScreen extends ScreenAdapter {
 
     public PlayScreen(GameDualism game) {
         this.game = game;
+
+        map = new TmxMapLoader().load("Maps/Level-1.tmx");
+        renderer= new OrthogonalTiledMapRenderer(map);
 
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.finishLoading();
@@ -128,6 +137,8 @@ public class PlayScreen extends ScreenAdapter {
     public void render(float delta) {
         world.step(1 / 60, 6, 2);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        renderer.render();
 
         stage.act(delta);
         stage.draw();
