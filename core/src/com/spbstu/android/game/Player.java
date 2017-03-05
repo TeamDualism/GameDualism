@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Player {
 
-    final float maxVelocity = 7f;
+    public final float maxVelocity = 7f;
 
     public Texture texture;
     public Body body;
@@ -35,7 +35,7 @@ public class Player {
         body.applyLinearImpulse(3f, 0, body.getPosition().x, body.getPosition().y, false);
 
         if (Math.abs(body.getLinearVelocity().x) > maxVelocity) {
-            body.setLinearVelocity((body.getLinearVelocity().x) * maxVelocity, body.getLinearVelocity().y);
+            body.setLinearVelocity(Math.signum(body.getLinearVelocity().x) * maxVelocity, body.getLinearVelocity().y);
         }
     }
 
@@ -43,7 +43,7 @@ public class Player {
         body.applyLinearImpulse(-3f, 0, body.getPosition().x, body.getPosition().y, false);
 
         if (Math.abs(body.getLinearVelocity().x) > maxVelocity) {
-            body.setLinearVelocity((body.getLinearVelocity().x) * maxVelocity, body.getLinearVelocity().y);
+            body.setLinearVelocity(Math.signum(body.getLinearVelocity().x) * maxVelocity, body.getLinearVelocity().y);
         }
     }
 

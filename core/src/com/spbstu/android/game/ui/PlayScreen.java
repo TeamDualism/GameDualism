@@ -8,6 +8,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
 
 /**
@@ -46,23 +48,32 @@ public class PlayScreen extends ScreenAdapter {
     private Button upButton;
     private Button pauseButton;
 
+    private OrthographicCamera camera;
+
     private SpriteBatch batch;
     private World world;
-    //public Box2DDebugRenderer box2DDebugRenderer;
+    public Box2DDebugRenderer box2DDebugRenderer;
     private Player player;
 
     public PlayScreen(GameDualism game) {
         this.game = game;
 
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth() / 3.5f, Gdx.graphics.getHeight() / 3.5f);
+
         map = new TmxMapLoader().load("Maps/Level-1.tmx");
         renderer= new OrthogonalTiledMapRenderer(map);
+
+        box2DDebugRenderer = new Box2DDebugRenderer();
 
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.finishLoading();
 
         batch = new SpriteBatch();
-        world = new World(new Vector2(0, -9.8f), false);
-        player = new Player(3.2f, 3.2f * 12, 2.1f, world, game.assetManager);
+        world = new World(new Vector2(0, -20f), false);
+        player = new Player(0.8f, 0.8f + 1.6f * 3, 1.5f, world, game.assetManager);
+
+        MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
 
         //stage.addActor(new Image(new Texture("back12.png")));
         label = new Label("This is play mode", new Label.LabelStyle(new BitmapFont(), Color.RED));
@@ -99,6 +110,7 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("rightButton is clicked");
+                //player.moveRight();
             }
         });
         stage.addActor(leftButton);
@@ -107,6 +119,7 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("leftButton is clicked");
+                player.moveLeft();
             }
         });
         stage.addActor(upButton);
@@ -115,6 +128,8 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("upButton is clicked");
+                player.jump();
+
             }
         });
         stage.addActor(pauseButton);
@@ -134,13 +149,22 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     @Override
-    public void render(float delta) {
-        world.step(1 / 60, 6, 2);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, width / 3.5f, height / 3.5f);
+    }
 
+    @Override
+    public void render(float delta) {
+        inputUpdate(delta);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        cameraUpdate();
+        batch.setProjectionMatrix(camera.combined);
+
+        renderer.setView(camera);
         renderer.render();
 
         stage.act(delta);
+        world.step(delta, 6, 2);
         stage.draw();
 
         batch.begin();
@@ -148,13 +172,35 @@ public class PlayScreen extends ScreenAdapter {
                 player.body.getPosition().x * 10 - player.texture.getWidth() / 2,
                 player.body.getPosition().y * 10 - player.texture.getHeight() / 2);
         batch.end();
+
+        box2DDebugRenderer.render(world, camera.combined.scl(10));
     }
 
     @Override
     public void dispose() {
         world.dispose();
-        //box2DDebugRenderer.dispose();
+        box2DDebugRenderer.dispose();
         batch.dispose();
         stage.dispose();
     }
+
+    private void cameraUpdate() {
+        camera.position.set(player.body.getPosition().x * 10f, player.body.getPosition().y * 10f, camera.position.z);
+        camera.update();
+    }
+
+    public void inputUpdate(float delta) {
+        if (!((ImageButton)stage.getActors().get(1)).isPressed() && !((ImageButton)stage.getActors().get(2)).isPressed()) {
+            player.stop();
+        }
+
+        if (((ImageButton)stage.getActors().get(1)).isPressed()) {
+            player.moveRight();
+        }
+
+        if (((ImageButton)stage.getActors().get(2)).isPressed()) {
+            player.moveLeft();
+        }
+    }
 }
+
