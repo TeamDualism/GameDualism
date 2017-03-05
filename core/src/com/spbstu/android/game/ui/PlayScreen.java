@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
 
 /**
@@ -51,7 +52,7 @@ public class PlayScreen extends ScreenAdapter {
 
     private SpriteBatch batch;
     private World world;
-    //public Box2DDebugRenderer box2DDebugRenderer;
+    public Box2DDebugRenderer box2DDebugRenderer;
     private Player player;
 
     public PlayScreen(GameDualism game) {
@@ -63,12 +64,16 @@ public class PlayScreen extends ScreenAdapter {
         map = new TmxMapLoader().load("Maps/Level-1.tmx");
         renderer= new OrthogonalTiledMapRenderer(map);
 
+        box2DDebugRenderer = new Box2DDebugRenderer();
+
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.finishLoading();
 
         batch = new SpriteBatch();
-        world = new World(new Vector2(0, -9.8f), false);
+        world = new World(new Vector2(0, -20f), false);
         player = new Player(0.8f, 0.8f + 1.6f * 3, 1.5f, world, game.assetManager);
+
+        MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
 
         //stage.addActor(new Image(new Texture("back12.png")));
         label = new Label("This is play mode", new Label.LabelStyle(new BitmapFont(), Color.RED));
@@ -162,12 +167,14 @@ public class PlayScreen extends ScreenAdapter {
                 player.body.getPosition().x * 10 - player.texture.getWidth() / 2,
                 player.body.getPosition().y * 10 - player.texture.getHeight() / 2);
         batch.end();
+
+        box2DDebugRenderer.render(world, camera.combined.scl(10));
     }
 
     @Override
     public void dispose() {
         world.dispose();
-        //box2DDebugRenderer.dispose();
+        box2DDebugRenderer.dispose();
         batch.dispose();
         stage.dispose();
     }
@@ -176,4 +183,5 @@ public class PlayScreen extends ScreenAdapter {
         camera.position.set(player.body.getPosition().x * 10f, player.body.getPosition().y * 10f, camera.position.z);
         camera.update();
     }
+
 }
