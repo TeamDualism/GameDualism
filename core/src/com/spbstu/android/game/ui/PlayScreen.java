@@ -110,6 +110,7 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("rightButton is clicked");
+                //player.moveRight();
             }
         });
         stage.addActor(leftButton);
@@ -118,6 +119,7 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("leftButton is clicked");
+                player.moveLeft();
             }
         });
         stage.addActor(upButton);
@@ -126,6 +128,8 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("upButton is clicked");
+                player.jump();
+
             }
         });
         stage.addActor(pauseButton);
@@ -151,7 +155,7 @@ public class PlayScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        world.step(1 / 60, 6, 2);
+        inputUpdate(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         cameraUpdate();
         batch.setProjectionMatrix(camera.combined);
@@ -160,6 +164,7 @@ public class PlayScreen extends ScreenAdapter {
         renderer.render();
 
         stage.act(delta);
+        world.step(delta, 6, 2);
         stage.draw();
 
         batch.begin();
@@ -184,4 +189,18 @@ public class PlayScreen extends ScreenAdapter {
         camera.update();
     }
 
+    public void inputUpdate(float delta) {
+        if (!((ImageButton)stage.getActors().get(1)).isPressed() && !((ImageButton)stage.getActors().get(2)).isPressed()) {
+            player.stop();
+        }
+
+        if (((ImageButton)stage.getActors().get(1)).isPressed()) {
+            player.moveRight();
+        }
+
+        if (((ImageButton)stage.getActors().get(2)).isPressed()) {
+            player.moveLeft();
+        }
+    }
 }
+
