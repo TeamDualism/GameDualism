@@ -32,11 +32,9 @@ public class MapParser {
 
     private static Shape createPolyLineObject(PolylineMapObject object) {
         float verticies[] = object.getPolyline().getTransformedVertices();
-
         for (int i = 0; i < verticies.length; i++) {
             verticies[i] /= 10;
         }
-
         ChainShape shape = new ChainShape();
         shape.createChain(verticies);
 
