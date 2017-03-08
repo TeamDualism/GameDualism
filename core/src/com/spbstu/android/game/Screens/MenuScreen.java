@@ -1,4 +1,4 @@
-package com.spbstu.android.game.ui;
+package com.spbstu.android.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -20,7 +20,6 @@ import com.spbstu.android.game.GameDualism;
 
 public class MenuScreen implements Screen {
     private final Stage stage;
-
     public MenuScreen(final GameDualism game) {
         Button button = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("startbutton.png"))));
@@ -31,7 +30,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked");
-                game.setScreen(new PlayScreen(game));
+                game.setScreen(new Level1Screen(game));
             }
         });
     }
