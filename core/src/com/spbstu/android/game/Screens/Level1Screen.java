@@ -46,7 +46,9 @@ public class Level1Screen extends ScreenAdapter {
     private Button menuButton;
     private static Boolean isItPause = false;
     private OrthographicCamera camera;
-
+    private final int height = Gdx.graphics.getHeight();
+    private final int width = Gdx.graphics.getWidth();
+    private int maxButtonsSize = height/6; // не размер, а коэффициент!
     private SpriteBatch batch;
     private World world;
     public Box2DDebugRenderer box2DDebugRenderer;
@@ -68,29 +70,37 @@ public class Level1Screen extends ScreenAdapter {
         actionButtons();
     }
 
+
+    public void maxButtonsSizeDeterminate(){// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
+        if (maxButtonsSize > leftButton.getWidth())
+            maxButtonsSize = (int)leftButton.getWidth();
+    }
+
     public void actionButtons() {
 
         rightButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("rightbutton.png"))));
+                new TextureRegion(new Texture("rightbutton1.png"))));
         leftButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("leftbutton.png"))));
+                new TextureRegion(new Texture("leftbutton1.png"))));
         upButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("upButton.png"))));
+                new TextureRegion(new Texture("upButton1.png"))));
         pauseButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("pausebutton.png"))));
+                new TextureRegion(new Texture("pausebutton1.png"))));
         playButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("playbutton.png"))));
+                new TextureRegion(new Texture("playbutton1.png"))));
         menuButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("menubutton.png"))));
-
+                new TextureRegion(new Texture("menubutton1.png"))));
+        maxButtonsSizeDeterminate();
         stage.addActor(rightButton);
-        rightButton.setPosition(85, 25);// могут быть проблемы с портом на разные устройства(*)
+
+
+        rightButton.setBounds(width/10 + maxButtonsSize/2, maxButtonsSize/4,maxButtonsSize,maxButtonsSize);
 
         stage.addActor(leftButton);
-        leftButton.setPosition(0, 25);
-
+        leftButton.setBounds( width/10 - maxButtonsSize*3/4 ,maxButtonsSize/4, maxButtonsSize, maxButtonsSize);
         stage.addActor(upButton);
-        upButton.setPosition(GameDualism.WIDTH - 100, 25);
+        upButton.setBounds( width - maxButtonsSize*3/2 ,maxButtonsSize/4, maxButtonsSize, maxButtonsSize);
+
         upButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -99,11 +109,11 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(playButton);
-        playButton.setPosition((GameDualism.WIDTH - playButton.getWidth()) / 2, (GameDualism.HEIGHT - playButton.getHeight()) * 3 / 4);
+        playButton.setBounds((width - maxButtonsSize*3/4) / 2, (height -  maxButtonsSize*3/4) * 3 / 4, maxButtonsSize*3/4, maxButtonsSize*3/4);
         playButton.setVisible(false);
 
         stage.addActor(pauseButton);
-        pauseButton.setPosition(GameDualism.WIDTH - 70, GameDualism.HEIGHT - 70);
+        pauseButton.setBounds( width - maxButtonsSize ,height - maxButtonsSize, maxButtonsSize*3/4, maxButtonsSize*3/4);
         pauseButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -113,7 +123,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(menuButton);
-        menuButton.setPosition(GameDualism.WIDTH - 70, GameDualism.HEIGHT - 70);
+        menuButton.setBounds( width - maxButtonsSize ,height - maxButtonsSize, maxButtonsSize*3/4, maxButtonsSize*3/4);
         menuButton.setVisible(false);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -216,7 +226,7 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     public void inputUpdate(float delta) {
-        if (!((ImageButton) stage.getActors().get(1)).isPressed() && !((ImageButton) stage.getActors().get(2)).isPressed()) {
+        if (!(rightButton.isPressed() && !(leftButton.isPressed()))) {
             player.stop();
         }
 
