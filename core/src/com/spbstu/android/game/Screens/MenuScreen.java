@@ -23,7 +23,6 @@ public class MenuScreen implements Screen {
     public MenuScreen(final GameDualism game) {
         Button button = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("startbutton.png"))));
-        button.setPosition((Gdx.graphics.getWidth() - button.getWidth()) / 2f, (Gdx.graphics.getHeight() - button.getHeight()) / 2f);
         stage = new Stage();
         stage.addActor(new Image(new Texture("back2.png")));
         stage.addActor(button);
