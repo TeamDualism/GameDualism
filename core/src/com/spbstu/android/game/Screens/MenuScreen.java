@@ -14,10 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 
-/**
- * @author shabalina-av
- */
-
 public class MenuScreen implements Screen {
     private final Stage stage;
     public MenuScreen(final GameDualism game) {
