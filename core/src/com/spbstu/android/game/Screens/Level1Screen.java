@@ -27,10 +27,6 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
 
-/**
- * @author shabalina-av
- */
-
 public class Level1Screen extends ScreenAdapter {
 
     private TiledMap map;
@@ -173,6 +169,22 @@ public class Level1Screen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false, width / 4.5f, height / 4.5f);
+
+        camera.position.set(player.body.getPosition().x * 10f, player.body.getPosition().y * 10f, camera.position.z);
+
+        if (player.body.getPosition().x - Gdx.graphics.getWidth() / (90f) < 0)
+            camera.position.set(Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
+
+        if (player.body.getPosition().x + Gdx.graphics.getWidth() / (90f) > map.getProperties().get("width", Integer.class) * 1.6f )
+            camera.position.set(map.getProperties().get("width", Integer.class) * 16f - Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
+
+        if (player.body.getPosition().y - Gdx.graphics.getHeight() / (90f) < 0)
+            camera.position.set(camera.position.x, Gdx.graphics.getHeight() / 9f, camera.position.z);
+
+        if (player.body.getPosition().y + Gdx.graphics.getHeight() / (90f) > map.getProperties().get("height", Integer.class) * 1.6f )
+            camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
+
+        camera.update();
     }
 
     @Override
@@ -180,7 +192,7 @@ public class Level1Screen extends ScreenAdapter {
         if (isItPause == false) {
             inputUpdate(delta);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-            //Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
+            Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
             cameraUpdate();
             batch.setProjectionMatrix(camera.combined);
 
@@ -221,7 +233,10 @@ public class Level1Screen extends ScreenAdapter {
 
 
     private void cameraUpdate() {
-        camera.position.set(player.body.getPosition().x * 10f, player.body.getPosition().y * 10f, camera.position.z);
+        if ((player.body.getPosition().x - Gdx.graphics.getWidth() / (90f) > 0) && (player.body.getPosition().x + Gdx.graphics.getWidth() / (90f) < map.getProperties().get("width", Integer.class) * 1.6f ))
+            camera.position.set(player.body.getPosition().x * 10f, camera.position.y, camera.position.z);
+        if ((player.body.getPosition().y - Gdx.graphics.getHeight() / (90f) > 0) && (player.body.getPosition().y + Gdx.graphics.getHeight() / (90f) < map.getProperties().get("height", Integer.class) * 1.6f ))
+            camera.position.set(camera.position.x, player.body.getPosition().y * 10f, camera.position.z);
         camera.update();
     }
 
