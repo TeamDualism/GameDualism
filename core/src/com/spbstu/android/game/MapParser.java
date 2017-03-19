@@ -10,6 +10,9 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class MapParser {
+
+    public static float PPM = 16f;
+
     public static void parseMapObjects(MapObjects objects, World world) {
         Shape shape;
 
@@ -33,7 +36,7 @@ public class MapParser {
     private static Shape createPolyLineObject(PolylineMapObject object) {
         float verticies[] = object.getPolyline().getTransformedVertices();
         for (int i = 0; i < verticies.length; i++) {
-            verticies[i] /= 10;
+            verticies[i] /= PPM;
         }
         ChainShape shape = new ChainShape();
         shape.createChain(verticies);
