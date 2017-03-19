@@ -72,17 +72,17 @@ public class Level1Screen extends ScreenAdapter {
     public void actionButtons() {
 
         rightButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("rightbutton1.png"))));
+                new TextureRegion(new Texture("Buttons/rightButton.png"))));
         leftButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("leftbutton1.png"))));
+                new TextureRegion(new Texture("Buttons/leftButton.png"))));
         upButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("upButton1.png"))));
+                new TextureRegion(new Texture("Buttons/upButton.png"))));
         pauseButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("pausebutton1.png"))));
+                new TextureRegion(new Texture("Buttons/pause.png"))));
         playButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("playbutton1.png"))));
+                new TextureRegion(new Texture("Buttons/playButton.png"))));
         menuButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("menubutton1.png"))));
+                new TextureRegion(new Texture("Buttons/menu.png"))));
         maxButtonsSizeDeterminate();
         stage.addActor(rightButton);
 

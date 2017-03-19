@@ -3,19 +3,13 @@ package com.spbstu.android.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
@@ -41,7 +35,7 @@ public class ScreenLevel extends ScreenAdapter {
         this.game = game;
         stage.addActor(new Image(new Texture("back2.png")));
         menuButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("menubutton1.png"))));
+                new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
         menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
@@ -49,7 +43,7 @@ public class ScreenLevel extends ScreenAdapter {
 
 
         Button buttonLevel1 = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Level1B.png"))));
+                new TextureRegion(new Texture("Buttons/level1.png"))));
         buttonLevel1.setBounds(5/4*(width - maxButtonsWidth) / 2f, 5/4*(height - maxButtonsHeight) / 2f, maxButtonsWidth * 5/4, maxButtonsHeight*5/4);
         stage.addActor(buttonLevel1);
 

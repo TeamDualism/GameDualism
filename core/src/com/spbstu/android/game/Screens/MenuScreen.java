@@ -25,18 +25,18 @@ public class MenuScreen implements Screen {
     public MenuScreen(final GameDualism game) {
 
         Button buttonLevelScreen = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("playbut1.png"))));
+                new TextureRegion(new Texture("Buttons/playButton.png"))));
         Button about = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("about1.png"))));
+                new TextureRegion(new Texture("Buttons/about.png"))));
         final ImageButton buttonSound = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("audioOn1.png"))));
+                new TextureRegion(new Texture("Buttons/audioOn.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("musicOn1.png"))));
+                new TextureRegion(new Texture("Buttons/musicOn.png"))));
 
         buttonLevelScreen.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         about.setBounds((width - maxButtonsWidth) / 2f, 2 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
-        buttonMusic.setBounds(99 * (width - maxButtonsWidth) / 100f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
-        buttonSound.setBounds(99 * (width - maxButtonsWidth) / 100f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
+        buttonMusic.setBounds( 999 * (width - maxButtonsWidth) / 1000f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);//!квадратная
+        buttonSound.setBounds( 999 * (width - maxButtonsWidth) / 1000f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);
 
         stage = new Stage();
 
@@ -72,12 +72,12 @@ public class MenuScreen implements Screen {
 
                 if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("musicOff1.png")));
+                            new TextureRegion(new Texture("Buttons/musicOff.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 0;
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("musicOn1.png")));
+                            new TextureRegion(new Texture("Buttons/musicOn.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 1;
                 }
@@ -95,12 +95,12 @@ public class MenuScreen implements Screen {
 
                 if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("audioOff1.png")));
+                            new TextureRegion(new Texture("Buttons/audioOff.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 0;
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("audioOn1.png")));
+                            new TextureRegion(new Texture("Buttons/audioOn.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 1;
                 }
