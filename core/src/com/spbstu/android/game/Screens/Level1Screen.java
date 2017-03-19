@@ -50,6 +50,8 @@ public class Level1Screen extends ScreenAdapter {
     private Box2DDebugRenderer box2DDebugRenderer;
     private Player player;
 
+    private boolean trapsMap[][];
+
     public Level1Screen(GameDualism game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -66,6 +68,9 @@ public class Level1Screen extends ScreenAdapter {
                 (16 / PPM - 0.1f) / 2, world, game.assetManager);
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
         actionButtons();
+
+        trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
+        initTrapsMap();
     }
 
 
@@ -193,9 +198,8 @@ public class Level1Screen extends ScreenAdapter {
             world.step(delta, 6, 2);
             stage.draw();
             player.render(batch);
-            handleTrapsCollision(player.getTileX(), player.getTileY());
             //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
-
+            handleTrapsCollision(player.getTileX(), player.getTileY());
         } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             renderer.render();
@@ -265,11 +269,21 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
-        TiledMapTileLayer traps = (TiledMapTileLayer)map.getLayers().get("traps");
-
-        if (traps.getCell(playerX, playerY) != null) {
-            if (traps.getCell(playerX, playerY).getTile().getId() == 2) {
+        if (trapsMap[playerY][playerX] == true) {
                 restart();
+        }
+    }
+
+    private void initTrapsMap() {
+        TiledMapTileLayer traps[] = new TiledMapTileLayer[3];
+
+        traps[0] = (TiledMapTileLayer)map.getLayers().get("Background-Water&amp;Lava");
+        traps[1] = (TiledMapTileLayer)map.getLayers().get("Traps-second-bro");
+        traps[2] = (TiledMapTileLayer)map.getLayers().get("Traps-first-bro");
+
+        for (int i = 0; i < map.getProperties().get("height", Integer.class); i++) {
+            for (int j = 0; j < map.getProperties().get("width", Integer.class); j++) {
+                trapsMap[i][j] = (traps[0].getCell(j, i) != null || traps[1].getCell(j, i) != null || traps[2].getCell(j, i) != null);
             }
         }
     }
