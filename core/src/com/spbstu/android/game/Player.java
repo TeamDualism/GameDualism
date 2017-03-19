@@ -16,10 +16,12 @@ import com.badlogic.gdx.utils.Array;
 
 public class Player {
 
-    public final float maxVelocity = 7f;
+    public final float maxVelocity = 4.5f;
 
     public Texture texture;
     public Body body;
+    public int jumpNumber;
+    public int jumpTimer;
 
     public Player(float x, float y, float radius, World world, AssetManager assetManager) {
         BodyDef bodyDef = new BodyDef();
@@ -48,6 +50,9 @@ public class Player {
         shape1.dispose();
 
         texture = assetManager.get("Textures/character.png", Texture.class);
+
+        jumpNumber = 1;
+        jumpTimer = 0;
     }
 
     public void moveRight() {
@@ -67,11 +72,18 @@ public class Player {
     }
 
     public void jump() {
-        body.applyLinearImpulse(0, body.getMass() * 13.5f, body.getPosition().x, body.getPosition().y, false);
+        jumpTimer = 3;
+
+        if (jumpNumber <= 2) {
+            body.setLinearVelocity(body.getLinearVelocity().x, 0f);
+            body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
+
+            jumpNumber++;
+        }
     }
 
     public void stop() {
-        body.setLinearVelocity(body.getLinearVelocity().x * 0.9f, body.getLinearVelocity().y);
+        body.setLinearVelocity(body.getLinearVelocity().x * 0.6f, body.getLinearVelocity().y);
     }
 
     public boolean isGrounded(World world) {

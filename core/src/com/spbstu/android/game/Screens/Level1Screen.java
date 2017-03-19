@@ -219,6 +219,14 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     public void inputUpdate(float delta) {
+        if (player.jumpTimer > 0) {
+            player.jumpTimer--;
+        }
+
+        if (player.isGrounded(world) && player.jumpTimer == 0) {
+            player.jumpNumber = 1;
+        }
+
         if (!(rightButton.isPressed() && !(leftButton.isPressed()))) {
             player.stop();
         }
@@ -230,7 +238,6 @@ public class Level1Screen extends ScreenAdapter {
         if (leftButton.isPressed()) {
             player.moveLeft();
         }
-
     }
 
     private void moveCamera() {
