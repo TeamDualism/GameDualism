@@ -16,6 +16,12 @@ import com.spbstu.android.game.GameDualism;
 
 public class MenuScreen implements Screen {
     private final Stage stage;
+
+    private final int height = Gdx.graphics.getHeight();
+    private final int width = Gdx.graphics.getWidth();
+    private int maxButtonsHeight = height / 6;
+    private int maxButtonsWidth = width / 6;
+
     public MenuScreen(final GameDualism game) {
 
         Button buttonLevelScreen = new ImageButton(new TextureRegionDrawable(
@@ -27,10 +33,10 @@ public class MenuScreen implements Screen {
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("musicOn.png"))));
 
-        buttonLevelScreen.setPosition((Gdx.graphics.getWidth() - buttonLevelScreen.getWidth()) / 2f, 6*(Gdx.graphics.getHeight() - buttonLevelScreen.getHeight()) / 10f);
-        about.setPosition((Gdx.graphics.getWidth() - about.getWidth()) / 2f, 4*(Gdx.graphics.getHeight() - about.getHeight()) / 10f);
-        buttonMusic.setPosition(99*(Gdx.graphics.getWidth() - buttonMusic.getWidth()) / 100f, 17*(Gdx.graphics.getHeight() - buttonMusic.getHeight()) / 100f);
-        buttonSound.setPosition(99*(Gdx.graphics.getWidth() - buttonSound.getWidth()) / 100f, 3*(Gdx.graphics.getHeight() - buttonSound.getHeight()) / 100f);
+        buttonLevelScreen.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        about.setBounds((width - maxButtonsWidth) / 2f, 2 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        buttonMusic.setBounds(99 * (width - maxButtonsWidth) / 100f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
+        buttonSound.setBounds(99 * (width - maxButtonsWidth) / 100f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
 
         stage = new Stage();
 
@@ -57,49 +63,46 @@ public class MenuScreen implements Screen {
         });
 
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
-            private int i=1;
+            private int state = 1;
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked music");
                 //выключить музыку
 
-                if (i==1) {
+                if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("musicOff.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    i=0;
-                }
-                else {
+                    state = 0;
+                } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("musicOn.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    i=1;
+                    state = 1;
                 }
-
             }
-
         });
 
         buttonSound.addListener(new ClickListener(Input.Buttons.LEFT) {
-            private int i=1;
+            private int state = 1;
 
             @Override
+
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked sound");
                 //выключить звуки
 
-                if (i==1) {
+                if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("audioOff.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    i=0;
-                }
-                else {
+                    state = 0;
+                } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("audioOn.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    i=1;
+                    state = 1;
                 }
 
             }
