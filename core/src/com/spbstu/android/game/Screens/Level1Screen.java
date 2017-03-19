@@ -255,5 +255,12 @@ public class Level1Screen extends ScreenAdapter {
         if (player.body.getPosition().y + Gdx.graphics.getHeight() / (9f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
     }
+
+    private void restart() {
+        player.body.setLinearVelocity(0f, 0f);
+        player.jumpNumber = 1;
+        player.jumpTimer = 0;
+        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
+    }
 }
 
