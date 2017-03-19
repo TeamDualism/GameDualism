@@ -24,6 +24,8 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
 
+import static com.spbstu.android.game.MapParser.PPM;
+
 public class Level1Screen extends ScreenAdapter {
 
     private TiledMap map;
@@ -58,7 +60,9 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.finishLoading();
         batch = new SpriteBatch();
         world = new World(new Vector2(0, -20f), false);
-        player = new Player(0.8f, 0.8f + 1.6f * 3, 1.5f, world, game.assetManager);
+        player = new Player(16f / (2 * PPM),
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, world, game.assetManager);
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
         actionButtons();
     }
@@ -187,12 +191,8 @@ public class Level1Screen extends ScreenAdapter {
             stage.act(delta);
             world.step(delta, 6, 2);
             stage.draw();
-            batch.begin();
-            batch.draw(player.texture,
-                    player.body.getPosition().x * 10 - player.texture.getWidth() / 2,
-                    player.body.getPosition().y * 10 - player.texture.getHeight() / 2);
-            batch.end();
-            //box2DDebugRenderer.render(world, camera.combined.scl(10));//надо только в дебаге
+            player.render(batch);
+            //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
 
         }
         else {
@@ -200,11 +200,7 @@ public class Level1Screen extends ScreenAdapter {
             renderer.render();
             stage.act(delta);
             stage.draw();
-            batch.begin();
-            batch.draw(player.texture,
-                    player.body.getPosition().x * 10 - player.texture.getWidth() / 2,
-                    player.body.getPosition().y * 10 - player.texture.getHeight() / 2);
-            batch.end();
+            player.render(batch);
         }
     }
 
@@ -223,6 +219,14 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     public void inputUpdate(float delta) {
+        if (player.jumpTimer > 0) {
+            player.jumpTimer--;
+        }
+
+        if (player.isGrounded(world) && player.jumpTimer == 0) {
+            player.jumpNumber = 1;
+        }
+
         if (!(rightButton.isPressed() && !(leftButton.isPressed()))) {
             player.stop();
         }
@@ -234,22 +238,21 @@ public class Level1Screen extends ScreenAdapter {
         if (leftButton.isPressed()) {
             player.moveLeft();
         }
-
     }
 
     private void moveCamera() {
-        camera.position.set(player.body.getPosition().x * 10f, player.body.getPosition().y * 10f, camera.position.z);
+        camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
 
-        if (player.body.getPosition().x - Gdx.graphics.getWidth() / (90f) < 0)
+        if (player.body.getPosition().x - Gdx.graphics.getWidth() / (9f * PPM) < 0)
             camera.position.set(Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + Gdx.graphics.getWidth() / (90f) > map.getProperties().get("width", Integer.class) * 1.6f )
+        if (player.body.getPosition().x + Gdx.graphics.getWidth() / (9f * PPM) > map.getProperties().get("width", Integer.class) * 16 / PPM )
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().y - Gdx.graphics.getHeight() / (90f) < 0)
+        if (player.body.getPosition().y - Gdx.graphics.getHeight() / (9f * PPM) < 0)
             camera.position.set(camera.position.x, Gdx.graphics.getHeight() / 9f, camera.position.z);
 
-        if (player.body.getPosition().y + Gdx.graphics.getHeight() / (90f) > map.getProperties().get("height", Integer.class) * 1.6f )
+        if (player.body.getPosition().y + Gdx.graphics.getHeight() / (9f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
     }
 }
