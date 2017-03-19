@@ -39,14 +39,14 @@ public class Level1Screen extends ScreenAdapter {
     private Button pauseButton;
     private Button playButton;
     private Button menuButton;
-    private static Boolean isItPause = false;
+    private Boolean isItPause = false;
     private OrthographicCamera camera;
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsSize = height/6; // не размер, а коэффициент!
+    private int maxButtonsSize = height / 6; // не размер, а коэффициент!
     private SpriteBatch batch;
     private World world;
-    public Box2DDebugRenderer box2DDebugRenderer;
+    private Box2DDebugRenderer box2DDebugRenderer;
     private Player player;
 
     public Level1Screen(GameDualism game) {
@@ -68,39 +68,39 @@ public class Level1Screen extends ScreenAdapter {
     }
 
 
-    public void maxButtonsSizeDeterminate(){// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
+    public void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
         if (maxButtonsSize > leftButton.getWidth())
-            maxButtonsSize = (int)leftButton.getWidth();
+            maxButtonsSize = (int) leftButton.getWidth();
     }
 
     public void actionButtons() {
 
         rightButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("rightbutton1.png"))));
+                new TextureRegion(new Texture("Buttons/rightButton.png"))));
         leftButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("leftbutton1.png"))));
+                new TextureRegion(new Texture("Buttons/leftButton.png"))));
         upButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("upButton1.png"))));
+                new TextureRegion(new Texture("Buttons/upButton.png"))));
         pauseButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("pausebutton1.png"))));
+                new TextureRegion(new Texture("Buttons/pause.png"))));
         playButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("playbutton1.png"))));
+                new TextureRegion(new Texture("Buttons/playButton.png"))));
         menuButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("menubutton1.png"))));
+                new TextureRegion(new Texture("Buttons/menu.png"))));
         maxButtonsSizeDeterminate();
         stage.addActor(rightButton);
 
 
-        rightButton.setBounds(width/10 + maxButtonsSize/2, maxButtonsSize/4,maxButtonsSize,maxButtonsSize);
+        rightButton.setBounds(width / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         stage.addActor(leftButton);
-        leftButton.setBounds( width/10 - maxButtonsSize*3/4 ,maxButtonsSize/4, maxButtonsSize, maxButtonsSize);
+        leftButton.setBounds(width / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
         stage.addActor(upButton);
-        upButton.setBounds( width - maxButtonsSize*3/2 ,maxButtonsSize/4, maxButtonsSize, maxButtonsSize);
+        upButton.setBounds(width - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         upButton.addListener(new ClickListener() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)  {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 player.jump();
 
                 return true;
@@ -108,21 +108,22 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(playButton);
-        playButton.setBounds((width - maxButtonsSize*3/4) / 2, (height -  maxButtonsSize*3/4) * 3 / 4, maxButtonsSize*3/4, maxButtonsSize*3/4);
+        playButton.setBounds((width - maxButtonsSize * 3 / 4) / 2, (height - maxButtonsSize * 3 / 4) * 3 / 4, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         playButton.setVisible(false);
 
         stage.addActor(pauseButton);
-        pauseButton.setBounds( width - maxButtonsSize ,height - maxButtonsSize, maxButtonsSize*3/4, maxButtonsSize*3/4);
+        pauseButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         pauseButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
+                game.setScreen(new PlayPauseScreen(game, Level1Screen.this));
             }
         });
 
         stage.addActor(menuButton);
-        menuButton.setBounds( width - maxButtonsSize ,height - maxButtonsSize, maxButtonsSize*3/4, maxButtonsSize*3/4);
+        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         menuButton.setVisible(false);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -159,7 +160,6 @@ public class Level1Screen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 resume();
-
             }
         });
     }
@@ -178,7 +178,7 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        if (isItPause == false) {
+        if (!isItPause) {
             inputUpdate(delta);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
@@ -194,8 +194,7 @@ public class Level1Screen extends ScreenAdapter {
             player.render(batch);
             //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
 
-        }
-        else {
+        } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             renderer.render();
             stage.act(delta);

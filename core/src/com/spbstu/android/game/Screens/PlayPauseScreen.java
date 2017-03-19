@@ -2,7 +2,7 @@ package com.spbstu.android.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,54 +14,71 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 
-public class MenuScreen implements Screen {
-    private final Stage stage;
+/**
+ * @author shabalina-av
+ */
+public class PlayPauseScreen extends ScreenAdapter {
 
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsHeight = height / 6;
-    private int maxButtonsWidth = width / 6;
+    private final Stage stage = new Stage();
 
-    public MenuScreen(final GameDualism game) {
+    private Button menuButton;
 
-        Button buttonLevelScreen = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/playButton.png"))));
-        Button about = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/about.png"))));
+    public PlayPauseScreen(final GameDualism game, final Level1Screen level1Screen) {
+
+        stage.addActor(new Image(new Texture("back2.png")));
+
+        menuButton = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/home.png"))));
+        stage.addActor(menuButton);
+        int height = Gdx.graphics.getHeight();
+        int maxButtonsSize = height / 6;
+        int width = Gdx.graphics.getWidth();
+        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        menuButton.setVisible(true);
+        menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
+                                   @Override
+                                   public void clicked(InputEvent event, float x, float y) {
+                                       game.setScreen(new MenuScreen(game));
+                                   }
+                               }
+        );
+
+
+        Button restartLevel = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/restartButton.png"))));
+        int maxButtonsHeight = height / 6;
+        int maxButtonsWidth = width / 6;
+        restartLevel.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        stage.addActor(restartLevel);
+        restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("clicked");
+                game.setScreen(new Level1Screen(game));
+            }
+        });
+        Button resumeLevel = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/resumeButton.png"))));
+        resumeLevel.setBounds((width - maxButtonsWidth) / 2f,  2*(height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        stage.addActor(resumeLevel);
+        resumeLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("clicked");
+                game.setScreen(level1Screen);
+                level1Screen.resume();
+            }
+        });
+
+
         final ImageButton buttonSound = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/audioOn.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/musicOn.png"))));
-
-        buttonLevelScreen.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
-        about.setBounds((width - maxButtonsWidth) / 2f, 2 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
-        buttonMusic.setBounds( 999 * (width - maxButtonsWidth) / 1000f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);//!квадратная
-        buttonSound.setBounds( 999 * (width - maxButtonsWidth) / 1000f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);
-
-        stage = new Stage();
-
-        stage.addActor(new Image(new Texture("back2.png")));
+        buttonMusic.setBounds(99 * (width - maxButtonsWidth) / 100f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
+        buttonSound.setBounds(99 * (width - maxButtonsWidth) / 100f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
         stage.addActor(buttonMusic);
         stage.addActor(buttonSound);
-        stage.addActor(about);
-        stage.addActor(buttonLevelScreen);
-
-        buttonLevelScreen.addListener(new ClickListener(Input.Buttons.LEFT) {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("clicked");
-                game.setScreen(new ScreenLevel(game, MenuScreen.this));
-            }
-        });
-
-        about.addListener(new ClickListener(Input.Buttons.LEFT) {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("clicked");
-                game.setScreen(new AboutScreen(game, MenuScreen.this));
-            }
-        });
-
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
             private int state = 1;
 
