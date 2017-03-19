@@ -59,7 +59,7 @@ public class PlayPauseScreen extends ScreenAdapter {
         });
         Button resumeLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("resume.png"))));
-        resumeLevel.setBounds((width - maxButtonsWidth) / 2f, 2 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        resumeLevel.setBounds((width - maxButtonsWidth) / 2f,  2*(height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(resumeLevel);
         resumeLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -71,9 +71,9 @@ public class PlayPauseScreen extends ScreenAdapter {
 
 
         final ImageButton buttonSound = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/audioOn1.png"))));
+                new TextureRegion(new Texture("audioOn1.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/musicOn1.png"))));
+                new TextureRegion(new Texture("musicOn1.png"))));
         buttonMusic.setBounds(99 * (width - maxButtonsWidth) / 100f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
         buttonSound.setBounds(99 * (width - maxButtonsWidth) / 100f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
         stage.addActor(buttonMusic);
@@ -88,12 +88,12 @@ public class PlayPauseScreen extends ScreenAdapter {
 
                 if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("Buttons/musicOff1.png")));
+                            new TextureRegion(new Texture("musicOff1.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 0;
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("Buttons/musicOn1.png")));
+                            new TextureRegion(new Texture("musicOn1.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 1;
                 }

@@ -25,13 +25,13 @@ public class MenuScreen implements Screen {
     public MenuScreen(final GameDualism game) {
 
         Button buttonLevelScreen = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("playbut.png"))));
+                new TextureRegion(new Texture("playbut1.png"))));
         Button about = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("about.png"))));
+                new TextureRegion(new Texture("about1.png"))));
         final ImageButton buttonSound = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("audioOn.png"))));
+                new TextureRegion(new Texture("audioOn1.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("musicOn.png"))));
+                new TextureRegion(new Texture("musicOn1.png"))));
 
         buttonLevelScreen.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         about.setBounds((width - maxButtonsWidth) / 2f, 2 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
@@ -72,12 +72,12 @@ public class MenuScreen implements Screen {
 
                 if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("musicOff.png")));
+                            new TextureRegion(new Texture("musicOff1.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 0;
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("musicOn.png")));
+                            new TextureRegion(new Texture("musicOn1.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 1;
                 }
@@ -95,12 +95,12 @@ public class MenuScreen implements Screen {
 
                 if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("audioOff.png")));
+                            new TextureRegion(new Texture("audioOff1.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 0;
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("audioOn.png")));
+                            new TextureRegion(new Texture("audioOn1.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 1;
                 }

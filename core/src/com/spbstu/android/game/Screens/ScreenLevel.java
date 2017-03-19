@@ -25,11 +25,14 @@ import com.spbstu.android.game.GameDualism;
  */
 public class ScreenLevel extends ScreenAdapter {
     private final GameDualism game;
-    private final Stage stage = new Stage();
-    private Button menuButton;
 
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
+    private int maxButtonsHeight = height / 6;
+    private int maxButtonsWidth = width / 6;
+    private final Stage stage = new Stage();
+    private Button menuButton;
+
     private int maxButtonsSize = height / 6; // не размер, а коэффициент!
 
 
@@ -46,8 +49,8 @@ public class ScreenLevel extends ScreenAdapter {
 
 
         Button buttonLevel1 = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("level1.png"))));
-        buttonLevel1.setPosition((Gdx.graphics.getWidth() - buttonLevel1.getWidth()) / 2f, (Gdx.graphics.getHeight() - buttonLevel1.getHeight()) / 2f);
+                new TextureRegion(new Texture("Level1B.png"))));
+        buttonLevel1.setBounds(5/4*(width - maxButtonsWidth) / 2f, 5/4*(height - maxButtonsHeight) / 2f, maxButtonsWidth * 5/4, maxButtonsHeight*5/4);
         stage.addActor(buttonLevel1);
 
 
