@@ -106,4 +106,12 @@ public class Player {
                 body.getPosition().y * MapParser.PPM - texture.getHeight() / 2);
         batch.end();
     }
+
+    public int getTileX() {
+        return (int)Math.floor(body.getPosition().x);
+    }
+
+    public int getTileY() {
+        return (int)Math.floor(body.getPosition().y);
+    }
 }

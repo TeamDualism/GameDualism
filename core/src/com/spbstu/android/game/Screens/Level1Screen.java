@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -49,6 +50,8 @@ public class Level1Screen extends ScreenAdapter {
     private Box2DDebugRenderer box2DDebugRenderer;
     private Player player;
 
+    private boolean trapsMap[][];
+
     public Level1Screen(GameDualism game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -65,6 +68,9 @@ public class Level1Screen extends ScreenAdapter {
                 (16 / PPM - 0.1f) / 2, world, game.assetManager);
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
         actionButtons();
+
+        trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
+        initTrapsMap();
     }
 
 
@@ -193,7 +199,7 @@ public class Level1Screen extends ScreenAdapter {
             stage.draw();
             player.render(batch);
             //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
-
+            handleTrapsCollision(player.getTileX(), player.getTileY());
         } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             renderer.render();
@@ -226,7 +232,7 @@ public class Level1Screen extends ScreenAdapter {
             player.jumpNumber = 1;
         }
 
-        if (!(rightButton.isPressed() && !(leftButton.isPressed()))) {
+        if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
             player.stop();
         }
 
@@ -253,6 +259,33 @@ public class Level1Screen extends ScreenAdapter {
 
         if (player.body.getPosition().y + Gdx.graphics.getHeight() / (9f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
+    }
+
+    private void restart() {
+        player.body.setLinearVelocity(0f, 0f);
+        player.jumpNumber = 1;
+        player.jumpTimer = 0;
+        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
+    }
+
+    private void handleTrapsCollision(int playerX, int playerY) {
+        if (trapsMap[playerY][playerX] == true) {
+                restart();
+        }
+    }
+
+    private void initTrapsMap() {
+        TiledMapTileLayer traps[] = new TiledMapTileLayer[3];
+
+        traps[0] = (TiledMapTileLayer)map.getLayers().get("Background-Water&amp;Lava");
+        traps[1] = (TiledMapTileLayer)map.getLayers().get("Traps-second-bro");
+        traps[2] = (TiledMapTileLayer)map.getLayers().get("Traps-first-bro");
+
+        for (int i = 0; i < map.getProperties().get("height", Integer.class); i++) {
+            for (int j = 0; j < map.getProperties().get("width", Integer.class); j++) {
+                trapsMap[i][j] = (traps[0].getCell(j, i) != null || traps[1].getCell(j, i) != null || traps[2].getCell(j, i) != null);
+            }
+        }
     }
 }
 
