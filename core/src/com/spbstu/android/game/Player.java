@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Player {
@@ -23,10 +25,23 @@ public class Player {
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
 
-        CircleShape shape = new CircleShape();
-        shape.setRadius(radius / 2);
-        body.createFixture(shape, 1.0f);
+        //Main body
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(radius / 2, radius * 0.95f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0f;
+        fixtureDef.shape = shape;
+        body.createFixture(fixtureDef);
         shape.dispose();
+
+        //Sensor body
+        PolygonShape shape1 = new PolygonShape();
+        shape1.setAsBox(radius / 2.05f, radius / 10, new Vector2(0, -radius * 0.9f), 0f);
+        fixtureDef.shape = shape1;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef);
+        shape1.dispose();
 
         texture = assetManager.get("Textures/character.png", Texture.class);
     }
