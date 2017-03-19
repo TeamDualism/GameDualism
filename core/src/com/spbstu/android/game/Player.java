@@ -7,9 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class Player {
 
@@ -69,6 +72,19 @@ public class Player {
 
     public void stop() {
         body.setLinearVelocity(body.getLinearVelocity().x * 0.9f, body.getLinearVelocity().y);
+    }
+
+    public boolean isGrounded(World world) {
+        Fixture sensorFixture = body.getFixtureList().get(1);
+
+        Array<Contact> contactList = world.getContactList();
+
+        for (Contact contact : contactList) {
+            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture))
+                return true;
+        }
+
+        return false;
     }
 
     public void render(SpriteBatch batch) {
