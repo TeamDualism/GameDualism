@@ -191,11 +191,7 @@ public class Level1Screen extends ScreenAdapter {
             stage.act(delta);
             world.step(delta, 6, 2);
             stage.draw();
-            batch.begin();
-            batch.draw(player.texture,
-                    player.body.getPosition().x * PPM - player.texture.getWidth() / 2,
-                    player.body.getPosition().y * PPM - player.texture.getHeight() / 2);
-            batch.end();
+            player.render(batch);
             //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
 
         }
@@ -204,11 +200,7 @@ public class Level1Screen extends ScreenAdapter {
             renderer.render();
             stage.act(delta);
             stage.draw();
-            batch.begin();
-            batch.draw(player.texture,
-                    player.body.getPosition().x * 10 - player.texture.getWidth() / 2,
-                    player.body.getPosition().y * 10 - player.texture.getHeight() / 2);
-            batch.end();
+            player.render(batch);
         }
     }
 

@@ -2,6 +2,7 @@ package com.spbstu.android.game;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -68,5 +69,13 @@ public class Player {
 
     public void stop() {
         body.setLinearVelocity(body.getLinearVelocity().x * 0.9f, body.getLinearVelocity().y);
+    }
+
+    public void render(SpriteBatch batch) {
+        batch.begin();
+        batch.draw(texture,
+                body.getPosition().x * MapParser.PPM - texture.getWidth() / 2,
+                body.getPosition().y * MapParser.PPM - texture.getHeight() / 2);
+        batch.end();
     }
 }
