@@ -37,14 +37,14 @@ public class Level1Screen extends ScreenAdapter {
     private Button pauseButton;
     private Button playButton;
     private Button menuButton;
-    private static Boolean isItPause = false;
+    private Boolean isItPause = false;
     private OrthographicCamera camera;
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsSize = height/6; // не размер, а коэффициент!
+    private int maxButtonsSize = height / 6; // не размер, а коэффициент!
     private SpriteBatch batch;
     private World world;
-    public Box2DDebugRenderer box2DDebugRenderer;
+    private Box2DDebugRenderer box2DDebugRenderer;
     private Player player;
 
     public Level1Screen(GameDualism game) {
@@ -64,9 +64,9 @@ public class Level1Screen extends ScreenAdapter {
     }
 
 
-    public void maxButtonsSizeDeterminate(){// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
+    public void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
         if (maxButtonsSize > leftButton.getWidth())
-            maxButtonsSize = (int)leftButton.getWidth();
+            maxButtonsSize = (int) leftButton.getWidth();
     }
 
     public void actionButtons() {
@@ -87,16 +87,16 @@ public class Level1Screen extends ScreenAdapter {
         stage.addActor(rightButton);
 
 
-        rightButton.setBounds(width/10 + maxButtonsSize/2, maxButtonsSize/4,maxButtonsSize,maxButtonsSize);
+        rightButton.setBounds(width / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         stage.addActor(leftButton);
-        leftButton.setBounds( width/10 - maxButtonsSize*3/4 ,maxButtonsSize/4, maxButtonsSize, maxButtonsSize);
+        leftButton.setBounds(width / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
         stage.addActor(upButton);
-        upButton.setBounds( width - maxButtonsSize*3/2 ,maxButtonsSize/4, maxButtonsSize, maxButtonsSize);
+        upButton.setBounds(width - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         upButton.addListener(new ClickListener() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)  {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 player.jump();
 
                 return true;
@@ -104,21 +104,22 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(playButton);
-        playButton.setBounds((width - maxButtonsSize*3/4) / 2, (height -  maxButtonsSize*3/4) * 3 / 4, maxButtonsSize*3/4, maxButtonsSize*3/4);
+        playButton.setBounds((width - maxButtonsSize * 3 / 4) / 2, (height - maxButtonsSize * 3 / 4) * 3 / 4, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         playButton.setVisible(false);
 
         stage.addActor(pauseButton);
-        pauseButton.setBounds( width - maxButtonsSize ,height - maxButtonsSize, maxButtonsSize*3/4, maxButtonsSize*3/4);
+        pauseButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         pauseButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
+                game.setScreen(new PlayPauseScreen(game));
             }
         });
 
         stage.addActor(menuButton);
-        menuButton.setBounds( width - maxButtonsSize ,height - maxButtonsSize, maxButtonsSize*3/4, maxButtonsSize*3/4);
+        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         menuButton.setVisible(false);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -155,7 +156,6 @@ public class Level1Screen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 resume();
-
             }
         });
     }
@@ -174,7 +174,7 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        if (isItPause == false) {
+        if (!isItPause) {
             inputUpdate(delta);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
@@ -194,8 +194,7 @@ public class Level1Screen extends ScreenAdapter {
             batch.end();
             //box2DDebugRenderer.render(world, camera.combined.scl(10));//надо только в дебаге
 
-        }
-        else {
+        } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             renderer.render();
             stage.act(delta);
@@ -243,13 +242,13 @@ public class Level1Screen extends ScreenAdapter {
         if (player.body.getPosition().x - Gdx.graphics.getWidth() / (90f) < 0)
             camera.position.set(Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + Gdx.graphics.getWidth() / (90f) > map.getProperties().get("width", Integer.class) * 1.6f )
+        if (player.body.getPosition().x + Gdx.graphics.getWidth() / (90f) > map.getProperties().get("width", Integer.class) * 1.6f)
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
 
         if (player.body.getPosition().y - Gdx.graphics.getHeight() / (90f) < 0)
             camera.position.set(camera.position.x, Gdx.graphics.getHeight() / 9f, camera.position.z);
 
-        if (player.body.getPosition().y + Gdx.graphics.getHeight() / (90f) > map.getProperties().get("height", Integer.class) * 1.6f )
+        if (player.body.getPosition().y + Gdx.graphics.getHeight() / (90f) > map.getProperties().get("height", Integer.class) * 1.6f)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
     }
 }
