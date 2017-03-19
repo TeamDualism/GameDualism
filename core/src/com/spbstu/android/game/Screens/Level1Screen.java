@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -192,6 +193,7 @@ public class Level1Screen extends ScreenAdapter {
             world.step(delta, 6, 2);
             stage.draw();
             player.render(batch);
+            handleTrapsCollision(player.getTileX(), player.getTileY());
             //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
 
         }
@@ -227,7 +229,7 @@ public class Level1Screen extends ScreenAdapter {
             player.jumpNumber = 1;
         }
 
-        if (!(rightButton.isPressed() && !(leftButton.isPressed()))) {
+        if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
             player.stop();
         }
 
@@ -261,6 +263,16 @@ public class Level1Screen extends ScreenAdapter {
         player.jumpNumber = 1;
         player.jumpTimer = 0;
         player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
+    }
+
+    private void handleTrapsCollision(int playerX, int playerY) {
+        TiledMapTileLayer traps = (TiledMapTileLayer)map.getLayers().get("traps");
+
+        if (traps.getCell(playerX, playerY) != null) {
+            if (traps.getCell(playerX, playerY).getTile().getId() == 2) {
+                restart();
+            }
+        }
     }
 }
 
