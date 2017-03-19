@@ -114,7 +114,7 @@ public class Level1Screen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                game.setScreen(new PlayPauseScreen(game));
+                game.setScreen(new PlayPauseScreen(game, Level1Screen.this));
             }
         });
 

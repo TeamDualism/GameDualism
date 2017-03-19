@@ -23,9 +23,9 @@ public class PlayPauseScreen extends ScreenAdapter {
 
     private Button menuButton;
 
-    public PlayPauseScreen(final GameDualism game) {
+    public PlayPauseScreen(final GameDualism game, final Level1Screen level1Screen) {
 
-        stage.addActor(new Image(new Texture("backpause.png")));
+        stage.addActor(new Image(new Texture("back2.png")));
 
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("home.png"))));
@@ -65,7 +65,8 @@ public class PlayPauseScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked");
-                //game.setScreen(new Level1Screen(game));
+                game.setScreen(level1Screen);
+                level1Screen.resume();
             }
         });
 
@@ -111,12 +112,12 @@ public class PlayPauseScreen extends ScreenAdapter {
 
                 if (state == 1) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("audioOff.png")));
+                            new TextureRegion(new Texture("audioOff1.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 0;
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("audioOn.png")));
+                            new TextureRegion(new Texture("audioOn1.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     state = 1;
                 }
