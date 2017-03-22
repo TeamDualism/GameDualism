@@ -40,6 +40,7 @@ public class Level1Screen extends ScreenAdapter {
     private Button pauseButton;
     private Button playButton;
     private Button menuButton;
+    private Button changeBroButton;
     private Boolean isItPause = false;
     private OrthographicCamera camera;
     private final int height = Gdx.graphics.getHeight();
@@ -93,6 +94,8 @@ public class Level1Screen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/playButton.png"))));
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/menu.png"))));
+        changeBroButton = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("buttons/changebrobutton.png"))));
         maxButtonsSizeDeterminate();
         stage.addActor(rightButton);
 
@@ -137,6 +140,9 @@ public class Level1Screen extends ScreenAdapter {
                 game.setScreen(new MenuScreen(game));
             }
         });
+
+        stage.addActor(changeBroButton);
+        changeBroButton.setBounds( width - maxButtonsSize*3/2 , 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
     }
 
     @Override
@@ -147,6 +153,7 @@ public class Level1Screen extends ScreenAdapter {
         pauseButton.setVisible(false);
         menuButton.setVisible(true);
         playButton.setVisible(true);
+        changeBroButton.setVisible(false);
         isItPause = true;
     }
 
@@ -158,6 +165,7 @@ public class Level1Screen extends ScreenAdapter {
         pauseButton.setVisible(true);
         playButton.setVisible(false);
         menuButton.setVisible(false);
+        changeBroButton.setVisible(true);
         isItPause = false;
     }
 
