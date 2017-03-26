@@ -45,6 +45,8 @@ public class Level1Screen extends ScreenAdapter {
     private OrthographicCamera camera;
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
+    private float HeightSize = 540 / 4.5f;
+    private float WidthSize = 960 / 4.5f;
     private int maxButtonsSize = height / 6; // не размер, а коэффициент!
     private SpriteBatch batch;
     private World world;
@@ -56,7 +58,8 @@ public class Level1Screen extends ScreenAdapter {
     public Level1Screen(GameDualism game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / 4.5f, Gdx.graphics.getHeight() / 4.5f);
+        //camera.setToOrtho(false, width / 4.5f, height / 4.5f);
+        camera.setToOrtho(false, WidthSize, HeightSize);
         map = new TmxMapLoader().load("Maps/Level-1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         box2DDebugRenderer = new Box2DDebugRenderer();
@@ -95,7 +98,7 @@ public class Level1Screen extends ScreenAdapter {
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/menu.png"))));
         changeBroButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("buttons/changebrobutton.png"))));
+                new TextureRegion(new Texture("Buttons/changebrobutton.png"))));
         maxButtonsSizeDeterminate();
         stage.addActor(rightButton);
 
@@ -185,7 +188,8 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, width / 4.5f, height / 4.5f);
+        //camera.setToOrtho(false, width / 4.5f, height / 4.5f);
+        camera.setToOrtho(false, WidthSize, HeightSize);
         moveCamera();
         camera.update();
     }
@@ -253,7 +257,7 @@ public class Level1Screen extends ScreenAdapter {
         }
     }
 
-    private void moveCamera() {
+    /*private void moveCamera() {
         camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
 
         if (player.body.getPosition().x - Gdx.graphics.getWidth() / (9f * PPM) < 0)
@@ -267,6 +271,21 @@ public class Level1Screen extends ScreenAdapter {
 
         if (player.body.getPosition().y + Gdx.graphics.getHeight() / (9f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
+    }*/
+    private void moveCamera() {
+        camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
+
+        if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
+            camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
+
+        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16 / PPM )
+            camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
+
+        if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
+            camera.position.set(camera.position.x, HeightSize / 2f, camera.position.z);
+
+        if (player.body.getPosition().y + HeightSize / (2f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
+            camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - HeightSize / 2f, camera.position.z);
     }
 
     private void restart() {
