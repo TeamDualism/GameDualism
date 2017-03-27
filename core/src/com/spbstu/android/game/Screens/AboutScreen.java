@@ -38,12 +38,12 @@ public class AboutScreen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
-        Label label = new Label("Above the application worked:\n" +
-                "Zatylkin Pavel\n" +
-                "Lesik Demyan\n" +
-                "Feofilaktov Mikhail\n" +
-                "Shabalina Anastasia\n" +
-                "St. Petersburg Polytechnic University Peter the Great\n" +
+        Label label = new Label("Developers:\n" +
+                "Zatylkin \"PENEK\" Pavel\n" +
+                "Lesik \"DEE\" Demyan\n" +
+                "Feofilaktov \"MADMANUTDFAN\" Mikhail\n" +
+                "Shabalina \nNET\" Anastasia\n" +
+                "Peter the Great St.Petersburg Polytechnic University\n" +
                 "May, 2017" , new Label.LabelStyle(font, Color.WHITE));
         label.setPosition(Gdx.graphics.getWidth()/3f, Gdx.graphics.getHeight()/ 2f);
         stage.addActor(label);
