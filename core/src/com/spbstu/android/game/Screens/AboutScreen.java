@@ -42,7 +42,7 @@ public class AboutScreen extends ScreenAdapter {
                 "Zatylkin \"PENEK\" Pavel\n" +
                 "Lesik \"DEE\" Demyan\n" +
                 "Feofilaktov \"MADMANUTDFAN\" Mikhail\n" +
-                "Shabalina \nNET\" Anastasia\n" +
+                "Shabalina\"NET\" Anastasia\n" +
                 "Peter the Great St.Petersburg Polytechnic University\n" +
                 "May, 2017" , new Label.LabelStyle(font, Color.WHITE));
         label.setPosition(Gdx.graphics.getWidth()/3f, Gdx.graphics.getHeight()/ 2f);
