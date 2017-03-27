@@ -29,11 +29,28 @@ import static com.spbstu.android.game.MapParser.PPM;
 
 public class Level1Screen extends ScreenAdapter {
 
+    // Map
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private boolean trapsMap[][];
 
+    // Game
     private final GameDualism game;
     private final Stage stage = new Stage();
+    private SpriteBatch batch;
+    private World world;
+    private Box2DDebugRenderer box2DDebugRenderer;
+
+    // Player
+    private Player player;
+
+    // Screen Size
+    private final int height = Gdx.graphics.getHeight();
+    private final int width = Gdx.graphics.getWidth();
+    private float HeightSize = 540 / 4f;
+    private float WidthSize = 960 / 4f;
+
+    // Buttons
     private Button rightButton;
     private Button leftButton;
     private Button upButton;
@@ -41,19 +58,14 @@ public class Level1Screen extends ScreenAdapter {
     private Button playButton;
     private Button menuButton;
     private Button changeBroButton;
-    private Boolean isItPause = false;
-    private OrthographicCamera camera;
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = 540 / 4.5f;
-    private float WidthSize = 960 / 4.5f;
     private int maxButtonsSize = height / 6; // не размер, а коэффициент!
-    private SpriteBatch batch;
-    private World world;
-    private Box2DDebugRenderer box2DDebugRenderer;
-    private Player player;
 
-    private boolean trapsMap[][];
+    // Conditions
+    private Boolean isItPause = false;
+
+    // Camera
+    private OrthographicCamera camera;
+
 
     public Level1Screen(GameDualism game) {
         this.game = game;
@@ -107,9 +119,9 @@ public class Level1Screen extends ScreenAdapter {
 
         stage.addActor(leftButton);
         leftButton.setBounds(width / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+
         stage.addActor(upButton);
         upButton.setBounds(width - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
-
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -256,7 +268,7 @@ public class Level1Screen extends ScreenAdapter {
             player.moveLeft();
         }
     }
-
+    // версия камеры Паши
     /*private void moveCamera() {
         camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
 
