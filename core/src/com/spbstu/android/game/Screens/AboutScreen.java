@@ -16,11 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
-import com.spbstu.android.game.screens.MenuScreen;
 
-/**
- * @author shabalina-av
- */
 public class AboutScreen extends ScreenAdapter {
     private final GameDualism game;
     private final Stage stage = new Stage();
