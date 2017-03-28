@@ -8,10 +8,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,18 +25,35 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
+import com.spbstu.android.game.objects.Bonus;
 
 import static com.spbstu.android.game.MapParser.PPM;
 
 public class Level1Screen extends ScreenAdapter {
 
+    private final GameDualism game;
+
+    //LibGdx
+    private OrthographicCamera camera;
+    private SpriteBatch batch;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
-    private final GameDualism game;
+    //Box2d
+    private World world;
+    private Box2DDebugRenderer box2DDebugRenderer;
+
+    //Game
+    private Player player;
+    private Boolean isPaused = false;
+    private boolean trapsMap[][];
+    private Array<Bonus> bonuses;
+
+    //UI
     private final Stage stage = new Stage();
     private Button rightButton;
     private Button leftButton;
@@ -41,37 +62,40 @@ public class Level1Screen extends ScreenAdapter {
     private Button playButton;
     private Button menuButton;
     private Button changeBroButton;
-    private Boolean isItPause = false;
-    private OrthographicCamera camera;
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
     private int maxButtonsSize = height / 6; // не размер, а коэффициент!
-    private SpriteBatch batch;
-    private World world;
-    private Box2DDebugRenderer box2DDebugRenderer;
-    private Player player;
 
-    private boolean trapsMap[][];
+
 
     public Level1Screen(GameDualism game) {
         this.game = game;
+
+        //LibGdx
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / 4.5f, Gdx.graphics.getHeight() / 4.5f);
+        batch = new SpriteBatch();
         map = new TmxMapLoader().load("Maps/Level-1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
-        box2DDebugRenderer = new Box2DDebugRenderer();
-        game.assetManager.load("Textures/character.png", Texture.class);
-        game.assetManager.finishLoading();
-        batch = new SpriteBatch();
+
+        //Box2d
         world = new World(new Vector2(0, -20f), false);
+        box2DDebugRenderer = new Box2DDebugRenderer();
+
+        //Game
+        game.assetManager.load("Textures/character.png", Texture.class);
+        game.assetManager.load("Textures/coin.png", Texture.class);
+        game.assetManager.finishLoading();
         player = new Player(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, world, game.assetManager);
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
-        actionButtons();
-
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
+        bonuses = new Array<Bonus>();
+        initBonuses();
+
+        //UI
+        actionButtons();
     }
 
 
@@ -154,7 +178,7 @@ public class Level1Screen extends ScreenAdapter {
         menuButton.setVisible(true);
         playButton.setVisible(true);
         changeBroButton.setVisible(false);
-        isItPause = true;
+        isPaused = true;
     }
 
     @Override
@@ -166,7 +190,7 @@ public class Level1Screen extends ScreenAdapter {
         playButton.setVisible(false);
         menuButton.setVisible(false);
         changeBroButton.setVisible(true);
-        isItPause = false;
+        isPaused = false;
     }
 
     public void pauseMode() {
@@ -192,18 +216,22 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        if (!isItPause) {
-            inputUpdate(delta);
+        if (!isPaused) {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
+
+            world.step(delta, 6, 2);
+            inputUpdate(delta);
             cameraUpdate();
+
             batch.setProjectionMatrix(camera.combined);
 
             renderer.setView(camera);
             renderer.render();
 
+            renderBonuses();
+
             stage.act(delta);
-            world.step(delta, 6, 2);
             stage.draw();
             player.render(batch);
             //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
@@ -294,6 +322,26 @@ public class Level1Screen extends ScreenAdapter {
                 trapsMap[i][j] = (traps[0].getCell(j, i) != null || traps[1].getCell(j, i) != null || traps[2].getCell(j, i) != null);
             }
         }
+    }
+
+    private void initBonuses() {
+        MapObjects objects = map.getLayers().get("Bonuses").getObjects();
+
+        for (MapObject object: objects) {
+            Rectangle rectangle = ((RectangleMapObject)object).getRectangle();
+
+            bonuses.add(new Bonus(rectangle.getX(), rectangle.getY(), game.assetManager.get("Textures/coin.png", Texture.class), world));
+        }
+    }
+
+    private void renderBonuses() {
+        batch.begin();
+
+        for (int i = 0; i < bonuses.size; i++) {
+            bonuses.get(i).draw(batch);
+        }
+
+        batch.end();
     }
 }
 

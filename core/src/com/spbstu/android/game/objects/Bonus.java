@@ -18,6 +18,7 @@ public class Bonus extends Object{
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x + this.getWidth() / (2 * MapParser.PPM), y + this.getHeight() / (2 * MapParser.PPM));
         bodyDef.fixedRotation = true;
+        body = world.createBody(bodyDef);
 
         CircleShape shape = new CircleShape();
         shape.setRadius(this.getHeight() / (2 * MapParser.PPM));
