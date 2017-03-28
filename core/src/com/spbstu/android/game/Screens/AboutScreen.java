@@ -1,4 +1,4 @@
-package com.spbstu.android.game.Screens;
+package com.spbstu.android.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.screens.MenuScreen;
 
 /**
  * @author shabalina-av
