@@ -44,13 +44,11 @@ public class Level1Screen extends ScreenAdapter {
     // Player
     private Player player;
 
-    // Screen Size
+    // Screen Size; 1500 = 960 + 540; 16:9
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
-    private float AspectRatioW = (float)width / height; // можно было обьединить в одну переменную, но пока для удобства оставлю так
-    private float AspectRatioH = (float)height / width;
-    private float HeightSize = 540f * 16f * AspectRatioH / 36f;
-    private float WidthSize = 960f * 9f * AspectRatioW / 64f;
+    private float HeightSize = (1500f / (float)(height + width) * height / 4f);
+    private float WidthSize = (1500f / (float)(height + width) * width / 4f);
 
     // Buttons
     private Button rightButton;
@@ -72,7 +70,7 @@ public class Level1Screen extends ScreenAdapter {
     public Level1Screen(GameDualism game) {
         this.game = game;
         camera = new OrthographicCamera();
-        //camera.setToOrtho(false, width / 4.5f, height / 4.5f);
+
         camera.setToOrtho(false, WidthSize, HeightSize);
         map = new TmxMapLoader().load("Maps/Level-1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -202,7 +200,6 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        //camera.setToOrtho(false, width / 4.5f, height / 4.5f);
         camera.setToOrtho(false, WidthSize, HeightSize);
         moveCamera();
         camera.update();
@@ -292,7 +289,7 @@ public class Level1Screen extends ScreenAdapter {
         if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
             camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16 / PPM )
+        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM )
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
 
         if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
