@@ -47,8 +47,10 @@ public class Level1Screen extends ScreenAdapter {
     // Screen Size
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = 540 / 4f;
-    private float WidthSize = 960 / 4f;
+    private float AspectRatioW = (float)width / height; // можно было обьединить в одну переменную, но пока для удобства оставлю так
+    private float AspectRatioH = (float)height / width;
+    private float HeightSize = 540f * 16f * AspectRatioH / 36f;
+    private float WidthSize = 960f * 9f * AspectRatioW / 64f;
 
     // Buttons
     private Button rightButton;
