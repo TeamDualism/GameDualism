@@ -14,10 +14,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import static com.spbstu.android.game.utils.Constants.IMPULSE;
+import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
+import static com.spbstu.android.game.utils.Constants.PPM;
+import static com.spbstu.android.game.utils.Constants.STOP;
+
 public class Player {
-
-    public final float maxVelocity = 4.5f;
-
     public Texture texture;
     public Body body;
     public int jumpNumber;
@@ -56,18 +58,18 @@ public class Player {
     }
 
     public void moveRight() {
-        body.applyLinearImpulse(3f, 0, body.getPosition().x, body.getPosition().y, false);
+        body.applyLinearImpulse(IMPULSE, 0, body.getPosition().x, body.getPosition().y, false);
 
-        if (Math.abs(body.getLinearVelocity().x) > maxVelocity) {
-            body.setLinearVelocity(Math.signum(body.getLinearVelocity().x) * maxVelocity, body.getLinearVelocity().y);
+        if (Math.abs(body.getLinearVelocity().x) > MAX_VELOCITY) {
+            body.setLinearVelocity(MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
 
     public void moveLeft() {
-        body.applyLinearImpulse(-3f, 0, body.getPosition().x, body.getPosition().y, false);
+        body.applyLinearImpulse(-IMPULSE, 0, body.getPosition().x, body.getPosition().y, false);
 
-        if (Math.abs(body.getLinearVelocity().x) > maxVelocity) {
-            body.setLinearVelocity(Math.signum(body.getLinearVelocity().x) * maxVelocity, body.getLinearVelocity().y);
+        if (Math.abs(body.getLinearVelocity().x) > MAX_VELOCITY) {
+            body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
 
@@ -83,7 +85,7 @@ public class Player {
     }
 
     public void stop() {
-        body.setLinearVelocity(body.getLinearVelocity().x * 0.6f, body.getLinearVelocity().y);
+        body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
     }
 
     public boolean isGrounded(World world) {
@@ -102,8 +104,8 @@ public class Player {
     public void render(SpriteBatch batch) {
         batch.begin();
         batch.draw(texture,
-                body.getPosition().x * MapParser.PPM - texture.getWidth() / 2,
-                body.getPosition().y * MapParser.PPM - texture.getHeight() / 2);
+                body.getPosition().x * PPM - texture.getWidth() / 2,
+                body.getPosition().y * PPM - texture.getHeight() / 2);
         batch.end();
     }
 

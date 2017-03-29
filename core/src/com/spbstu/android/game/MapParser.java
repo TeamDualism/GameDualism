@@ -9,10 +9,9 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static com.spbstu.android.game.utils.Constants.PPM;
+
 public class MapParser {
-
-    public static float PPM = 16f;
-
     public static void parseMapObjects(MapObjects objects, World world) {
         Shape shape;
 

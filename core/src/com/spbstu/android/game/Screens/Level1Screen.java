@@ -31,7 +31,9 @@ import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
 import com.spbstu.android.game.objects.Bonus;
 
-import static com.spbstu.android.game.MapParser.PPM;
+import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.PPM;
+import static com.spbstu.android.game.utils.Constants.WIDTH;
 
 public class Level1Screen extends ScreenAdapter {
 
@@ -62,9 +64,7 @@ public class Level1Screen extends ScreenAdapter {
     private Button playButton;
     private Button menuButton;
     private Button changeBroButton;
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsSize = height / 6; // не размер, а коэффициент!
+    private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
 
 
@@ -124,12 +124,12 @@ public class Level1Screen extends ScreenAdapter {
         stage.addActor(rightButton);
 
 
-        rightButton.setBounds(width / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         stage.addActor(leftButton);
-        leftButton.setBounds(width / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
         stage.addActor(upButton);
-        upButton.setBounds(width - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        upButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         upButton.addListener(new ClickListener() {
             @Override
@@ -141,11 +141,11 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(playButton);
-        playButton.setBounds((width - maxButtonsSize * 3 / 4) / 2, (height - maxButtonsSize * 3 / 4) * 3 / 4, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        playButton.setBounds((WIDTH - maxButtonsSize * 3 / 4) / 2, (HEIGHT - maxButtonsSize * 3 / 4) * 3 / 4, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         playButton.setVisible(false);
 
         stage.addActor(pauseButton);
-        pauseButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        pauseButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         pauseButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -156,7 +156,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(menuButton);
-        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        menuButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         menuButton.setVisible(false);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -166,7 +166,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(changeBroButton);
-        changeBroButton.setBounds( width - maxButtonsSize*3/2 , 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.setBounds( WIDTH - maxButtonsSize*3/2 , 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
     }
 
     @Override

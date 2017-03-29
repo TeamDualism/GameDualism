@@ -17,14 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 
+import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.WIDTH;
+
 public class AboutScreen extends ScreenAdapter {
     private final GameDualism game;
     private final Stage stage = new Stage();
     private Button menuButton;
 
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsSize = height / 6; // не размер, а коэффициент!
+    private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     private final BitmapFont font = new BitmapFont();
 
@@ -45,7 +46,7 @@ public class AboutScreen extends ScreenAdapter {
         label.setPosition(Gdx.graphics.getWidth()/3f, Gdx.graphics.getHeight()/ 2f);
         stage.addActor(label);
 
-        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        menuButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override

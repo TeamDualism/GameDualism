@@ -14,13 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 
+import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.WIDTH;
+
 public class MenuScreen implements Screen {
     private final Stage stage;
 
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsHeight = height / 6;
-    private int maxButtonsWidth = width / 6;
+    private int maxButtonsHeight = HEIGHT / 6;
+    private int maxButtonsWidth = WIDTH / 6;
 
     public MenuScreen(final GameDualism game) {
 
@@ -33,10 +34,10 @@ public class MenuScreen implements Screen {
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/musicOn.png"))));
 
-        buttonLevelScreen.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
-        about.setBounds((width - maxButtonsWidth) / 2f, 2 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
-        buttonMusic.setBounds( 999 * (width - maxButtonsWidth) / 1000f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);//!квадратная
-        buttonSound.setBounds( 999 * (width - maxButtonsWidth) / 1000f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);
+        buttonLevelScreen.setBounds((WIDTH - maxButtonsWidth) / 2f, 3 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        about.setBounds((WIDTH - maxButtonsWidth) / 2f, 2 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth) / 1000f, 25 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);//!квадратная
+        buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth) / 1000f, 3 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);
 
         stage = new Stage();
 
