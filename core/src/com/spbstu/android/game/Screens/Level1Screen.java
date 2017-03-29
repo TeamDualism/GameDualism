@@ -30,6 +30,7 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.MapParser;
 import com.spbstu.android.game.Player;
 import com.spbstu.android.game.objects.Bonus;
+import com.spbstu.android.game.utils.GameWorld;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
@@ -46,14 +47,13 @@ public class Level1Screen extends ScreenAdapter {
     private OrthogonalTiledMapRenderer renderer;
 
     //Box2d
-    private World world;
+    private GameWorld gameWorld;
     private Box2DDebugRenderer box2DDebugRenderer;
 
     //Game
     private Player player;
     private Boolean isPaused = false;
     private boolean trapsMap[][];
-    private Array<Bonus> bonuses;
 
     //UI
     private final Stage stage = new Stage();
@@ -78,7 +78,7 @@ public class Level1Screen extends ScreenAdapter {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         //Box2d
-        world = new World(new Vector2(0, -20f), false);
+        gameWorld = new GameWorld(game);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
         //Game
@@ -87,12 +87,11 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.finishLoading();
         player = new Player(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, world, game.assetManager);
-        MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), world);
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), game.assetManager);
+        MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
-        bonuses = new Array<Bonus>();
-        initBonuses();
+        gameWorld.initBonuses(map);
 
         //UI
         actionButtons();
@@ -220,7 +219,7 @@ public class Level1Screen extends ScreenAdapter {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
 
-            world.step(delta, 6, 2);
+            gameWorld.getWorld().step(delta, 6, 2);
             inputUpdate(delta);
             cameraUpdate();
 
@@ -229,7 +228,7 @@ public class Level1Screen extends ScreenAdapter {
             renderer.setView(camera);
             renderer.render();
 
-            renderBonuses();
+            gameWorld.renderBonuses(batch);
 
             stage.act(delta);
             stage.draw();
@@ -247,7 +246,7 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        world.dispose();
+        gameWorld.dispose();
         box2DDebugRenderer.dispose();
         batch.dispose();
         stage.dispose();
@@ -264,7 +263,7 @@ public class Level1Screen extends ScreenAdapter {
             player.jumpTimer--;
         }
 
-        if (player.isGrounded(world) && player.jumpTimer == 0) {
+        if (player.isGrounded(gameWorld.getWorld()) && player.jumpTimer == 0) {
             player.jumpNumber = 1;
         }
 
@@ -322,26 +321,6 @@ public class Level1Screen extends ScreenAdapter {
                 trapsMap[i][j] = (traps[0].getCell(j, i) != null || traps[1].getCell(j, i) != null || traps[2].getCell(j, i) != null);
             }
         }
-    }
-
-    private void initBonuses() {
-        MapObjects objects = map.getLayers().get("Bonuses").getObjects();
-
-        for (MapObject object: objects) {
-            Rectangle rectangle = ((RectangleMapObject)object).getRectangle();
-
-            bonuses.add(new Bonus(rectangle.getX(), rectangle.getY(), game.assetManager.get("Textures/coin.png", Texture.class), world));
-        }
-    }
-
-    private void renderBonuses() {
-        batch.begin();
-
-        for (int i = 0; i < bonuses.size; i++) {
-            bonuses.get(i).draw(batch);
-        }
-
-        batch.end();
     }
 }
 
