@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.spbstu.android.game.Player;
+import com.spbstu.android.game.player.Player;
 import com.spbstu.android.game.objects.Bonus;
 
 import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
@@ -31,7 +31,6 @@ public class GameContactListener implements ContactListener{
 
         switch (contactType) {
             case PLAYER_BIT | BONUS_BIT:
-                System.out.println("COIN");
                 if (fixtureB.getFilterData().categoryBits == BONUS_BIT)
                     gameWorld.addToDestroy((Bonus)(fixtureB.getBody().getUserData()));
 
@@ -46,7 +45,6 @@ public class GameContactListener implements ContactListener{
                 break;
 
             case SENSOR_BIT | TILE_BIT:
-                System.out.println(fixtureA.getFilterData().categoryBits + " " + fixtureB.getFilterData().categoryBits);
                 if (fixtureA.getFilterData().categoryBits == SENSOR_BIT) {
                     Timer timer = new Timer();
 

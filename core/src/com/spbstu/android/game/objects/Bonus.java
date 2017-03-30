@@ -33,6 +33,5 @@ public class Bonus extends Object{
 
         body.createFixture(fixtureDef);
         shape.dispose();
-        System.out.println(x + " " + y);
     }
 }

@@ -15,4 +15,5 @@ dependencies {
 
     compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
 
+    compile 'com.badlogicgames.gdx:gdx-freetype:1.9.5'
 }

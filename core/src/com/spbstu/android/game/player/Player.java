@@ -1,4 +1,4 @@
-package com.spbstu.android.game;
+package com.spbstu.android.game.player;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;

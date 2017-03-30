@@ -3,11 +3,14 @@ package com.spbstu.android.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -17,11 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.utils.MapParser;
-import com.spbstu.android.game.Player;
+import com.spbstu.android.game.player.Player;
 import com.spbstu.android.game.utils.GameWorld;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
@@ -56,8 +60,12 @@ public class Level1Screen extends ScreenAdapter {
     private Button playButton;
     private Button menuButton;
     private Button changeBroButton;
+    private Label score;
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
+    FreeTypeFontGenerator generator;
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    private  BitmapFont font;
 
 
     public Level1Screen(GameDualism game) {
@@ -86,6 +94,11 @@ public class Level1Screen extends ScreenAdapter {
         gameWorld.initBonuses(map);
 
         //UI
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        font = generator.generateFont(parameter);
+
         actionButtons();
     }
 
@@ -158,6 +171,10 @@ public class Level1Screen extends ScreenAdapter {
 
         stage.addActor(changeBroButton);
         changeBroButton.setBounds( WIDTH - maxButtonsSize*3/2 , 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+
+        score = new Label("" + player.getBonusCounter(), new Label.LabelStyle(font, Color.WHITE));
+        score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
+        stage.addActor(score);
     }
 
     @Override
@@ -226,8 +243,9 @@ public class Level1Screen extends ScreenAdapter {
             stage.draw();
             player.render(batch);
             gameWorld.destroyObjects();
-            box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
-            //handleTrapsCollision(player.getTileX(), player.getTileY());
+            //box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
+            handleTrapsCollision(player.getTileX(), player.getTileY());
+            score.setText("" + player.getBonusCounter());
         } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             renderer.render();
