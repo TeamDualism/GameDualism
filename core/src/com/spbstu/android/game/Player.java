@@ -16,14 +16,16 @@ import com.badlogic.gdx.utils.Array;
 
 import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
+import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
+import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
 import static com.spbstu.android.game.utils.Constants.STOP;
 
 public class Player {
     public Texture texture;
     public Body body;
     public int jumpNumber;
-    public int jumpTimer;
+    private int bonusCounter;
 
     public Player(float x, float y, float radius, World world, AssetManager assetManager) {
         BodyDef bodyDef = new BodyDef();
@@ -32,6 +34,7 @@ public class Player {
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
+        body.setUserData(this);
 
         //Main body
         PolygonShape shape = new PolygonShape();
@@ -40,6 +43,7 @@ public class Player {
         fixtureDef.density = 1.0f;
         fixtureDef.friction = 0f;
         fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = PLAYER_BIT;
         body.createFixture(fixtureDef);
         shape.dispose();
 
@@ -48,13 +52,14 @@ public class Player {
         shape1.setAsBox(radius / 2.05f, radius / 10, new Vector2(0, -radius * 0.9f), 0f);
         fixtureDef.shape = shape1;
         fixtureDef.isSensor = true;
+        fixtureDef.filter.categoryBits = SENSOR_BIT;
         body.createFixture(fixtureDef);
         shape1.dispose();
 
         texture = assetManager.get("Textures/character.png", Texture.class);
 
         jumpNumber = 1;
-        jumpTimer = 0;
+        bonusCounter = 0;
     }
 
     public void moveRight() {
@@ -74,8 +79,6 @@ public class Player {
     }
 
     public void jump() {
-        jumpTimer = 3;
-
         if (jumpNumber <= 2) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
@@ -88,18 +91,6 @@ public class Player {
         body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
     }
 
-    public boolean isGrounded(World world) {
-        Fixture sensorFixture = body.getFixtureList().get(1);
-
-        Array<Contact> contactList = world.getContactList();
-
-        for (Contact contact : contactList) {
-            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture))
-                return true;
-        }
-
-        return false;
-    }
 
     public void render(SpriteBatch batch) {
         batch.begin();
@@ -115,5 +106,13 @@ public class Player {
 
     public int getTileY() {
         return (int)Math.floor(body.getPosition().y);
+    }
+
+    public void incBonusCounter() {
+        bonusCounter++;
+    }
+
+    public int getBonusCounter() {
+        return bonusCounter;
     }
 }

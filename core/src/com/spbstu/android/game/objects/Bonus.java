@@ -5,8 +5,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.spbstu.android.game.MapParser;
 
+import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 
 public class Bonus extends Object{
@@ -21,6 +21,7 @@ public class Bonus extends Object{
         bodyDef.position.set(x + this.getWidth() / (2 * PPM), y + this.getHeight() / (2 * PPM));
         bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
+        body.setUserData(this);
 
         CircleShape shape = new CircleShape();
         shape.setRadius(this.getHeight() / (2 * PPM));
@@ -28,8 +29,10 @@ public class Bonus extends Object{
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
+        fixtureDef.filter.categoryBits = BONUS_BIT;
 
         body.createFixture(fixtureDef);
         shape.dispose();
+        System.out.println(x + " " + y);
     }
 }

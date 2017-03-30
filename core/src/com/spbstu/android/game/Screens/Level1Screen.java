@@ -8,28 +8,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.spbstu.android.game.GameDualism;
-import com.spbstu.android.game.MapParser;
+import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.Player;
-import com.spbstu.android.game.objects.Bonus;
 import com.spbstu.android.game.utils.GameWorld;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
@@ -233,8 +225,9 @@ public class Level1Screen extends ScreenAdapter {
             stage.act(delta);
             stage.draw();
             player.render(batch);
-            //box2DDebugRenderer.render(world, camera.combined.scl(PPM));//надо только в дебаге
-            handleTrapsCollision(player.getTileX(), player.getTileY());
+            gameWorld.destroyObjects();
+            box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
+            //handleTrapsCollision(player.getTileX(), player.getTileY());
         } else {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
             renderer.render();
@@ -259,14 +252,6 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     public void inputUpdate(float delta) {
-        if (player.jumpTimer > 0) {
-            player.jumpTimer--;
-        }
-
-        if (player.isGrounded(gameWorld.getWorld()) && player.jumpTimer == 0) {
-            player.jumpNumber = 1;
-        }
-
         if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
             player.stop();
         }
@@ -299,12 +284,11 @@ public class Level1Screen extends ScreenAdapter {
     private void restart() {
         player.body.setLinearVelocity(0f, 0f);
         player.jumpNumber = 1;
-        player.jumpTimer = 0;
         player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
-        if (trapsMap[playerY][playerX] == true) {
+        if (trapsMap[playerY][playerX]) {
                 restart();
         }
     }

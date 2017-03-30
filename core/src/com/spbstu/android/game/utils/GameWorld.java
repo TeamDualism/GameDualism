@@ -27,6 +27,7 @@ public class GameWorld implements Disposable{
         bonuses = new Array<Bonus>();
 
         world = new World(GRAVITY, false);
+        world.setContactListener(new GameContactListener(this));
         this.game = game;
     }
 
