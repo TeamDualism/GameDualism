@@ -3,7 +3,7 @@ package com.spbstu.android.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.spbstu.android.game.Screens.MenuScreen;
+import com.spbstu.android.game.screens.MenuScreen;
 
 public class GameDualism extends Game {
 

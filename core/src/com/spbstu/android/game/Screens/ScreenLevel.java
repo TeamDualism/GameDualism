@@ -1,4 +1,4 @@
-package com.spbstu.android.game.Screens;
+package com.spbstu.android.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,20 +14,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 
-/**
- * @author shabalina-av
- */
+import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.WIDTH;
+
 public class ScreenLevel extends ScreenAdapter {
     private final GameDualism game;
 
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private int maxButtonsHeight = height / 6;
-    private int maxButtonsWidth = width / 6;
+    private int maxButtonsHeight = HEIGHT / 6;
+    private int maxButtonsWidth = WIDTH / 6;
     private final Stage stage = new Stage();
     private Button menuButton;
 
-    private int maxButtonsSize = height / 6; // не размер, а коэффициент!
+    private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
 
     public ScreenLevel(final GameDualism game,final MenuScreen menu) {
@@ -38,13 +36,13 @@ public class ScreenLevel extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
-        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        menuButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         menuButton.setVisible(true);
 
 
         Button buttonLevel1 = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/level1.png"))));
-        buttonLevel1.setBounds(5/4*(width - maxButtonsWidth) / 2f, 5/4*(height - maxButtonsHeight) / 2f, maxButtonsWidth * 5/4, maxButtonsHeight*5/4);
+        buttonLevel1.setBounds(5/4*(WIDTH - maxButtonsWidth) / 2f, 5/4*(HEIGHT - maxButtonsHeight) / 2f, maxButtonsWidth * 5/4, maxButtonsHeight*5/4);
         stage.addActor(buttonLevel1);
 
 

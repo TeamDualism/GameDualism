@@ -1,4 +1,4 @@
-package com.spbstu.android.game;
+package com.spbstu.android.game.utils;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -6,13 +6,14 @@ import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static com.spbstu.android.game.utils.Constants.PPM;
+import static com.spbstu.android.game.utils.Constants.TILE_BIT;
+
 public class MapParser {
-
-    public static float PPM = 16f;
-
     public static void parseMapObjects(MapObjects objects, World world) {
         Shape shape;
 
@@ -26,7 +27,13 @@ public class MapParser {
 
                 bodyDef.type = BodyDef.BodyType.StaticBody;
                 body = world.createBody(bodyDef);
-                body.createFixture(shape, 1.0f);
+
+                FixtureDef fixtureDef = new FixtureDef();
+                fixtureDef.density = 1.0f;
+                fixtureDef.shape = shape;
+                fixtureDef.filter.categoryBits = TILE_BIT;
+
+                body.createFixture(fixtureDef);
 
                 shape.dispose();
             }

@@ -1,4 +1,4 @@
-package com.spbstu.android.game.Screens;
+package com.spbstu.android.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,9 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 
-/**
- * @author shabalina-av
- */
+import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.WIDTH;
+
 public class PlayPauseScreen extends ScreenAdapter {
 
     private final Stage stage = new Stage();
@@ -30,10 +30,8 @@ public class PlayPauseScreen extends ScreenAdapter {
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
-        int height = Gdx.graphics.getHeight();
-        int maxButtonsSize = height / 6;
-        int width = Gdx.graphics.getWidth();
-        menuButton.setBounds(width - maxButtonsSize, height - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        int maxButtonsSize = HEIGHT / 6;
+        menuButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
@@ -46,9 +44,9 @@ public class PlayPauseScreen extends ScreenAdapter {
 
         Button restartLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/restartButton.png"))));
-        int maxButtonsHeight = height / 6;
-        int maxButtonsWidth = width / 6;
-        restartLevel.setBounds((width - maxButtonsWidth) / 2f, 3 * (height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        int maxButtonsHeight = HEIGHT / 6;
+        int maxButtonsWidth = WIDTH / 6;
+        restartLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 3 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(restartLevel);
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -59,7 +57,7 @@ public class PlayPauseScreen extends ScreenAdapter {
         });
         Button resumeLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/resumeButton.png"))));
-        resumeLevel.setBounds((width - maxButtonsWidth) / 2f,  2*(height - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        resumeLevel.setBounds((WIDTH - maxButtonsWidth) / 2f,  2*(HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(resumeLevel);
         resumeLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -75,8 +73,8 @@ public class PlayPauseScreen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/audioOn.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/musicOn.png"))));
-        buttonMusic.setBounds(99 * (width - maxButtonsWidth) / 100f, 25 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
-        buttonSound.setBounds(99 * (width - maxButtonsWidth) / 100f, 3 * (height - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
+        buttonMusic.setBounds(99 * (WIDTH - maxButtonsWidth) / 100f, 25 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
+        buttonSound.setBounds(99 * (WIDTH - maxButtonsWidth) / 100f, 3 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
         stage.addActor(buttonMusic);
         stage.addActor(buttonSound);
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
