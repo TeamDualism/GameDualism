@@ -96,7 +96,7 @@ public class Level1Screen extends ScreenAdapter {
         //UI
         generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
+        parameter.size = 90;
         font = generator.generateFont(parameter);
 
         actionButtons();
@@ -123,7 +123,7 @@ public class Level1Screen extends ScreenAdapter {
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/menu.png"))));
         changeBroButton = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("buttons/changebrobutton.png"))));
+                new TextureRegion(new Texture("Buttons/changebrobutton.png"))));
         maxButtonsSizeDeterminate();
         stage.addActor(rightButton);
 
