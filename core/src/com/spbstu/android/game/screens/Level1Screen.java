@@ -1,7 +1,11 @@
 package com.spbstu.android.game.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -219,6 +223,9 @@ public class Level1Screen extends ScreenAdapter {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        if (Gdx.app.getType().equals(Application.ApplicationType.Desktop)) {
+            bindKeyboard();
+        }
     }
 
     @Override
@@ -295,7 +302,7 @@ public class Level1Screen extends ScreenAdapter {
         if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
             camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM )
+        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM)
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
 
         if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
@@ -313,22 +320,69 @@ public class Level1Screen extends ScreenAdapter {
 
     private void handleTrapsCollision(int playerX, int playerY) {
         if (trapsMap[playerY][playerX]) {
-                restart();
+            restart();
         }
     }
 
     private void initTrapsMap() {
         TiledMapTileLayer traps[] = new TiledMapTileLayer[3];
 
-        traps[0] = (TiledMapTileLayer)map.getLayers().get("Background-Water&amp;Lava");
-        traps[1] = (TiledMapTileLayer)map.getLayers().get("Traps-second-bro");
-        traps[2] = (TiledMapTileLayer)map.getLayers().get("Traps-first-bro");
+        traps[0] = (TiledMapTileLayer) map.getLayers().get("Background-Water&amp;Lava");
+        traps[1] = (TiledMapTileLayer) map.getLayers().get("Traps-second-bro");
+        traps[2] = (TiledMapTileLayer) map.getLayers().get("Traps-first-bro");
 
         for (int i = 0; i < map.getProperties().get("height", Integer.class); i++) {
             for (int j = 0; j < map.getProperties().get("width", Integer.class); j++) {
                 trapsMap[i][j] = (traps[0].getCell(j, i) != null || traps[1].getCell(j, i) != null || traps[2].getCell(j, i) != null);
             }
         }
+    }
+
+    private void bindKeyboard() {
+        InputProcessor oldProcessor = Gdx.input.getInputProcessor();
+        InputAdapter keyDispatcher = new InputAdapter() {
+            @Override
+            public boolean keyUp(int keycode) {
+                return handleIfSupported(keycode, InputEvent.Type.touchUp);
+            }
+
+            @Override
+            public boolean keyDown(int keycode) {
+                return handleIfSupported(keycode, InputEvent.Type.touchDown);
+            }
+
+            private boolean handleIfSupported(int keycode, InputEvent.Type eventType) {
+                if (isSupported(keycode)) {
+                    fireEvent(keycode, eventType);
+                }
+
+                return false;
+            }
+
+            private boolean isSupported(int keyCode) {
+                return keyCode == Input.Keys.UP ||
+                        keyCode == Input.Keys.RIGHT ||
+                        keyCode == Input.Keys.LEFT;
+            }
+
+            private void fireEvent(int keyCode, InputEvent.Type eventType) {
+                InputEvent e = new InputEvent();
+                e.setType(eventType);
+                if (keyCode == Input.Keys.UP) {
+                    fire(upButton, e);
+                } else if (keyCode == Input.Keys.LEFT) {
+                    fire(leftButton, e);
+
+                } else if (keyCode == Input.Keys.RIGHT) {
+                    fire(rightButton, e);
+                }
+            }
+
+            private void fire(Button button, InputEvent event) {
+                button.fire(event);
+            }
+        };
+        Gdx.input.setInputProcessor(new InputMultiplexer(keyDispatcher, oldProcessor));
     }
 }
 
