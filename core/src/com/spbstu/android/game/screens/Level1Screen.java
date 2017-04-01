@@ -63,6 +63,12 @@ public class Level1Screen extends ScreenAdapter {
     private Label score;
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
+    // Screen Size; 1500 = 960 + 540; 16:9
+    private final int height = Gdx.graphics.getHeight();
+    private final int width = Gdx.graphics.getWidth();
+    private float HeightSize = (1500f / (float)(height + width) * height / 4f);
+    private float WidthSize = (1500f / (float)(height + width) * width / 4f);
+
     FreeTypeFontGenerator generator;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private  BitmapFont font;
@@ -217,7 +223,7 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, width / 4.5f, height / 4.5f);
+        camera.setToOrtho(false, WidthSize, HeightSize);
         moveCamera();
         camera.update();
     }
@@ -286,17 +292,17 @@ public class Level1Screen extends ScreenAdapter {
     private void moveCamera() {
         camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
 
-        if (player.body.getPosition().x - Gdx.graphics.getWidth() / (9f * PPM) < 0)
-            camera.position.set(Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
+        if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
+            camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + Gdx.graphics.getWidth() / (9f * PPM) > map.getProperties().get("width", Integer.class) * 16 / PPM )
-            camera.position.set(map.getProperties().get("width", Integer.class) * 16f - Gdx.graphics.getWidth() / 9f, camera.position.y, camera.position.z);
+        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM )
+            camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().y - Gdx.graphics.getHeight() / (9f * PPM) < 0)
-            camera.position.set(camera.position.x, Gdx.graphics.getHeight() / 9f, camera.position.z);
+        if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
+            camera.position.set(camera.position.x, HeightSize / 2f, camera.position.z);
 
-        if (player.body.getPosition().y + Gdx.graphics.getHeight() / (9f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
-            camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - Gdx.graphics.getHeight() / 9f, camera.position.z);
+        if (player.body.getPosition().y + HeightSize / (2f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
+            camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - HeightSize / 2f, camera.position.z);
     }
 
     private void restart() {
