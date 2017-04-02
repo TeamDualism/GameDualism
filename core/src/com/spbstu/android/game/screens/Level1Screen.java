@@ -36,6 +36,9 @@ import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
 
+import static com.spbstu.android.game.player.Player.State.JUMPING;
+import static com.spbstu.android.game.player.Player.State.RUNNING;
+import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -99,7 +102,7 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.finishLoading();
         player = new Player(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), game.assetManager);
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
@@ -302,6 +305,16 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     private void inputUpdate() {
+        if (player.isGrounded(gameWorld.getWorld())) {
+            if (player.body.getLinearVelocity().x != 0f) {
+                player.setState(RUNNING);
+            } else {
+                player.setState(STANDING);
+            }
+        } else {
+            player.setState(JUMPING);
+        }
+
         if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
             player.stop();
         }
