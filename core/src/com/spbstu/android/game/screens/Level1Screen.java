@@ -10,6 +10,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,12 +26,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
-import com.spbstu.android.game.utils.MapParser;
+import com.spbstu.android.game.component.TimeLine;
+import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.player.Player;
 import com.spbstu.android.game.utils.GameWorld;
+import com.spbstu.android.game.utils.MapParser;
+import com.spbstu.android.game.utils.TextureUtil;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
@@ -110,8 +116,23 @@ public class Level1Screen extends ScreenAdapter {
         font = generator.generateFont(parameter);
 
         actionButtons();
-    }
 
+        Drawable background = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
+        Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
+        final TimeLine timeLine = new TimeLine(background, knob, 60);
+
+        timeLine.setWidth(WIDTH);
+        timeLine.setPosition(0, 0);
+        timeLine.setAnimateDuration(.01f);
+        timeLine.addListener(new TimeOverListener() {
+            @Override
+            public void handle() {
+                // Put a logic to handle time over event here
+                timeLine.reset();
+            }
+        });
+        stage.addActor(timeLine);
+    }
 
     public void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
         if (maxButtonsSize > leftButton.getWidth())
@@ -180,7 +201,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(changeBroButton);
-        changeBroButton.setBounds( WIDTH - maxButtonsSize*3/2 , 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
 
         score = new Label("" + player.getBonusCounter(), new Label.LabelStyle(font, Color.WHITE));
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
