@@ -73,8 +73,8 @@ public class PlayPauseScreen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/audioOn.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/musicOn.png"))));
-        buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 999 * (HEIGHT - maxButtonsHeight) / 1000f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);//!квадратная
-        buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 830 * (HEIGHT - maxButtonsHeight) / 1000f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);
+        buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99* (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);//!квадратная
+        buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth + 60)/ 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);
         stage.addActor(buttonMusic);
         stage.addActor(buttonSound);
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
