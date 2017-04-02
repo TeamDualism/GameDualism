@@ -1,7 +1,11 @@
 package com.spbstu.android.game.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,11 +26,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
-import com.spbstu.android.game.utils.MapParser;
+import com.spbstu.android.game.component.TimeLine;
+import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.player.Player;
 import com.spbstu.android.game.utils.GameWorld;
+import com.spbstu.android.game.utils.MapParser;
+import com.spbstu.android.game.utils.TextureUtil;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
@@ -64,12 +72,12 @@ public class Level1Screen extends ScreenAdapter {
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     // Screen Size; 1500 = 960 + 540; 16:9
-    private float HeightSize = (1500f / (float)(HEIGHT + WIDTH) * HEIGHT / 4f);
-    private float WidthSize = (1500f / (float)(HEIGHT + WIDTH) * WIDTH / 4f);
+    private final int height = Gdx.graphics.getHeight();
+    private final int width = Gdx.graphics.getWidth();
+    private float HeightSize = (1500f / (float) (height + width) * height / 4f);
+    private float WidthSize = (1500f / (float) (height + width) * width / 4f);
 
-    FreeTypeFontGenerator generator;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-    private  BitmapFont font;
+    private BitmapFont font;
 
 
     public Level1Screen(GameDualism game) {
@@ -98,21 +106,36 @@ public class Level1Screen extends ScreenAdapter {
         gameWorld.initBonuses(map);
 
         //UI
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 90;
         font = generator.generateFont(parameter);
 
         actionButtons();
+
+        Drawable background = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
+        Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
+        final TimeLine timeLine = new TimeLine(background, knob, 60);
+
+        timeLine.setWidth(WIDTH / 4);
+        timeLine.setPosition(3 * WIDTH / 8, HEIGHT - 2 * timeLine.getHeight());
+        timeLine.setAnimateDuration(.01f);
+        timeLine.addListener(new TimeOverListener() {
+            @Override
+            public void handle() {
+                // Put a logic to handle time over event here
+                timeLine.reset();
+            }
+        });
+        stage.addActor(timeLine);
     }
 
-
-    public void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
+    private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
         if (maxButtonsSize > leftButton.getWidth())
             maxButtonsSize = (int) leftButton.getWidth();
     }
 
-    public void actionButtons() {
+    private void actionButtons() {
 
         rightButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/rightButton.png"))));
@@ -174,7 +197,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(changeBroButton);
-        changeBroButton.setBounds( WIDTH - maxButtonsSize*3/2 , 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
 
         score = new Label("" + player.getBonusCounter(), new Label.LabelStyle(font, Color.WHITE));
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
@@ -191,6 +214,8 @@ public class Level1Screen extends ScreenAdapter {
         playButton.setVisible(true);
         changeBroButton.setVisible(false);
         isPaused = true;
+
+        player.stop();
     }
 
     @Override
@@ -205,7 +230,7 @@ public class Level1Screen extends ScreenAdapter {
         isPaused = false;
     }
 
-    public void pauseMode() {
+    private void pauseMode() {
         playButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -217,6 +242,9 @@ public class Level1Screen extends ScreenAdapter {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        if (Gdx.app.getType().equals(Application.ApplicationType.Desktop)) {
+            bindKeyboard();
+        }
     }
 
     @Override
@@ -233,7 +261,7 @@ public class Level1Screen extends ScreenAdapter {
             Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
 
             gameWorld.getWorld().step(delta, 6, 2);
-            inputUpdate(delta);
+            inputUpdate();
             cameraUpdate();
 
             batch.setProjectionMatrix(camera.combined);
@@ -273,7 +301,7 @@ public class Level1Screen extends ScreenAdapter {
         camera.update();
     }
 
-    public void inputUpdate(float delta) {
+    private void inputUpdate() {
         if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
             player.stop();
         }
@@ -293,7 +321,7 @@ public class Level1Screen extends ScreenAdapter {
         if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
             camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM )
+        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM)
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
 
         if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
@@ -311,22 +339,69 @@ public class Level1Screen extends ScreenAdapter {
 
     private void handleTrapsCollision(int playerX, int playerY) {
         if (trapsMap[playerY][playerX]) {
-                restart();
+            restart();
         }
     }
 
     private void initTrapsMap() {
         TiledMapTileLayer traps[] = new TiledMapTileLayer[3];
 
-        traps[0] = (TiledMapTileLayer)map.getLayers().get("Background-Water&amp;Lava");
-        traps[1] = (TiledMapTileLayer)map.getLayers().get("Traps-second-bro");
-        traps[2] = (TiledMapTileLayer)map.getLayers().get("Traps-first-bro");
+        traps[0] = (TiledMapTileLayer) map.getLayers().get("Background-Water&amp;Lava");
+        traps[1] = (TiledMapTileLayer) map.getLayers().get("Traps-second-bro");
+        traps[2] = (TiledMapTileLayer) map.getLayers().get("Traps-first-bro");
 
         for (int i = 0; i < map.getProperties().get("height", Integer.class); i++) {
             for (int j = 0; j < map.getProperties().get("width", Integer.class); j++) {
                 trapsMap[i][j] = (traps[0].getCell(j, i) != null || traps[1].getCell(j, i) != null || traps[2].getCell(j, i) != null);
             }
         }
+    }
+
+    private void bindKeyboard() {
+        InputProcessor oldProcessor = Gdx.input.getInputProcessor();
+        InputAdapter keyDispatcher = new InputAdapter() {
+            @Override
+            public boolean keyUp(int keycode) {
+                return handleIfSupported(keycode, InputEvent.Type.touchUp);
+            }
+
+            @Override
+            public boolean keyDown(int keycode) {
+                return handleIfSupported(keycode, InputEvent.Type.touchDown);
+            }
+
+            private boolean handleIfSupported(int keycode, InputEvent.Type eventType) {
+                if (isSupported(keycode)) {
+                    fireEvent(keycode, eventType);
+                }
+
+                return false;
+            }
+
+            private boolean isSupported(int keyCode) {
+                return keyCode == Input.Keys.UP ||
+                        keyCode == Input.Keys.RIGHT ||
+                        keyCode == Input.Keys.LEFT;
+            }
+
+            private void fireEvent(int keyCode, InputEvent.Type eventType) {
+                InputEvent e = new InputEvent();
+                e.setType(eventType);
+                if (keyCode == Input.Keys.UP) {
+                    fire(upButton, e);
+                } else if (keyCode == Input.Keys.LEFT) {
+                    fire(leftButton, e);
+
+                } else if (keyCode == Input.Keys.RIGHT) {
+                    fire(rightButton, e);
+                }
+            }
+
+            private void fire(Button button, InputEvent event) {
+                button.fire(event);
+            }
+        };
+        Gdx.input.setInputProcessor(new InputMultiplexer(keyDispatcher, oldProcessor));
     }
 }
 

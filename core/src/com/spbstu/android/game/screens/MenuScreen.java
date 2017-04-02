@@ -36,8 +36,8 @@ public class MenuScreen implements Screen {
 
         buttonLevelScreen.setBounds((WIDTH - maxButtonsWidth) / 2f, 3 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         about.setBounds((WIDTH - maxButtonsWidth) / 2f, 2 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
-        buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth) / 1000f, 25 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);//!квадратная
-        buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth) / 1000f, 3 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*4/5, maxButtonsHeight*4/5);
+        buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99* (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);//!квадратная
+        buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth + 60)/ 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);
 
         stage = new Stage();
 
