@@ -46,23 +46,9 @@ public class GameContactListener implements ContactListener{
 
             case SENSOR_BIT | TILE_BIT:
                 if (fixtureA.getFilterData().categoryBits == SENSOR_BIT) {
-                    Timer timer = new Timer();
-
-                    timer.scheduleTask(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            ((Player)(fixtureA.getBody().getUserData())).jumpNumber = 1;
-                        }
-                    }, Gdx.graphics.getDeltaTime());
+                    ((Player)(fixtureA.getBody().getUserData())).jumpNumber = 1;
                 } else {
-                    Timer timer = new Timer();
-
-                    timer.scheduleTask(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            ((Player)(fixtureB.getBody().getUserData())).jumpNumber = 1;
-                        }
-                    }, Gdx.graphics.getDeltaTime());
+                    ((Player)(fixtureB.getBody().getUserData())).jumpNumber = 1;
                 }
                 break;
         }
