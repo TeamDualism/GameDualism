@@ -64,10 +64,8 @@ public class Level1Screen extends ScreenAdapter {
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     // Screen Size; 1500 = 960 + 540; 16:9
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = (1500f / (float)(height + width) * height / 4f);
-    private float WidthSize = (1500f / (float)(height + width) * width / 4f);
+    private float HeightSize = (1500f / (float)(HEIGHT + WIDTH) * HEIGHT / 4f);
+    private float WidthSize = (1500f / (float)(HEIGHT + WIDTH) * WIDTH / 4f);
 
     FreeTypeFontGenerator generator;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter;
