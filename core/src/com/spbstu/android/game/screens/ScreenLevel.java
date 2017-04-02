@@ -36,13 +36,13 @@ public class ScreenLevel extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
-        menuButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        menuButton.setBounds(999*(WIDTH - maxButtonsSize +10)/1000f, 999*(HEIGHT - maxButtonsSize)/1000f, maxButtonsSize * 2 / 3, maxButtonsSize * 2 / 3);
         menuButton.setVisible(true);
 
 
         Button buttonLevel1 = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/level1.png"))));
-        buttonLevel1.setBounds(5/4*(WIDTH - maxButtonsWidth) / 2f, 5/4*(HEIGHT - maxButtonsHeight) / 2f, maxButtonsWidth * 5/4, maxButtonsHeight*5/4);
+        buttonLevel1.setBounds((WIDTH - maxButtonsWidth) / 2f, 3*(HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth , maxButtonsHeight);
         stage.addActor(buttonLevel1);
 
 

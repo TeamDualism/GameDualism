@@ -31,7 +31,7 @@ public class PlayPauseScreen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
         int maxButtonsSize = HEIGHT / 6;
-        menuButton.setBounds(WIDTH - maxButtonsSize, HEIGHT - maxButtonsSize, maxButtonsSize * 3 / 4, maxButtonsSize * 3 / 4);
+        menuButton.setBounds((WIDTH - maxButtonsSize)/100f, 2*(HEIGHT - maxButtonsSize)/100f, maxButtonsSize , maxButtonsSize );
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
@@ -73,8 +73,8 @@ public class PlayPauseScreen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/audioOn.png"))));
         final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/musicOn.png"))));
-        buttonMusic.setBounds(99 * (WIDTH - maxButtonsWidth) / 100f, 25 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);//!квадратная
-        buttonSound.setBounds(99 * (WIDTH - maxButtonsWidth) / 100f, 3 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight, maxButtonsHeight);
+        buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 999 * (HEIGHT - maxButtonsHeight) / 1000f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);//!квадратная
+        buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 830 * (HEIGHT - maxButtonsHeight) / 1000f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);
         stage.addActor(buttonMusic);
         stage.addActor(buttonSound);
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
