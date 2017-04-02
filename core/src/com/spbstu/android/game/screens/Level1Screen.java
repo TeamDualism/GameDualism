@@ -117,8 +117,8 @@ public class Level1Screen extends ScreenAdapter {
         Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
         final TimeLine timeLine = new TimeLine(background, knob, 60);
 
-        timeLine.setWidth(WIDTH);
-        timeLine.setPosition(0, 0);
+        timeLine.setWidth(WIDTH / 4);
+        timeLine.setPosition(3 * WIDTH / 8, HEIGHT - 2 * timeLine.getHeight());
         timeLine.setAnimateDuration(.01f);
         timeLine.addListener(new TimeOverListener() {
             @Override
