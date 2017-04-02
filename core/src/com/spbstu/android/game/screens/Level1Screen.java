@@ -214,6 +214,8 @@ public class Level1Screen extends ScreenAdapter {
         playButton.setVisible(true);
         changeBroButton.setVisible(false);
         isPaused = true;
+
+        player.stop();
     }
 
     @Override
