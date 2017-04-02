@@ -10,7 +10,6 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -76,12 +74,10 @@ public class Level1Screen extends ScreenAdapter {
     // Screen Size; 1500 = 960 + 540; 16:9
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = (1500f / (float)(height + width) * height / 4f);
-    private float WidthSize = (1500f / (float)(height + width) * width / 4f);
+    private float HeightSize = (1500f / (float) (height + width) * height / 4f);
+    private float WidthSize = (1500f / (float) (height + width) * width / 4f);
 
-    FreeTypeFontGenerator generator;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-    private  BitmapFont font;
+    private BitmapFont font;
 
 
     public Level1Screen(GameDualism game) {
@@ -110,8 +106,8 @@ public class Level1Screen extends ScreenAdapter {
         gameWorld.initBonuses(map);
 
         //UI
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 90;
         font = generator.generateFont(parameter);
 
@@ -134,12 +130,12 @@ public class Level1Screen extends ScreenAdapter {
         stage.addActor(timeLine);
     }
 
-    public void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
+    private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
         if (maxButtonsSize > leftButton.getWidth())
             maxButtonsSize = (int) leftButton.getWidth();
     }
 
-    public void actionButtons() {
+    private void actionButtons() {
 
         rightButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/rightButton.png"))));
@@ -232,7 +228,7 @@ public class Level1Screen extends ScreenAdapter {
         isPaused = false;
     }
 
-    public void pauseMode() {
+    private void pauseMode() {
         playButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -263,7 +259,7 @@ public class Level1Screen extends ScreenAdapter {
             Gdx.gl.glClearColor(2f / 256f, 23f / 256f, 33f / 256f, 1f);
 
             gameWorld.getWorld().step(delta, 6, 2);
-            inputUpdate(delta);
+            inputUpdate();
             cameraUpdate();
 
             batch.setProjectionMatrix(camera.combined);
@@ -303,7 +299,7 @@ public class Level1Screen extends ScreenAdapter {
         camera.update();
     }
 
-    public void inputUpdate(float delta) {
+    private void inputUpdate() {
         if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
             player.stop();
         }
