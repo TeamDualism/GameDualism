@@ -32,13 +32,15 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.player.Player;
+import com.spbstu.android.game.player.Ronnie;
+import com.spbstu.android.game.player.Reggie;
 import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
 
-import static com.spbstu.android.game.player.Player.State.JUMPING;
-import static com.spbstu.android.game.player.Player.State.RUNNING;
-import static com.spbstu.android.game.player.Player.State.STANDING;
+import static com.spbstu.android.game.player.Ronnie.State.JUMPING;
+import static com.spbstu.android.game.player.Ronnie.State.RUNNING;
+import static com.spbstu.android.game.player.Ronnie.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -59,6 +61,8 @@ public class Level1Screen extends ScreenAdapter {
 
     //Game
     private Player player;
+    private Ronnie ronnie;
+    private Reggie reggie;
     private Boolean isPaused = false;
     private boolean trapsMap[][];
 
@@ -100,9 +104,16 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.finishLoading();
-        player = new Player(16f / (2 * PPM),
+        ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+        //ronnie.body.setActive(false);
+        reggie = new Reggie(16f / (2 * PPM),
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+        player = reggie;
+        player.body = reggie.body;
+
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
@@ -168,8 +179,30 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.jump();
+                player.jump(player.jumpNumber);
+                player.jumpNumber ++;
+                return true;
+            }
+        });
 
+        changeBroButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(player == reggie){
+                //    ronnie.body.setActive(true);
+                //    ronnie.body = reggie.body;
+                //    reggie.body.setActive(false);
+                    player = ronnie;
+                    player.body = ronnie.body;
+
+                } else {
+                   // reggie.body.setActive(true);
+                  //  reggie.body = ronnie.body;
+                   // ronnie.body.setActive(false);
+                    player = reggie;
+                    player.body = reggie.body;
+                    //reggie.body = ronnie.body;
+                }
                 return true;
             }
         });
