@@ -74,7 +74,7 @@ public class Player {
         body.createFixture(fixtureDef);
         shape1.dispose();
 
-        atlas = new TextureAtlas(new FileHandle("Textures/player.pack"));
+        atlas = new TextureAtlas(Gdx.files.internal("Textures/player.pack"));
         runningAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("running"), Animation.PlayMode.LOOP);
         standingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("standing"), Animation.PlayMode.LOOP);
         jumpingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("jumping"), Animation.PlayMode.LOOP);
