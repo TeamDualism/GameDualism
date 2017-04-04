@@ -63,7 +63,7 @@ public class Reggie extends Player{
         body.createFixture(fixtureDef);
         shape1.dispose();
 
-        atlas = new TextureAtlas(Gdx.files.internal("Textures/Ronnie.pack"));
+        atlas = new TextureAtlas(Gdx.files.internal("Textures/blueReggie.pack"));
         runningAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("running"), Animation.PlayMode.LOOP);
         standingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("standing"), Animation.PlayMode.LOOP);
         jumpingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("jumping"), Animation.PlayMode.LOOP);

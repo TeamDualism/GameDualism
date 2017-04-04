@@ -1,0 +1,40 @@
+
+blueReggie.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+running
+  rotate: false
+  xy: 1, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: 0
+running
+  rotate: false
+  xy: 1, 1
+  size: 13, 14
+  orig: 13, 14
+  offset: 0, 0
+  index: 2
+jumping
+  rotate: false
+  xy: 16, 1
+  size: 12, 14
+  orig: 12, 14
+  offset: 0, 0
+  index: 0
+standing
+  rotate: false
+  xy: 17, 17
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: 0
+running
+  rotate: false
+  xy: 30, 16
+  size: 9, 15
+  orig: 9, 15
+  offset: 0, 0
+  index: 1
