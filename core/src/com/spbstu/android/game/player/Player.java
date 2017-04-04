@@ -137,7 +137,7 @@ public abstract class Player {
         return false;
     }
 
-    abstract  public void jump(int jumpNumberPlayer);
+    abstract  public void jump();
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame;

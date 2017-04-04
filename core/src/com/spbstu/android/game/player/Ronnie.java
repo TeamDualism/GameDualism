@@ -11,12 +11,6 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 
 public class Ronnie extends Player{
-    public TextureAtlas atlas;
-    public int jumpNumber;
-
-    public Animation<TextureRegion> runningAnimation;
-    public Animation<TextureRegion> standingAnimation;
-    public Animation<TextureRegion> jumpingAnimation;
 
     public Ronnie(float x, float y, float radius, World world) {
         super (x, y, radius, world);
@@ -28,8 +22,7 @@ public class Ronnie extends Player{
 
     }
 
-    public void jump(int jumpNumberPlayer) {
-        jumpNumber = jumpNumberPlayer;
+    public void jump() {
         if (jumpNumber <= 2) {
             super.body.setLinearVelocity(super.body.getLinearVelocity().x, 0f);
             super.body.applyLinearImpulse(0, super.body.getMass() * 10f, super.body.getPosition().x, super.body.getPosition().y, false);

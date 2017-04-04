@@ -183,8 +183,7 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.jump(player.jumpNumber);
-                player.jumpNumber ++;
+                player.jump();
                 return true;
             }
         });
