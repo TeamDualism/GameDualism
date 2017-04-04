@@ -1,4 +1,4 @@
-package com.spbstu.android.game.screens;
+package com.spbstu.android.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

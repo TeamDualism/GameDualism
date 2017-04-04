@@ -8,19 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 
 
 import static com.spbstu.android.game.player.Player.Direction.LEFT;
-import static com.spbstu.android.game.player.Player.Direction.RIGHT;
 import static com.spbstu.android.game.player.Player.State.STANDING;
-import static com.spbstu.android.game.utils.Constants.IMPULSE;
-import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
 import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;

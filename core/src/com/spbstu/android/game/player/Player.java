@@ -1,9 +1,6 @@
 package com.spbstu.android.game.player;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -14,13 +11,11 @@ import static com.spbstu.android.game.player.Player.Direction.LEFT;
 import static com.spbstu.android.game.player.Player.Direction.RIGHT;
 import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
-import static com.spbstu.android.game.utils.Constants.PPM;
 
 public abstract class Player {
     public Body body;
     public int jumpNumber;
     public int bonusCounter = 0;
-    private Player.State state;
 
     public enum State {STANDING, RUNNING, JUMPING};
     public enum Direction {LEFT, RIGHT};
@@ -79,7 +74,4 @@ public abstract class Player {
         return false;
     }
     abstract public void setState(Player.State newState);
-    public void setPosition(float x, float y){
-        
-    }
 }

@@ -1,4 +1,4 @@
-package com.spbstu.android.game.screens;
+package com.spbstu.android.game.Screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -38,8 +38,6 @@ import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
 
-import static com.spbstu.android.game.player.Player.Direction.RIGHT;
-import static com.spbstu.android.game.player.Player.Direction.LEFT;
 import static com.spbstu.android.game.player.Player.State.RUNNING;
 import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.STANDING;
@@ -197,9 +195,7 @@ public class Level1Screen extends ScreenAdapter {
                     player = ronnie;
                     // body
                     ronnie.body.setActive(true);
-                    ronnie.body.setTransform(reggie.body.getPosition().x,
-                            reggie.body.getPosition().y,
-                            reggie.body.getAngle());
+                    ronnie.body.setTransform(reggie.body.getPosition().x, reggie.body.getPosition().y, reggie.body.getAngle());
                     reggie.body.setActive(false);
                     player.body = ronnie.body;
                 } else {
