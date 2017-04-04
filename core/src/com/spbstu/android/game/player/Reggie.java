@@ -15,9 +15,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-import static com.spbstu.android.game.player.Ronnie.Direction.LEFT;
-import static com.spbstu.android.game.player.Ronnie.Direction.RIGHT;
-import static com.spbstu.android.game.player.Ronnie.State.STANDING;
+import static com.spbstu.android.game.player.Player.Direction.LEFT;
+import static com.spbstu.android.game.player.Player.Direction.RIGHT;
+import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
 import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
@@ -32,7 +32,6 @@ public class Reggie extends Player{
     private TextureAtlas atlas;
     public Body body;
     public int jumpNumber;
-    private int bonusCounter;
 
     float stateTime;
     private Animation<TextureRegion> runningAnimation;
@@ -40,7 +39,6 @@ public class Reggie extends Player{
     private Animation<TextureRegion> jumpingAnimation;
 
     private Ronnie.State state;
-    private Ronnie.Direction direction;
 
     public Reggie(float x, float y, float radius, World world) {
         BodyDef bodyDef = new BodyDef();
@@ -71,37 +69,15 @@ public class Reggie extends Player{
         body.createFixture(fixtureDef);
         shape1.dispose();
 
-        atlas = new TextureAtlas(Gdx.files.internal("Textures/player.pack"));
+        atlas = new TextureAtlas(Gdx.files.internal("Textures/Ronnie.pack"));
         runningAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("running"), Animation.PlayMode.LOOP);
         standingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("standing"), Animation.PlayMode.LOOP);
         jumpingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("jumping"), Animation.PlayMode.LOOP);
 
         jumpNumber = 1;
-        bonusCounter = 0;
 
         stateTime = 0f;
         state = STANDING;
-        direction = RIGHT;
-    }
-
-    public void moveRight() {
-        direction = RIGHT;
-
-        body.applyLinearImpulse(IMPULSE, 0, body.getPosition().x, body.getPosition().y, false);
-
-        if (Math.abs(body.getLinearVelocity().x) > MAX_VELOCITY) {
-            body.setLinearVelocity(MAX_VELOCITY, body.getLinearVelocity().y);
-        }
-    }
-
-    public void moveLeft() {
-        direction = LEFT;
-
-        body.applyLinearImpulse(-IMPULSE, 0, body.getPosition().x, body.getPosition().y, false);
-
-        if (Math.abs(body.getLinearVelocity().x) > MAX_VELOCITY) {
-            body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
-        }
     }
 
     public void jump(int jumpNumberPlayer) {
@@ -112,11 +88,6 @@ public class Reggie extends Player{
 
             jumpNumber++;
         }
-    }
-
-    public void stop() {
-        //body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
-        body.setLinearVelocity(0f, body.getLinearVelocity().y);
     }
 
     public void render(SpriteBatch batch) {
@@ -146,38 +117,5 @@ public class Reggie extends Player{
                 currentFrame.getRegionHeight());
         batch.end();
     }
-
-    public boolean isGrounded(World world) {
-        Fixture sensorFixture = body.getFixtureList().get(1);
-
-        Array<Contact> contactList = world.getContactList();
-
-        for (Contact contact : contactList) {
-            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture))
-                return true;
-        }
-
-        return false;
-    }
-
-
-    public int getTileX() {
-        return (int)Math.floor(body.getPosition().x);
-    }
-
-    public int getTileY() {
-        return (int)Math.floor(body.getPosition().y);
-    }
-
-    public void incBonusCounter() {
-        bonusCounter++;
-    }
-
-    public int getBonusCounter() {
-        return bonusCounter;
-    }
-
-    public void setState(Ronnie.State newState) {
-        state = newState;
-    }
+    public void setState(Reggie.State newState){ state = newState; };
 }
