@@ -194,36 +194,18 @@ public class Level1Screen extends ScreenAdapter {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(player == reggie){
                     player = ronnie;
-                    player.atlas = ronnie.atlas;
-                    player.runningAnimation = ronnie.runningAnimation;
-                    player.jumpingAnimation = ronnie.jumpingAnimation;
-                    player.standingAnimation = ronnie.standingAnimation;
+                    player.changeAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                     // bonus
-                   // ronnie.bonusCounter = player.bonusCounter;
                     player.bonusCounter = reggie.bonusCounter;
                     //swap
-                    player = ronnie;
-                    // body
-                    ronnie.body.setActive(true);
-                    ronnie.body.setTransform(reggie.body.getPosition().x, reggie.body.getPosition().y, reggie.body.getAngle());
-                    reggie.body.setActive(false);
-                    player.body = ronnie.body;
+                    player.changeBody(player, reggie, ronnie);
                 } else {
                     player = reggie;
-                    player.atlas = reggie.atlas;
-                    player.runningAnimation = reggie.runningAnimation;
-                    player.jumpingAnimation = reggie.jumpingAnimation;
-                    player.standingAnimation = reggie.standingAnimation;
+                    player.changeAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
                     // bonus
-                    //reggie.bonusCounter = player.bonusCounter;
                     player.bonusCounter = ronnie.bonusCounter;
                     // swap
-                    player = reggie;
-                    // body
-                    reggie.body.setActive(true);
-                    reggie.body.setTransform(ronnie.body.getPosition().x, ronnie.body.getPosition().y, ronnie.body.getAngle());
-                    ronnie.body.setActive(false);
-                    player.body = reggie.body;
+                    player.changeBody(player, ronnie, reggie);
                 }
                 return true;
             }
