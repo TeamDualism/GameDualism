@@ -76,6 +76,19 @@ public abstract class Player {
         state = STANDING;
     }
 
+    public void changeAtlas(TextureAtlas atlass, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping){
+        atlas = atlass;
+        runningAnimation = running;
+        jumpingAnimation = jumping;
+        standingAnimation = standing;
+    }
+    public void changeBody(Player curCharacter, Player prevCharacter, Player nextCharacter){
+        nextCharacter.body.setActive(true);
+        nextCharacter.body.setTransform(prevCharacter.body.getPosition().x, prevCharacter.body.getPosition().y, prevCharacter.body.getAngle());
+        prevCharacter.body.setActive(false);
+        curCharacter.body = nextCharacter.body;
+    }
+
     public void moveRight() {
         direction = RIGHT;
 
