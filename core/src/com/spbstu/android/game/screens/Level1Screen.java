@@ -112,7 +112,11 @@ public class Level1Screen extends ScreenAdapter {
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
         player = reggie;
-        player.body = reggie.body;
+        player.atlas = reggie.atlas;
+        player.runningAnimation = reggie.runningAnimation;
+        player.jumpingAnimation = reggie.jumpingAnimation;
+        player.standingAnimation = reggie.standingAnimation;
+        //player.body = reggie.body;
 
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
@@ -189,8 +193,14 @@ public class Level1Screen extends ScreenAdapter {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(player == reggie){
+                    player = ronnie;
+                    player.atlas = ronnie.atlas;
+                    player.runningAnimation = ronnie.runningAnimation;
+                    player.jumpingAnimation = ronnie.jumpingAnimation;
+                    player.standingAnimation = ronnie.standingAnimation;
                     // bonus
-                    ronnie.bonusCounter = player.bonusCounter;
+                   // ronnie.bonusCounter = player.bonusCounter;
+                    player.bonusCounter = reggie.bonusCounter;
                     //swap
                     player = ronnie;
                     // body
@@ -199,8 +209,14 @@ public class Level1Screen extends ScreenAdapter {
                     reggie.body.setActive(false);
                     player.body = ronnie.body;
                 } else {
+                    player = reggie;
+                    player.atlas = reggie.atlas;
+                    player.runningAnimation = reggie.runningAnimation;
+                    player.jumpingAnimation = reggie.jumpingAnimation;
+                    player.standingAnimation = reggie.standingAnimation;
                     // bonus
-                    reggie.bonusCounter = player.bonusCounter;
+                    //reggie.bonusCounter = player.bonusCounter;
+                    player.bonusCounter = ronnie.bonusCounter;
                     // swap
                     player = reggie;
                     // body
