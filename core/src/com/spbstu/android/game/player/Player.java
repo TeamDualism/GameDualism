@@ -40,26 +40,22 @@ public abstract class Player {
             body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
-    abstract  public void jump(int jumpNumberPlayer);
     public void stop() {
         //body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
     }
+
     public int getTileX() {
         return (int)Math.floor(body.getPosition().x);
     }
-    public int getTileY() {
-        return (int)Math.floor(body.getPosition().y);
-    }
+    public int getTileY() { return (int)Math.floor(body.getPosition().y);}
 
     public void incBonusCounter() {
         bonusCounter++;
     }
-
     public int getBonusCounter() {
         return bonusCounter;
     }
-    abstract public void render(SpriteBatch batch);
 
     public boolean isGrounded(World world) {
         Fixture sensorFixture = body.getFixtureList().get(1);
@@ -73,5 +69,8 @@ public abstract class Player {
 
         return false;
     }
+
+    abstract  public void jump(int jumpNumberPlayer);
     abstract public void setState(Player.State newState);
+    abstract public void render(SpriteBatch batch);
 }
