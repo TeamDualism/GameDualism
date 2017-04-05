@@ -21,13 +21,4 @@ public class Ronnie extends Player{
         jumpingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("jumping"), Animation.PlayMode.LOOP);
 
     }
-
-    public void jump() {
-        if (jumpNumber <= 2) {
-            super.body.setLinearVelocity(super.body.getLinearVelocity().x, 0f);
-            super.body.applyLinearImpulse(0, super.body.getMass() * 10f, super.body.getPosition().x, super.body.getPosition().y, false);
-
-            jumpNumber++;
-        }
-    }
 }

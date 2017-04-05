@@ -137,7 +137,7 @@ public abstract class Player {
         return false;
     }
 
-    abstract  public void jump();
+    //abstract  public void jump();
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame;
@@ -166,4 +166,13 @@ public abstract class Player {
         batch.end();
     }
     public void setState(Player.State newState){ state = newState; };
+
+    public void jump(int jumpNumber) {
+        if (this.jumpNumber <= jumpNumber) {
+            body.setLinearVelocity(body.getLinearVelocity().x, 0f);
+            body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
+
+            this.jumpNumber++;
+        }
+    }
 }
