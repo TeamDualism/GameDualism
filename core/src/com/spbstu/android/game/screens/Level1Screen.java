@@ -32,12 +32,14 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.player.Player;
+import com.spbstu.android.game.player.Ronnie;
+import com.spbstu.android.game.player.Reggie;
 import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
 
-import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.RUNNING;
+import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
@@ -59,6 +61,8 @@ public class Level1Screen extends ScreenAdapter {
 
     //Game
     private Player player;
+    private Ronnie ronnie;
+    private Reggie reggie;
     private Boolean isPaused = false;
     private boolean trapsMap[][];
 
@@ -75,11 +79,8 @@ public class Level1Screen extends ScreenAdapter {
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     // Screen Size; 1500 = 960 + 540; 16:9
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = (1500f / (float) (height + width) * height / 4f);
-    private float WidthSize = (1500f / (float) (height + width) * width / 4f);
-
+    private float HeightSize = (1500f / (float) (HEIGHT + WIDTH) * HEIGHT / 4f);
+    private float WidthSize = (1500f / (float) (HEIGHT + WIDTH) * WIDTH / 4f);
     private BitmapFont font;
 
 
@@ -100,9 +101,17 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.finishLoading();
-        player = new Player(16f / (2 * PPM),
+
+        ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+        reggie = new Reggie(16f / (2 * PPM),
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+        ronnie.body.setActive(false);
+        player = reggie;
+        player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
@@ -168,8 +177,30 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.jump();
+                if( player == ronnie ){ player.jump(2);}
+                else{ player.jump(1); }
+                return true;
+            }
+        });
 
+        changeBroButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(player == reggie){
+                    player = ronnie;
+                    player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
+                    // bonus
+                    player.bonusCounter = reggie.bonusCounter;
+                    //swap
+                    player.changeBody(player, reggie, ronnie);
+                } else {
+                    player = reggie;
+                    player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+                    // bonus
+                    player.bonusCounter = ronnie.bonusCounter;
+                    // swap
+                    player.changeBody(player, ronnie, reggie);
+                }
                 return true;
             }
         });
