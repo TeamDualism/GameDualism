@@ -1,4 +1,4 @@
-package com.spbstu.android.game.Screens;
+package com.spbstu.android.game.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -79,11 +79,8 @@ public class Level1Screen extends ScreenAdapter {
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     // Screen Size; 1500 = 960 + 540; 16:9
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = (1500f / (float) (height + width) * height / 4f);
-    private float WidthSize = (1500f / (float) (height + width) * width / 4f);
-
+    private float HeightSize = (1500f / (float) (HEIGHT + WIDTH) * HEIGHT / 4f);
+    private float WidthSize = (1500f / (float) (HEIGHT + WIDTH) * WIDTH / 4f);
     private BitmapFont font;
 
 
@@ -104,19 +101,16 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.finishLoading();
+
         ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
-        ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+        ronnie.body.setActive(false);
         player = reggie;
-        player.atlas = reggie.atlas;
-        player.runningAnimation = reggie.runningAnimation;
-        player.jumpingAnimation = reggie.jumpingAnimation;
-        player.standingAnimation = reggie.standingAnimation;
-        //player.body = reggie.body;
+        player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
 
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
@@ -183,8 +177,8 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if( player == ronnie ){ player.jump(1);}
-                else{ player.jump(2); }
+                if( player == ronnie ){ player.jump(2);}
+                else{ player.jump(1); }
                 return true;
             }
         });
@@ -194,14 +188,14 @@ public class Level1Screen extends ScreenAdapter {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(player == reggie){
                     player = ronnie;
-                    player.changeAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
+                    player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                     // bonus
                     player.bonusCounter = reggie.bonusCounter;
                     //swap
                     player.changeBody(player, reggie, ronnie);
                 } else {
                     player = reggie;
-                    player.changeAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+                    player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
                     // bonus
                     player.bonusCounter = ronnie.bonusCounter;
                     // swap

@@ -75,9 +75,8 @@ public abstract class Player {
         stateTime = 0f;
         state = STANDING;
     }
-
-    public void changeAtlas(TextureAtlas atlass, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping){
-        atlas = atlass;
+    public void setAtlas(TextureAtlas atlas, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping){
+        this.atlas = atlas;
         runningAnimation = running;
         jumpingAnimation = jumping;
         standingAnimation = standing;
@@ -88,7 +87,6 @@ public abstract class Player {
         prevCharacter.body.setActive(false);
         curCharacter.body = nextCharacter.body;
     }
-
     public void moveRight() {
         direction = RIGHT;
 
@@ -107,6 +105,14 @@ public abstract class Player {
             body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
+    public void jump(int jumpNumber) {
+        if (this.jumpNumber <= jumpNumber) {
+            body.setLinearVelocity(body.getLinearVelocity().x, 0f);
+            body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
+
+            this.jumpNumber++;
+        }
+    }
     public void stop() {
         //body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
@@ -116,14 +122,13 @@ public abstract class Player {
         return (int)Math.floor(body.getPosition().x);
     }
     public int getTileY() { return (int)Math.floor(body.getPosition().y);}
-
     public void incBonusCounter() {
         bonusCounter++;
     }
     public int getBonusCounter() {
         return bonusCounter;
     }
-
+    public void setState(Player.State newState){ state = newState; };
     public boolean isGrounded(World world) {
         Fixture sensorFixture = body.getFixtureList().get(1);
 
@@ -136,8 +141,6 @@ public abstract class Player {
 
         return false;
     }
-
-    //abstract  public void jump();
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame;
@@ -164,15 +167,5 @@ public abstract class Player {
                 currentFrame.getRegionWidth() * (direction == LEFT ? -1 : 1),
                 currentFrame.getRegionHeight());
         batch.end();
-    }
-    public void setState(Player.State newState){ state = newState; };
-
-    public void jump(int jumpNumber) {
-        if (this.jumpNumber <= jumpNumber) {
-            body.setLinearVelocity(body.getLinearVelocity().x, 0f);
-            body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-
-            this.jumpNumber++;
-        }
     }
 }
