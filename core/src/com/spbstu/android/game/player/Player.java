@@ -2,6 +2,7 @@ package com.spbstu.android.game.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -44,6 +45,7 @@ public class Player {
     public enum Direction {LEFT, RIGHT};
     private State state;
     private Direction direction;
+   // private final Sound jumnSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
 
     public Player(float x, float y, float radius, World world) {
         BodyDef bodyDef = new BodyDef();
@@ -111,7 +113,8 @@ public class Player {
         if (jumpNumber <= 2) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-
+            //jumnSound.play();
+           // jumnSound.dispose();
             jumpNumber++;
         }
     }
