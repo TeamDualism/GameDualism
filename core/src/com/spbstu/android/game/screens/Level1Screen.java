@@ -42,6 +42,7 @@ import static com.spbstu.android.game.player.Player.State.RUNNING;
 import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
@@ -105,10 +106,10 @@ public class Level1Screen extends ScreenAdapter {
         ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+        ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
-        ronnie.body.setActive(false);
         player = reggie;
         player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
 
@@ -164,16 +165,15 @@ public class Level1Screen extends ScreenAdapter {
         changeBroButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/changebrobutton.png"))));
         maxButtonsSizeDeterminate();
+
         stage.addActor(rightButton);
-
-
         rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         stage.addActor(leftButton);
         leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+
         stage.addActor(upButton);
         upButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
-
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -183,21 +183,25 @@ public class Level1Screen extends ScreenAdapter {
             }
         });
 
+        stage.addActor(changeBroButton);
+        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(player == reggie){
                     player = ronnie;
+                    ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x,reggie.body.getLinearVelocity().y);
+                    player.changeBody(player, reggie, ronnie);
                     ronnie.jumpNumber = reggie.jumpNumber;
                     player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                     player.bonusCounter = reggie.bonusCounter;
-                    player.changeBody(player, reggie, ronnie);
                 } else {
                     player = reggie;
+                    reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x,ronnie.body.getLinearVelocity().y);
+                    player.changeBody(player, ronnie, reggie);
                     reggie.jumpNumber = ronnie.jumpNumber;
                     player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
                     player.bonusCounter = ronnie.bonusCounter;
-                    player.changeBody(player, ronnie, reggie);
                 }
                 return true;
             }
@@ -227,9 +231,6 @@ public class Level1Screen extends ScreenAdapter {
                 game.setScreen(new MenuScreen(game));
             }
         });
-
-        stage.addActor(changeBroButton);
-        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
 
         score = new Label("" + player.getBonusCounter(), new Label.LabelStyle(font, Color.WHITE));
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
@@ -423,7 +424,8 @@ public class Level1Screen extends ScreenAdapter {
             private boolean isSupported(int keyCode) {
                 return keyCode == Input.Keys.UP ||
                         keyCode == Input.Keys.RIGHT ||
-                        keyCode == Input.Keys.LEFT;
+                        keyCode == Input.Keys.LEFT ||
+                        keyCode == Input.Keys.SPACE;
             }
 
             private void fireEvent(int keyCode, InputEvent.Type eventType) {
@@ -436,6 +438,8 @@ public class Level1Screen extends ScreenAdapter {
 
                 } else if (keyCode == Input.Keys.RIGHT) {
                     fire(rightButton, e);
+                } else if (keyCode == Input.Keys.SPACE) {
+                    fire(changeBroButton, e);
                 }
             }
 
