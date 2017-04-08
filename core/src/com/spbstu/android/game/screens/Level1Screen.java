@@ -188,17 +188,15 @@ public class Level1Screen extends ScreenAdapter {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(player == reggie){
                     player = ronnie;
+                    ronnie.jumpNumber = reggie.jumpNumber;
                     player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
-                    // bonus
                     player.bonusCounter = reggie.bonusCounter;
-                    //swap
                     player.changeBody(player, reggie, ronnie);
                 } else {
                     player = reggie;
+                    reggie.jumpNumber = ronnie.jumpNumber;
                     player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
-                    // bonus
                     player.bonusCounter = ronnie.bonusCounter;
-                    // swap
                     player.changeBody(player, ronnie, reggie);
                 }
                 return true;
