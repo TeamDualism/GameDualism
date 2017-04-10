@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -28,24 +28,24 @@ import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
 import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
-import static com.spbstu.android.game.utils.Constants.STOP;
 
-public class Player {
-    private TextureAtlas atlas;
+public abstract class Player {
+    public TextureAtlas atlas;
     public Body body;
     public int jumpNumber;
-    private int bonusCounter;
+    public int bonusCounter = 0;
 
     float stateTime;
-    private Animation<TextureRegion> runningAnimation;
-    private Animation<TextureRegion> standingAnimation;
-    private Animation<TextureRegion> jumpingAnimation;
+    public Animation<TextureRegion> runningAnimation;
+    public Animation<TextureRegion> standingAnimation;
+    public Animation<TextureRegion> jumpingAnimation;
+    public Player.State state;
 
     public enum State {STANDING, RUNNING, JUMPING};
     public enum Direction {LEFT, RIGHT};
     private State state;
-    private Direction direction;
-   // private final Sound jumnSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
+
+    public Player.Direction direction;
 
     public Player(float x, float y, float radius, World world) {
         BodyDef bodyDef = new BodyDef();
@@ -76,19 +76,23 @@ public class Player {
         body.createFixture(fixtureDef);
         shape1.dispose();
 
-        atlas = new TextureAtlas(Gdx.files.internal("Textures/player.pack"));
-        runningAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("running"), Animation.PlayMode.LOOP);
-        standingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("standing"), Animation.PlayMode.LOOP);
-        jumpingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("jumping"), Animation.PlayMode.LOOP);
-
         jumpNumber = 1;
-        bonusCounter = 0;
 
         stateTime = 0f;
         state = STANDING;
-        direction = RIGHT;
     }
-
+    public void setAtlas(TextureAtlas atlas, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping){
+        this.atlas = atlas;
+        runningAnimation = running;
+        jumpingAnimation = jumping;
+        standingAnimation = standing;
+    }
+    public void changeBody(Player curCharacter, Player prevCharacter, Player nextCharacter){
+        nextCharacter.body.setActive(true);
+        nextCharacter.body.setTransform(prevCharacter.body.getPosition().x, prevCharacter.body.getPosition().y, prevCharacter.body.getAngle());
+        prevCharacter.body.setActive(false);
+        curCharacter.body = nextCharacter.body;
+    }
     public void moveRight() {
         direction = RIGHT;
 
@@ -98,7 +102,6 @@ public class Player {
             body.setLinearVelocity(MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
-
     public void moveLeft() {
         direction = LEFT;
 
@@ -108,23 +111,41 @@ public class Player {
             body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
-
-    public void jump() {
-        if (jumpNumber <= 2) {
+    public void jump(int jumpNumber) {
+        if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-            //jumnSound.play();
-           // jumnSound.dispose();
-            jumpNumber++;
+            this.jumpNumber++;
         }
     }
-
     public void stop() {
         //body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
     }
 
+    public int getTileX() {
+        return (int)Math.floor(body.getPosition().x);
+    }
+    public int getTileY() { return (int)Math.floor(body.getPosition().y);}
+    public void incBonusCounter() {
+        bonusCounter++;
+    }
+    public int getBonusCounter() {
+        return bonusCounter;
+    }
+    public void setState(Player.State newState){ state = newState; };
+    public boolean isGrounded(World world) {
+        Fixture sensorFixture = body.getFixtureList().get(1);
 
+        Array<Contact> contactList = world.getContactList();
+
+        for (Contact contact : contactList) {
+            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture))
+                return true;
+        }
+
+        return false;
+    }
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame;
@@ -151,39 +172,5 @@ public class Player {
                 currentFrame.getRegionWidth() * (direction == LEFT ? -1 : 1),
                 currentFrame.getRegionHeight());
         batch.end();
-    }
-
-    public boolean isGrounded(World world) {
-        Fixture sensorFixture = body.getFixtureList().get(1);
-
-        Array<Contact> contactList = world.getContactList();
-
-        for (Contact contact : contactList) {
-            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture))
-                return true;
-        }
-
-        return false;
-    }
-
-
-    public int getTileX() {
-        return (int)Math.floor(body.getPosition().x);
-    }
-
-    public int getTileY() {
-        return (int)Math.floor(body.getPosition().y);
-    }
-
-    public void incBonusCounter() {
-        bonusCounter++;
-    }
-
-    public int getBonusCounter() {
-        return bonusCounter;
-    }
-
-    public void setState(State newState) {
-        state = newState;
     }
 }
