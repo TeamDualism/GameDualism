@@ -1,6 +1,11 @@
 package com.spbstu.android.game.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -38,6 +43,7 @@ public abstract class Player {
 
     public enum State {STANDING, RUNNING, JUMPING};
     public enum Direction {LEFT, RIGHT};
+    private State state;
 
     public Player.Direction direction;
 
@@ -109,7 +115,6 @@ public abstract class Player {
         if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-
             this.jumpNumber++;
         }
     }

@@ -37,6 +37,7 @@ import com.spbstu.android.game.player.Reggie;
 import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
+import com.badlogic.gdx.audio.Music;
 
 import static com.spbstu.android.game.player.Player.State.RUNNING;
 import static com.spbstu.android.game.player.Player.State.JUMPING;
@@ -84,9 +85,14 @@ public class Level1Screen extends ScreenAdapter {
     private float WidthSize = (1500f / (float) (HEIGHT + WIDTH) * WIDTH / 4f);
     private BitmapFont font;
 
+    private final Music layoutMusic; //= Gdx.audio.newSound(Gdx.files.internal("Audio/layout.ogg"));
 
     public Level1Screen(GameDualism game) {
         this.game = game;
+
+        layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/layout.ogg"));
+        layoutMusic.setVolume(0.4f);
+        layoutMusic.setLooping(true);
 
         //LibGdx
         camera = new OrthographicCamera();
@@ -141,6 +147,11 @@ public class Level1Screen extends ScreenAdapter {
             }
         });
         stage.addActor(timeLine);
+
+
+        layoutMusic.play();
+        if(!game.getIsMusicOn())
+            layoutMusic.pause();
     }
 
     private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
@@ -247,6 +258,7 @@ public class Level1Screen extends ScreenAdapter {
         playButton.setVisible(true);
         changeBroButton.setVisible(false);
         isPaused = true;
+        if(game.getIsMusicOn()) layoutMusic.pause();
 
         player.stop();
     }
@@ -261,6 +273,7 @@ public class Level1Screen extends ScreenAdapter {
         menuButton.setVisible(false);
         changeBroButton.setVisible(true);
         isPaused = false;
+        if(game.getIsMusicOn()) layoutMusic.play();
     }
 
     private void pauseMode() {
@@ -326,6 +339,7 @@ public class Level1Screen extends ScreenAdapter {
         box2DDebugRenderer.dispose();
         batch.dispose();
         stage.dispose();
+        layoutMusic.dispose();
     }
 
 

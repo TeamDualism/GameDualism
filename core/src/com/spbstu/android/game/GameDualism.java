@@ -3,6 +3,7 @@ package com.spbstu.android.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.utils.BooleanArray;
 import com.spbstu.android.game.screens.MenuScreen;
 
 public class GameDualism extends Game {
@@ -12,6 +13,8 @@ public class GameDualism extends Game {
     public static final java.lang.String TITLE = "Dualism";
 
     public AssetManager assetManager = new AssetManager();
+    private Boolean isMusicOn = true;
+    private Boolean isSoundOn = true;
 
     @Override
     public void create() {
@@ -23,4 +26,29 @@ public class GameDualism extends Game {
     public void dispose() {
         assetManager.dispose();
     }
+
+    public void setMusicOn(){
+        isMusicOn = true;
+    }
+
+    public void setMusicOff(){
+        isMusicOn = false;
+    }
+
+    public Boolean getIsMusicOn(){
+        return isMusicOn;
+    }
+
+    public void setSoundOn(){
+        isSoundOn = true;
+    }
+
+    public void setSoundOff(){
+        isSoundOn = false;
+    }
+
+    public Boolean getIsSoundOn(){
+        return isSoundOn;
+    }
+
 }
