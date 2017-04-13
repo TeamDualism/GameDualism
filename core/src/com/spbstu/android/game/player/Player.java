@@ -1,6 +1,12 @@
 package com.spbstu.android.game.player;
 
 import com.badlogic.gdx.Gdx;
+
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.spbstu.android.game.GameDualism;
 
 import static com.spbstu.android.game.player.Player.Direction.LEFT;
 import static com.spbstu.android.game.player.Player.Direction.RIGHT;
@@ -41,8 +48,14 @@ public abstract class Player {
 
     public Player.Direction direction;
 
-    public Player(float x, float y, float radius, World world) {
+    private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
+
+    private GameDualism currentGame;
+
+    public Player(float x, float y, float radius, World world, GameDualism game) {
         BodyDef bodyDef = new BodyDef();
+
+        currentGame = game;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -109,7 +122,7 @@ public abstract class Player {
         if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-
+            GameDualism.playSound(jumpSound, currentGame);
             this.jumpNumber++;
         }
     }

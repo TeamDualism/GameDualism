@@ -3,6 +3,7 @@ package com.spbstu.android.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -24,7 +25,7 @@ public class PlayPauseScreen extends ScreenAdapter {
     private Button menuButton;
 
     public PlayPauseScreen(final GameDualism game, final Level1Screen level1Screen) {
-
+        final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
         stage.addActor(new Image(new Texture("back2.png")));
 
         menuButton = new ImageButton(new TextureRegionDrawable(
@@ -36,6 +37,7 @@ public class PlayPauseScreen extends ScreenAdapter {
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
                                    public void clicked(InputEvent event, float x, float y) {
+                                       GameDualism.playSound(buttonEffect, game);
                                        game.setScreen(new MenuScreen(game));
                                    }
                                }
@@ -51,6 +53,7 @@ public class PlayPauseScreen extends ScreenAdapter {
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameDualism.playSound(buttonEffect, game);
                 System.out.println("clicked");
                 game.setScreen(new Level1Screen(game));
             }
@@ -62,6 +65,7 @@ public class PlayPauseScreen extends ScreenAdapter {
         resumeLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameDualism.playSound(buttonEffect, game);
                 System.out.println("clicked");
                 game.setScreen(level1Screen);
                 level1Screen.resume();
@@ -69,32 +73,46 @@ public class PlayPauseScreen extends ScreenAdapter {
         });
 
 
-        final ImageButton buttonSound = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/audioOn.png"))));
-        final ImageButton buttonMusic = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/musicOn.png"))));
+        final ImageButton buttonSound;
+        final ImageButton buttonMusic;
+
+        if(game.getIsMusicOn())
+            buttonMusic = new ImageButton(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/musicOn.png"))));
+        else
+            buttonMusic = new ImageButton(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/musicOff.png"))));
+
+        if(game.getIsSoundOn())
+            buttonSound = new ImageButton(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/audioOn.png"))));
+        else
+            buttonSound = new ImageButton(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/audioOff.png"))));
+
         buttonMusic.setBounds( 999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99* (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);//!квадратная
         buttonSound.setBounds( 999 * (WIDTH - maxButtonsWidth + 60)/ 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight*2/3, maxButtonsHeight*2/3);
         stage.addActor(buttonMusic);
         stage.addActor(buttonSound);
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
-            private int state = 1;
+//            private int state = 1;
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked music");
                 //выключить музыку
-
-                if (state == 1) {
+                
+                GameDualism.playSound(buttonEffect, game);
+                if (game.getIsMusicOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/musicOff.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    state = 0;
+                    game.setMusicOff();
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/musicOn.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    state = 1;
+                    game.setMusicOn();
                 }
             }
         });
@@ -107,17 +125,17 @@ public class PlayPauseScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked sound");
                 //выключить звуки
-
-                if (state == 1) {
+                GameDualism.playSound(buttonEffect, game);
+                if (game.getIsSoundOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/audioOff.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    state = 0;
+                    game.setSoundOff();
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/audioOn.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    state = 1;
+                    game.setSoundOn();
                 }
 
             }

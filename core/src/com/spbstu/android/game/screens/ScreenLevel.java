@@ -3,6 +3,7 @@ package com.spbstu.android.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -27,6 +28,7 @@ public class ScreenLevel extends ScreenAdapter {
 
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
+    final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
     public ScreenLevel(final GameDualism game,final MenuScreen menu) {
 
@@ -49,6 +51,7 @@ public class ScreenLevel extends ScreenAdapter {
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameDualism.playSound(buttonEffect, game);
                 game.setScreen(menu);
             }
         }
@@ -56,6 +59,7 @@ public class ScreenLevel extends ScreenAdapter {
         buttonLevel1.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameDualism.playSound(buttonEffect, game);
                 System.out.println("clicked");
                 game.setScreen(new Level1Screen(game));
             }
