@@ -3,6 +3,7 @@ package com.spbstu.android.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.BooleanArray;
 import com.spbstu.android.game.screens.MenuScreen;
 
@@ -49,6 +50,11 @@ public class GameDualism extends Game {
 
     public Boolean getIsSoundOn(){
         return isSoundOn;
+    }
+
+    public static void playSound(Sound sound, GameDualism game){
+        if(game.getIsSoundOn())
+            sound.play();
     }
 
 }

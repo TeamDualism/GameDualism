@@ -32,15 +32,18 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.player.Player;
+import com.spbstu.android.game.player.Ronnie;
+import com.spbstu.android.game.player.Reggie;
 import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
 import com.badlogic.gdx.audio.Music;
 
-import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.RUNNING;
+import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
+import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
@@ -60,6 +63,8 @@ public class Level1Screen extends ScreenAdapter {
 
     //Game
     private Player player;
+    private Ronnie ronnie;
+    private Reggie reggie;
     private Boolean isPaused = false;
     private boolean trapsMap[][];
 
@@ -76,11 +81,8 @@ public class Level1Screen extends ScreenAdapter {
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     // Screen Size; 1500 = 960 + 540; 16:9
-    private final int height = Gdx.graphics.getHeight();
-    private final int width = Gdx.graphics.getWidth();
-    private float HeightSize = (1500f / (float) (height + width) * height / 4f);
-    private float WidthSize = (1500f / (float) (height + width) * width / 4f);
-
+    private float HeightSize = (1500f / (float) (HEIGHT + WIDTH) * HEIGHT / 4f);
+    private float WidthSize = (1500f / (float) (HEIGHT + WIDTH) * WIDTH / 4f);
     private BitmapFont font;
 
     private final Music layoutMusic; //= Gdx.audio.newSound(Gdx.files.internal("Audio/layout.ogg"));
@@ -106,9 +108,17 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.finishLoading();
-        player = new Player(16f / (2 * PPM),
+
+        ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), game);
+        ronnie.body.setActive(false);
+        reggie = new Reggie(16f / (2 * PPM),
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), game);
+        player = reggie;
+        player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
@@ -166,21 +176,44 @@ public class Level1Screen extends ScreenAdapter {
         changeBroButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/changebrobutton.png"))));
         maxButtonsSizeDeterminate();
+
         stage.addActor(rightButton);
-
-
         rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         stage.addActor(leftButton);
         leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+
         stage.addActor(upButton);
         upButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
-
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                player.jump();
+                if( player == ronnie ){ player.jump(2);}
+                else{ player.jump(1); }
+                return true;
+            }
+        });
 
+        stage.addActor(changeBroButton);
+        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(player == reggie){
+                    player = ronnie;
+                    ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x,reggie.body.getLinearVelocity().y);
+                    player.changeBody(player, reggie, ronnie);
+                    ronnie.jumpNumber = reggie.jumpNumber;
+                    player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
+                    player.bonusCounter = reggie.bonusCounter;
+                } else {
+                    player = reggie;
+                    reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x,ronnie.body.getLinearVelocity().y);
+                    player.changeBody(player, ronnie, reggie);
+                    reggie.jumpNumber = ronnie.jumpNumber;
+                    player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+                    player.bonusCounter = ronnie.bonusCounter;
+                }
                 return true;
             }
         });
@@ -209,9 +242,6 @@ public class Level1Screen extends ScreenAdapter {
                 game.setScreen(new MenuScreen(game));
             }
         });
-
-        stage.addActor(changeBroButton);
-        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
 
         score = new Label("" + player.getBonusCounter(), new Label.LabelStyle(font, Color.WHITE));
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
@@ -408,7 +438,8 @@ public class Level1Screen extends ScreenAdapter {
             private boolean isSupported(int keyCode) {
                 return keyCode == Input.Keys.UP ||
                         keyCode == Input.Keys.RIGHT ||
-                        keyCode == Input.Keys.LEFT;
+                        keyCode == Input.Keys.LEFT ||
+                        keyCode == Input.Keys.SPACE;
             }
 
             private void fireEvent(int keyCode, InputEvent.Type eventType) {
@@ -421,6 +452,8 @@ public class Level1Screen extends ScreenAdapter {
 
                 } else if (keyCode == Input.Keys.RIGHT) {
                     fire(rightButton, e);
+                } else if (keyCode == Input.Keys.SPACE) {
+                    fire(changeBroButton, e);
                 }
             }
 
