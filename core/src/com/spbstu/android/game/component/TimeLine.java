@@ -43,7 +43,7 @@ public class TimeLine extends ProgressBar {
 
     public void reset() {
         isTimeOver = false;
-        setValue(totalSeconds);
+        setValue(0);
     }
 
     private static ProgressBarStyle createStyle(Drawable background, Drawable knob) {
