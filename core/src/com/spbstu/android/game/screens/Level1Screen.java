@@ -400,6 +400,10 @@ public class Level1Screen extends ScreenAdapter {
     private void gameOver() {
         reggie.getTimeline().reset();
         ronnie.getTimeline().reset();
+
+        // TODO: Avoid using of public non-final fields
+        ronnie.bonusCounter = 0;
+        reggie.bonusCounter = 0;
         changeBroButton.setDisabled(false);
         restart();
     }
