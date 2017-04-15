@@ -19,8 +19,6 @@ import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
 public class ScreenLevel extends ScreenAdapter {
-    private final GameDualism game;
-
     private int maxButtonsHeight = HEIGHT / 6;
     private int maxButtonsWidth = WIDTH / 6;
     private final Stage stage = new Stage();
@@ -31,8 +29,6 @@ public class ScreenLevel extends ScreenAdapter {
     final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
     public ScreenLevel(final GameDualism game,final MenuScreen menu) {
-
-        this.game = game;
         stage.addActor(new Image(new Texture("back2.png")));
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/menu.png"))));
@@ -51,7 +47,7 @@ public class ScreenLevel extends ScreenAdapter {
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameDualism.playSound(buttonEffect, game);
+                GameDualism.playSound(buttonEffect);
                 game.setScreen(menu);
             }
         }
@@ -59,7 +55,7 @@ public class ScreenLevel extends ScreenAdapter {
         buttonLevel1.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameDualism.playSound(buttonEffect, game);
+                GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
                 game.setScreen(new Level1Screen(game));
             }

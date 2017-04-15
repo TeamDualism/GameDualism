@@ -15,7 +15,7 @@ import com.spbstu.android.game.GameDualism;
 public class Ronnie extends Player{
 
     public Ronnie(float x, float y, float radius, World world, GameDualism game) {
-        super (x, y, radius, world, game);
+        super (x, y, radius, world);
         atlas = new TextureAtlas(Gdx.files.internal("Textures/player.pack"));
         runningAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("running"), Animation.PlayMode.LOOP);
         standingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("standing"), Animation.PlayMode.LOOP);

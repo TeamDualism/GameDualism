@@ -4,8 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.BooleanArray;
-import com.spbstu.android.game.screens.MenuScreen;
+import com.spbstu.android.game.screens.Level1Screen;
 
 public class GameDualism extends Game {
 
@@ -14,13 +13,24 @@ public class GameDualism extends Game {
     public static final java.lang.String TITLE = "Dualism";
 
     public AssetManager assetManager = new AssetManager();
-    private Boolean isMusicOn = true;
-    private Boolean isSoundOn = true;
+    private static boolean isMusicOn = true;
+    private static boolean isSoundOn = true;
+
+    private static class Holder {
+        private static GameDualism INSTANCE = new GameDualism();
+    }
+
+    private GameDualism() {
+    }
+
+    public static GameDualism getInstance() {
+        return Holder.INSTANCE;
+    }
 
     @Override
     public void create() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        setScreen(new MenuScreen(this));
+        setScreen(new Level1Screen(this));
     }
 
     @Override
@@ -28,32 +38,32 @@ public class GameDualism extends Game {
         assetManager.dispose();
     }
 
-    public void setMusicOn(){
+    public void setMusicOn() {
         isMusicOn = true;
     }
 
-    public void setMusicOff(){
+    public void setMusicOff() {
         isMusicOn = false;
     }
 
-    public Boolean getIsMusicOn(){
+    public Boolean getIsMusicOn() {
         return isMusicOn;
     }
 
-    public void setSoundOn(){
+    public void setSoundOn() {
         isSoundOn = true;
     }
 
-    public void setSoundOff(){
+    public void setSoundOff() {
         isSoundOn = false;
     }
 
-    public Boolean getIsSoundOn(){
+    public Boolean getIsSoundOn() {
         return isSoundOn;
     }
 
-    public static void playSound(Sound sound, GameDualism game){
-        if(game.getIsSoundOn())
+    public static void playSound(Sound sound) {
+        if (isSoundOn)
             sound.play();
     }
 

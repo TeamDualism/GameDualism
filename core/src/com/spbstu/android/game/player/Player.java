@@ -1,12 +1,7 @@
 package com.spbstu.android.game.player;
 
 import com.badlogic.gdx.Gdx;
-
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -50,12 +45,8 @@ public abstract class Player {
 
     private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
 
-    private GameDualism currentGame;
-
-    public Player(float x, float y, float radius, World world, GameDualism game) {
+    public Player(float x, float y, float radius, World world) {
         BodyDef bodyDef = new BodyDef();
-
-        currentGame = game;
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -122,7 +113,7 @@ public abstract class Player {
         if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-            GameDualism.playSound(jumpSound, currentGame);
+            GameDualism.playSound(jumpSound);
             this.jumpNumber++;
         }
     }
