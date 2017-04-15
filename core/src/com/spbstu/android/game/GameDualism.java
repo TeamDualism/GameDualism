@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.spbstu.android.game.screens.Level1Screen;
+import com.spbstu.android.game.screens.MenuScreen;
 
 public class GameDualism extends Game {
 
@@ -30,7 +30,7 @@ public class GameDualism extends Game {
     @Override
     public void create() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        setScreen(new Level1Screen(this));
+        setScreen(new MenuScreen(this));
     }
 
     @Override
