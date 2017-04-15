@@ -84,6 +84,8 @@ public class Level1Screen extends ScreenAdapter {
     private float WidthSize = (1500f / (float) (HEIGHT + WIDTH) * WIDTH / 4f);
     private BitmapFont font;
 
+    private final TimeLine.Holder timeLineHolder;
+
     private final Music layoutMusic; //= Gdx.audio.newSound(Gdx.files.internal("Audio/layout.ogg"));
 
     public Level1Screen(GameDualism game) {
@@ -108,16 +110,22 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.finishLoading();
 
+        Drawable warmBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
+        Drawable coldBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background_cold.png");
+        Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
+
         ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 60)));
         ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld());
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 60)));
 
         player = reggie;
         player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+        timeLineHolder = new TimeLine.Holder(reggie.getTimeline());
+        stage.addActor(timeLineHolder);
 
         MapParser.parseMapObjects(map.getLayers().get("Line").getObjects(), gameWorld.getWorld());
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
@@ -131,26 +139,8 @@ public class Level1Screen extends ScreenAdapter {
         font = generator.generateFont(parameter);
 
         actionButtons();
-
-        Drawable background = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
-        Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
-        final TimeLine timeLine = new TimeLine(background, knob, 60);
-
-        timeLine.setWidth(WIDTH / 4);
-        timeLine.setPosition(3 * WIDTH / 8, HEIGHT - 2 * timeLine.getHeight());
-        timeLine.setAnimateDuration(.01f);
-        timeLine.addListener(new TimeOverListener() {
-            @Override
-            public void handle() {
-                // Put a logic to handle time over event here
-                timeLine.reset();
-            }
-        });
-        stage.addActor(timeLine);
-
-
         layoutMusic.play();
-        if(!game.getIsMusicOn())
+        if (!game.getIsMusicOn())
             layoutMusic.pause();
     }
 
@@ -188,8 +178,11 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if( player == ronnie ){ player.jump(2);}
-                else{ player.jump(1); }
+                if (player == ronnie) {
+                    player.jump(2);
+                } else {
+                    player.jump(1);
+                }
                 return true;
             }
         });
@@ -199,21 +192,23 @@ public class Level1Screen extends ScreenAdapter {
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(player == reggie){
+                if (player == reggie) {
                     player = ronnie;
-                    ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x,reggie.body.getLinearVelocity().y);
+                    ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
                     player.changeBody(player, reggie, ronnie);
                     ronnie.jumpNumber = reggie.jumpNumber;
                     player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                     player.bonusCounter = reggie.bonusCounter;
                 } else {
                     player = reggie;
-                    reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x,ronnie.body.getLinearVelocity().y);
+                    reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x, ronnie.body.getLinearVelocity().y);
                     player.changeBody(player, ronnie, reggie);
                     reggie.jumpNumber = ronnie.jumpNumber;
                     player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
                     player.bonusCounter = ronnie.bonusCounter;
                 }
+
+                timeLineHolder.change(player.getTimeline());
                 return true;
             }
         });
@@ -258,7 +253,7 @@ public class Level1Screen extends ScreenAdapter {
         playButton.setVisible(true);
         changeBroButton.setVisible(false);
         isPaused = true;
-        if(game.getIsMusicOn()) layoutMusic.pause();
+        if (game.getIsMusicOn()) layoutMusic.pause();
 
         player.stop();
     }
@@ -273,7 +268,7 @@ public class Level1Screen extends ScreenAdapter {
         menuButton.setVisible(false);
         changeBroButton.setVisible(true);
         isPaused = false;
-        if(game.getIsMusicOn()) layoutMusic.play();
+        if (game.getIsMusicOn()) layoutMusic.play();
     }
 
     private void pauseMode() {
@@ -462,6 +457,20 @@ public class Level1Screen extends ScreenAdapter {
             }
         };
         Gdx.input.setInputProcessor(new InputMultiplexer(keyDispatcher, oldProcessor));
+    }
+
+    private static TimeLine prepareTimeLine(final TimeLine timeLine) {
+        timeLine.setWidth(WIDTH / 4);
+        timeLine.setPosition(3 * WIDTH / 8, HEIGHT - 2 * timeLine.getHeight());
+        timeLine.setAnimateDuration(.01f);
+
+        timeLine.addListener(new TimeOverListener() {
+            @Override
+            public void handle() {
+                timeLine.reset();
+            }
+        });
+        return timeLine;
     }
 }
 
