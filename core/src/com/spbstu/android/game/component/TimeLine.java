@@ -16,7 +16,7 @@ public class TimeLine extends ProgressBar {
     public TimeLine(Drawable background, Drawable knob, int totalSeconds) {
         super(0, totalSeconds, .0001f, false, createStyle(background, knob));
         this.totalSeconds = totalSeconds;
-        setValue(totalSeconds);
+        setValue(0);
     }
 
     @Override
@@ -24,8 +24,8 @@ public class TimeLine extends ProgressBar {
         if (!isTimeOver) {
             super.act(delta);
             float value = getValue();
-            setValue(value - delta);
-            if (value <= 0) {
+            setValue(value + delta);
+            if (value >= totalSeconds) {
                 isTimeOver = true;
                 fireTimeOver();
             }
