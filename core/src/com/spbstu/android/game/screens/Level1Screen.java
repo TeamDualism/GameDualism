@@ -354,8 +354,9 @@ public class Level1Screen extends ScreenAdapter {
 
             stage.act(delta);
             stage.draw();
-            player.render(batch);
             rope.render(batch, player.body);
+            player.render(batch);
+
             gameWorld.destroyObjects();
             //box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
             handleTrapsCollision(player.getTileX(), player.getTileY());
