@@ -81,6 +81,7 @@ public class MenuScreen implements Screen {
             }
         });
 
+        // TODO: refactor this
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
 
             @Override
@@ -103,6 +104,7 @@ public class MenuScreen implements Screen {
             }
         });
 
+        // TODO: and this need to refactor too
         buttonSound.addListener(new ClickListener(Input.Buttons.LEFT) {
 //            private int state = 1;
 
