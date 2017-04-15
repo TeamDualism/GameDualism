@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -31,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
+import com.spbstu.android.game.objects.Rope;
 import com.spbstu.android.game.player.Player;
 import com.spbstu.android.game.player.Ronnie;
 import com.spbstu.android.game.player.Reggie;
@@ -67,6 +69,10 @@ public class Level1Screen extends ScreenAdapter {
     private Reggie reggie;
     private Boolean isPaused = false;
     private boolean trapsMap[][];
+    private boolean blocksMap[][];// массив блоков
+    private int numberWidthBlocks;
+    private int numberHeightBlocks;
+    private Rope rope;
 
     //UI
     private final Stage stage = new Stage();
@@ -79,6 +85,8 @@ public class Level1Screen extends ScreenAdapter {
     private Button changeBroButton;
     private Label score;
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
+    private final int height = Gdx.graphics.getHeight();
+    private final int width = Gdx.graphics.getWidth();
 
     // Screen Size; 1500 = 960 + 540; 16:9
     private float HeightSize = (1500f / (float) (HEIGHT + WIDTH) * HEIGHT / 4f);
@@ -153,6 +161,14 @@ public class Level1Screen extends ScreenAdapter {
         layoutMusic.play();
         if(!game.getIsMusicOn())
             layoutMusic.pause();
+
+        //for Rope
+        numberWidthBlocks = map.getProperties().get("width", Integer.class);
+        numberHeightBlocks = map.getProperties().get("height", Integer.class);
+        blocksMap = new boolean[numberHeightBlocks][numberWidthBlocks];
+        initBlocks();
+        listeners();
+        rope = new Rope();
     }
 
     private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
@@ -191,6 +207,11 @@ public class Level1Screen extends ScreenAdapter {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if( player == ronnie ){ player.jump(2);}
                 else{ player.jump(1); }
+                if (rope.isExist == true){
+                    rope.isRoped = false;
+                    rope.inFlight = true;
+                    rope.destroyJoint(gameWorld.getWorld());
+                }
                 return true;
             }
         });
@@ -201,12 +222,14 @@ public class Level1Screen extends ScreenAdapter {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(player == reggie){
-                    player = ronnie;
-                    ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x,reggie.body.getLinearVelocity().y);
-                    player.changeBody(player, reggie, ronnie);
-                    ronnie.jumpNumber = reggie.jumpNumber;
-                    player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
-                    player.bonusCounter = reggie.bonusCounter;
+                    if((!rope.inFlight) && (!rope.isRoped)) {
+                        player = ronnie;
+                        ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
+                        player.changeBody(player, reggie, ronnie);
+                        ronnie.jumpNumber = reggie.jumpNumber;
+                        player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
+                        player.bonusCounter = reggie.bonusCounter;
+                    }
                 } else {
                     player = reggie;
                     reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x,ronnie.body.getLinearVelocity().y);
@@ -247,6 +270,17 @@ public class Level1Screen extends ScreenAdapter {
         score = new Label("" + player.getBonusCounter(), new Label.LabelStyle(font, Color.WHITE));
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
         stage.addActor(score);
+    }
+
+    public void listeners() {
+        stage.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {// создаю слушатаеля касания к экрану
+                if( player == reggie)
+                    rope.buildJoint(gameWorld.getWorld(), x / width * camera.viewportWidth + camera.position.x - camera.viewportWidth / 2,
+                        y / height * camera.viewportHeight + camera.position.y - camera.viewportHeight / 2, player.body,blocksMap);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -321,6 +355,7 @@ public class Level1Screen extends ScreenAdapter {
             stage.act(delta);
             stage.draw();
             player.render(batch);
+            rope.render(batch, player.body);
             gameWorld.destroyObjects();
             //box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
             handleTrapsCollision(player.getTileX(), player.getTileY());
@@ -356,11 +391,12 @@ public class Level1Screen extends ScreenAdapter {
             } else {
                 player.setState(STANDING);
             }
+            rope.inFlight = false;
         } else {
             player.setState(JUMPING);
         }
 
-        if (!(rightButton.isPressed()) && !(leftButton.isPressed())) {
+        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((!rope.inFlight) && (!rope.isRoped) || (player.isGrounded(gameWorld.getWorld())))) {
             player.stop();
         }
 
@@ -390,9 +426,15 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     private void restart() {
+        if (rope.isExist == true){
+            rope.isRoped = false;
+            rope.inFlight = true;
+            rope.destroyJoint(gameWorld.getWorld());
+        }
         player.body.setLinearVelocity(0f, 0f);
         player.jumpNumber = 1;
         player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
+
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
@@ -414,7 +456,15 @@ public class Level1Screen extends ScreenAdapter {
             }
         }
     }
+    private void initBlocks() {
+        final TiledMapTileLayer blocks;
+        blocks = (TiledMapTileLayer) map.getLayers().get(" Main obstacles");
+        for (int i = 0; i < numberHeightBlocks; i++)
+            for (int j = 0; j < numberWidthBlocks; j++)
+                blocksMap[i][j] = (blocks.getCell(j, i) != null);
 
+
+    }
     private void bindKeyboard() {
         InputProcessor oldProcessor = Gdx.input.getInputProcessor();
         InputAdapter keyDispatcher = new InputAdapter() {
