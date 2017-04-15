@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -32,18 +33,16 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.player.Player;
-import com.spbstu.android.game.player.Ronnie;
 import com.spbstu.android.game.player.Reggie;
+import com.spbstu.android.game.player.Ronnie;
 import com.spbstu.android.game.utils.GameWorld;
 import com.spbstu.android.game.utils.MapParser;
 import com.spbstu.android.game.utils.TextureUtil;
-import com.badlogic.gdx.audio.Music;
 
-import static com.spbstu.android.game.player.Player.State.RUNNING;
 import static com.spbstu.android.game.player.Player.State.JUMPING;
+import static com.spbstu.android.game.player.Player.State.RUNNING;
 import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
-import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
