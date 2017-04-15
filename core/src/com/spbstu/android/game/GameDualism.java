@@ -46,7 +46,7 @@ public class GameDualism extends Game {
         isMusicOn = false;
     }
 
-    public Boolean getIsMusicOn() {
+    public boolean getIsMusicOn() {
         return isMusicOn;
     }
 
@@ -58,7 +58,7 @@ public class GameDualism extends Game {
         isSoundOn = false;
     }
 
-    public Boolean getIsSoundOn() {
+    public boolean getIsSoundOn() {
         return isSoundOn;
     }
 
