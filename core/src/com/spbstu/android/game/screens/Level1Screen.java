@@ -97,7 +97,7 @@ public class Level1Screen extends ScreenAdapter {
         //LibGdx
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
-        map = new TmxMapLoader().load("Maps/Level-1.tmx");
+        map = new TmxMapLoader().load("Maps/newLEVEL.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
         //Box2d
@@ -110,11 +110,11 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.finishLoading();
 
         ronnie = new Ronnie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
+                16f / (2 * PPM) + 16 / PPM * 33,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), game);
         ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
+                16f / (2 * PPM) + 16 / PPM * 33,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), game);
 
         player = reggie;
@@ -392,7 +392,7 @@ public class Level1Screen extends ScreenAdapter {
     private void restart() {
         player.body.setLinearVelocity(0f, 0f);
         player.jumpNumber = 1;
-        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
+        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 33, player.body.getAngle());
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
