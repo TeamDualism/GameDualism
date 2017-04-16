@@ -46,14 +46,15 @@ public class AboutScreen extends ScreenAdapter {
         BitmapFont font12 = generator.generateFont(parameter);
         generator.dispose();
         Label label = new Label("Developed by:\n" +
-                "Zatylkin Pavel\n" +
-                "Lesik Demyan\n" +
+                "Demyanov Dmitriy\n" +
                 "Feofilaktov Mikhail\n" +
+                "Lesik Demyan\n" +
                 "Shabalina Anastasia\n" +
+                "Zatylkin Pavel\n" +
                 "Peter the Great St.Petersburg\n" +
                 "Polytechnic University\n" +
                 "May, 2017" , new Label.LabelStyle(font12, Color.WHITE));
-        label.setPosition(Gdx.graphics.getWidth()/3f, Gdx.graphics.getHeight()/ 2f);
+        label.setPosition(Gdx.graphics.getWidth()/3f, 2*Gdx.graphics.getHeight()/ 5f);
         stage.addActor(label);
 
         menuButton.setBounds(999*(WIDTH - maxButtonsSize + 7 )/1000f, 99*(HEIGHT - maxButtonsSize +10)/100f, maxButtonsSize * 2 / 3, maxButtonsSize * 2 / 3);
