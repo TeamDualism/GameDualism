@@ -208,8 +208,11 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if( player == ronnie ){ player.jump(2);}
-                else{ player.jump(1); }
+                if (player == ronnie) {
+                    player.jump(2);
+                } else {
+                    player.jump(1);
+                }
                 if (rope.isExist == true){
                     rope.isRoped = false;
                     rope.inFlight = true;
@@ -224,6 +227,9 @@ public class Level1Screen extends ScreenAdapter {
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (changeBroButton.isDisabled()) {
+                    return true;
+                }
                 if(player == reggie){
                     if((!rope.inFlight) && (!rope.isRoped)) {
                         player = ronnie;
