@@ -214,7 +214,7 @@ public class Level1Screen extends ScreenAdapter {
                     player.jump(1);
 
                 }
-                if (rope.isExist == true) {
+                if (rope.isExist == true){
                     rope.isRoped = false;
                     rope.inFlight = true;
                     rope.destroyJoint(gameWorld.getWorld());
@@ -232,7 +232,8 @@ public class Level1Screen extends ScreenAdapter {
                 if (changeBroButton.isDisabled()) {
                     return true;
                 }
-                if (player == reggie) {
+
+                if(player == reggie){
                     if((!rope.inFlight) && (!rope.isRoped)) {
                         player = ronnie;
                         ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
