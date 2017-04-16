@@ -208,19 +208,17 @@ public class Level1Screen extends ScreenAdapter {
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-<<<<<<< HEAD
-                if( player == ronnie ){ player.jump(2);}
-                else{ player.jump(1); }
-                if (rope.isExist == true){
-                    rope.isRoped = false;
-                    rope.inFlight = true;
-                    rope.destroyJoint(gameWorld.getWorld());
-=======
                 if (player == ronnie) {
                     player.jump(2);
                 } else {
                     player.jump(1);
->>>>>>> refs/remotes/origin/master
+
+                }
+                if (rope.isExist == true) {
+                    rope.isRoped = false;
+                    rope.inFlight = true;
+                    rope.destroyJoint(gameWorld.getWorld());
+                    return true;
                 }
                 return true;
             }
@@ -231,8 +229,10 @@ public class Level1Screen extends ScreenAdapter {
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-<<<<<<< HEAD
-                if(player == reggie){
+                if (changeBroButton.isDisabled()) {
+                    return true;
+                }
+                if (player == reggie) {
                     if((!rope.inFlight) && (!rope.isRoped)) {
                         player = ronnie;
                         ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
@@ -241,18 +241,6 @@ public class Level1Screen extends ScreenAdapter {
                         player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                         player.bonusCounter = reggie.bonusCounter;
                     }
-=======
-                if (changeBroButton.isDisabled()) {
-                    return true;
-                }
-                if (player == reggie) {
-                    player = ronnie;
-                    ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
-                    player.changeBody(player, reggie, ronnie);
-                    ronnie.jumpNumber = reggie.jumpNumber;
-                    player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
-                    player.bonusCounter = reggie.bonusCounter;
->>>>>>> refs/remotes/origin/master
                 } else {
                     player = reggie;
                     reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x, ronnie.body.getLinearVelocity().y);

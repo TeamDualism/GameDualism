@@ -118,7 +118,7 @@ public abstract class Player {
             body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
-<<<<<<< HEAD
+
     public void moveRightOnRope() {
         direction = RIGHT;
         body.applyLinearImpulse(IMPULSE/2, 0, body.getPosition().x, body.getPosition().y, false);
@@ -129,9 +129,7 @@ public abstract class Player {
         body.applyLinearImpulse(-IMPULSE/2, 0, body.getPosition().x, body.getPosition().y, false);
 
     }
-=======
 
->>>>>>> refs/remotes/origin/master
     public void jump(int jumpNumber) {
         if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);

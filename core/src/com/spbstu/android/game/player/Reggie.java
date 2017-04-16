@@ -7,19 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.utils.TextureUtil;
-
-<<<<<<< HEAD
 import static com.spbstu.android.game.player.Player.Direction.LEFT;
 import static com.spbstu.android.game.player.Player.Direction.RIGHT;
 import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
 
-/**
- * Created by User on 04.04.2017.
- */
-=======
+
 public class Reggie extends Player {
->>>>>>> refs/remotes/origin/master
 
     public Reggie(float x, float y, float radius, World world, TimeLine timeLine) {
         super(x, y, radius, world, timeLine);
