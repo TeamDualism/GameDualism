@@ -12,15 +12,19 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.objects.Bonus;
+import com.spbstu.android.game.objects.Exit;
 import com.spbstu.android.game.objects.Object;
+import com.spbstu.android.game.screens.MenuScreen;
 
 import static com.spbstu.android.game.utils.Constants.GRAVITY;
+import static com.spbstu.android.game.utils.Constants.PPM;
 
 public class GameWorld implements Disposable{
     private World world;
     private Array<Object> objectsToDestroy;
     private Array<Bonus> bonuses;
     private GameDualism game;
+    private Exit exit;
 
     public GameWorld(GameDualism game) {
         objectsToDestroy = new Array<Object>();
@@ -40,7 +44,15 @@ public class GameWorld implements Disposable{
             bonuses.add(new Bonus(rectangle.getX(), rectangle.getY(), game.assetManager.get("Textures/coin.png", Texture.class), world));
         }
     }
+    public void initExit(int x, int y) {
+        exit = new Exit(x*PPM, y*PPM, new Texture("Textures/exit.png"), world);
+    }
 
+    public void onExit()
+    {
+        destroyObjects();
+        game.setScreen(new MenuScreen(game));
+    }
     public void renderBonuses(Batch batch) {
         batch.begin();
 
@@ -48,6 +60,11 @@ public class GameWorld implements Disposable{
             bonuses.get(i).draw(batch);
         }
 
+        batch.end();
+    }
+    public void renderExit(Batch batch) {
+        batch.begin();
+        exit.draw(batch);
         batch.end();
     }
 

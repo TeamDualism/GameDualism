@@ -133,6 +133,7 @@ public class Level1Screen extends ScreenAdapter {
         initTrapsMap();
         gameWorld.initBonuses(map);
 
+
         //UI
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -169,6 +170,8 @@ public class Level1Screen extends ScreenAdapter {
         initBlocks();
         listeners();
         rope = new Rope();
+        //for exit
+        gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4);
     }
 
     private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
@@ -281,6 +284,23 @@ public class Level1Screen extends ScreenAdapter {
                 return true;
             }
         });
+        rightButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (rope.isRoped)
+                        player.moveRightOnRope();
+                return true;
+            }
+        });
+        leftButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (rope.isRoped)
+                    player.moveLeftOnRope();
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -351,7 +371,7 @@ public class Level1Screen extends ScreenAdapter {
             renderer.render();
 
             gameWorld.renderBonuses(batch);
-
+            gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();
             rope.render(batch, player.body);
@@ -401,11 +421,13 @@ public class Level1Screen extends ScreenAdapter {
             player.stop();
         }
 
-        if (rightButton.isPressed()) {
+        if (rightButton.isPressed() && (!rope.isRoped)) {
             player.moveRight();
         }
 
-        if (leftButton.isPressed()) {
+
+
+        if (leftButton.isPressed()  && (!rope.isRoped)) {
             player.moveLeft();
         }
     }
