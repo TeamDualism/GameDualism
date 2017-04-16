@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.BooleanArray;
 import com.spbstu.android.game.screens.MenuScreen;
 
 public class GameDualism extends Game {
@@ -14,8 +13,19 @@ public class GameDualism extends Game {
     public static final java.lang.String TITLE = "Dualism";
 
     public AssetManager assetManager = new AssetManager();
-    private Boolean isMusicOn = true;
-    private Boolean isSoundOn = true;
+    private static boolean isMusicOn = true;
+    private static boolean isSoundOn = true;
+
+    private static class Holder {
+        private static GameDualism INSTANCE = new GameDualism();
+    }
+
+    private GameDualism() {
+    }
+
+    public static GameDualism getInstance() {
+        return Holder.INSTANCE;
+    }
 
     @Override
     public void create() {
@@ -28,32 +38,32 @@ public class GameDualism extends Game {
         assetManager.dispose();
     }
 
-    public void setMusicOn(){
+    public void setMusicOn() {
         isMusicOn = true;
     }
 
-    public void setMusicOff(){
+    public void setMusicOff() {
         isMusicOn = false;
     }
 
-    public Boolean getIsMusicOn(){
+    public boolean getIsMusicOn() {
         return isMusicOn;
     }
 
-    public void setSoundOn(){
+    public void setSoundOn() {
         isSoundOn = true;
     }
 
-    public void setSoundOff(){
+    public void setSoundOff() {
         isSoundOn = false;
     }
 
-    public Boolean getIsSoundOn(){
+    public boolean getIsSoundOn() {
         return isSoundOn;
     }
 
-    public static void playSound(Sound sound, GameDualism game){
-        if(game.getIsSoundOn())
+    public static void playSound(Sound sound) {
+        if (isSoundOn)
             sound.play();
     }
 
