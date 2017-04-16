@@ -26,7 +26,10 @@ public class PlayPauseScreen extends ScreenAdapter {
 
     public PlayPauseScreen(final GameDualism game, final Level1Screen level1Screen) {
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
-        stage.addActor(new Image(new Texture("back2.png")));
+        Image image = new Image(new Texture("back2.png"));
+        image.setHeight(HEIGHT);
+        image.setWidth(WIDTH);
+        stage.addActor(image);
 
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));

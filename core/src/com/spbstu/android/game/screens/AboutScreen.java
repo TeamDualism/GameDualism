@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -31,18 +32,27 @@ public class AboutScreen extends ScreenAdapter {
 
     public AboutScreen(final GameDualism game,final MenuScreen menu) {
         this.game = game;
-        stage.addActor(new Image(new Texture("back2.png")));
+        Image image = new Image(new Texture("back3_1.png"));
+        image.setHeight(HEIGHT);
+        image.setWidth(WIDTH);
+        stage.addActor(image);
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 30;
+        BitmapFont font12 = generator.generateFont(parameter);
+        generator.dispose();
         Label label = new Label("Developed by:\n" +
                 "Zatylkin Pavel\n" +
                 "Lesik Demyan\n" +
                 "Feofilaktov Mikhail\n" +
                 "Shabalina Anastasia\n" +
-                "Peter the Great St.Petersburg Polytechnic University\n" +
-                "May, 2017" , new Label.LabelStyle(font, Color.WHITE));
+                "Peter the Great St.Petersburg\n" +
+                "Polytechnic University\n" +
+                "May, 2017" , new Label.LabelStyle(font12, Color.WHITE));
         label.setPosition(Gdx.graphics.getWidth()/3f, Gdx.graphics.getHeight()/ 2f);
         stage.addActor(label);
 
