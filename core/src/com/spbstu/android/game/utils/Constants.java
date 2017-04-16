@@ -17,6 +17,7 @@ public class Constants {
     public static final int BONUS_BIT = 1 << 1;
     public static final int SENSOR_BIT = 1 << 2;
     public static final int TILE_BIT = 1 << 3;
+    public static final int EXIT_BIT = 1 << 4;
 
     //Player
     public static final float MAX_VELOCITY = 4.5f;

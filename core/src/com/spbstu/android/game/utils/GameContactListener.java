@@ -9,8 +9,10 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.spbstu.android.game.player.Player;
 import com.spbstu.android.game.objects.Bonus;
+import com.spbstu.android.game.screens.MenuScreen;
 
 import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
+import static com.spbstu.android.game.utils.Constants.EXIT_BIT;
 import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
 import static com.spbstu.android.game.utils.Constants.TILE_BIT;
@@ -31,6 +33,7 @@ public class GameContactListener implements ContactListener{
 
         switch (contactType) {
             case PLAYER_BIT | BONUS_BIT:
+
                 if (fixtureB.getFilterData().categoryBits == BONUS_BIT)
                     gameWorld.addToDestroy((Bonus)(fixtureB.getBody().getUserData()));
 
@@ -51,6 +54,8 @@ public class GameContactListener implements ContactListener{
                     ((Player)(fixtureB.getBody().getUserData())).jumpNumber = 1;
                 }
                 break;
+            case PLAYER_BIT | EXIT_BIT:
+                gameWorld.onExit();
         }
     }
 

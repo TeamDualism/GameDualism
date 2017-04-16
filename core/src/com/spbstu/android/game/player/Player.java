@@ -119,6 +119,17 @@ public abstract class Player {
         }
     }
 
+    public void moveRightOnRope() {
+        direction = RIGHT;
+        body.applyLinearImpulse(IMPULSE/2, 0, body.getPosition().x, body.getPosition().y, false);
+
+    }
+    public void moveLeftOnRope() {
+        direction = LEFT;
+        body.applyLinearImpulse(-IMPULSE/2, 0, body.getPosition().x, body.getPosition().y, false);
+
+    }
+
     public void jump(int jumpNumber) {
         if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
