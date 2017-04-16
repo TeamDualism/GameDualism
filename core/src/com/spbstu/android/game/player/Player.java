@@ -1,12 +1,7 @@
 package com.spbstu.android.game.player;
 
 import com.badlogic.gdx.Gdx;
-
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -21,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.component.TimeLine;
 
 import static com.spbstu.android.game.player.Player.Direction.LEFT;
 import static com.spbstu.android.game.player.Player.Direction.RIGHT;
@@ -43,20 +39,20 @@ public abstract class Player {
     public Animation<TextureRegion> jumpingAnimation;
     public Player.State state;
 
-    public enum State {STANDING, RUNNING, JUMPING};
-    public enum Direction {LEFT, RIGHT};
+    public enum State {STANDING, RUNNING, JUMPING}
+
+    public enum Direction {LEFT, RIGHT}
 
     public Player.Direction direction;
 
+    private final TimeLine timeLine;
+
     private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
 
-    private GameDualism currentGame;
-
-    public Player(float x, float y, float radius, World world, GameDualism game) {
+    public Player(float x, float y, float radius, World world, TimeLine timeLine) {
         BodyDef bodyDef = new BodyDef();
 
-        currentGame = game;
-
+        this.timeLine = timeLine;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.fixedRotation = true;
@@ -88,18 +84,21 @@ public abstract class Player {
         stateTime = 0f;
         state = STANDING;
     }
-    public void setAtlas(TextureAtlas atlas, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping){
+
+    public void setAtlas(TextureAtlas atlas, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping) {
         this.atlas = atlas;
         runningAnimation = running;
         jumpingAnimation = jumping;
         standingAnimation = standing;
     }
-    public void changeBody(Player curCharacter, Player prevCharacter, Player nextCharacter){
+
+    public void changeBody(Player curCharacter, Player prevCharacter, Player nextCharacter) {
         nextCharacter.body.setActive(true);
         nextCharacter.body.setTransform(prevCharacter.body.getPosition().x, prevCharacter.body.getPosition().y, prevCharacter.body.getAngle());
         prevCharacter.body.setActive(false);
         curCharacter.body = nextCharacter.body;
     }
+
     public void moveRight() {
         direction = RIGHT;
 
@@ -109,6 +108,7 @@ public abstract class Player {
             body.setLinearVelocity(MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
+
     public void moveLeft() {
         direction = LEFT;
 
@@ -118,6 +118,7 @@ public abstract class Player {
             body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
     }
+<<<<<<< HEAD
     public void moveRightOnRope() {
         direction = RIGHT;
         body.applyLinearImpulse(IMPULSE/2, 0, body.getPosition().x, body.getPosition().y, false);
@@ -128,30 +129,43 @@ public abstract class Player {
         body.applyLinearImpulse(-IMPULSE/2, 0, body.getPosition().x, body.getPosition().y, false);
 
     }
+=======
+
+>>>>>>> refs/remotes/origin/master
     public void jump(int jumpNumber) {
         if (this.jumpNumber <= jumpNumber) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
-            GameDualism.playSound(jumpSound, currentGame);
+            GameDualism.playSound(jumpSound);
             this.jumpNumber++;
         }
     }
+
     public void stop() {
         //body.setLinearVelocity(body.getLinearVelocity().x * STOP, body.getLinearVelocity().y);
         body.setLinearVelocity(0f, body.getLinearVelocity().y);
     }
 
     public int getTileX() {
-        return (int)Math.floor(body.getPosition().x);
+        return (int) Math.floor(body.getPosition().x);
     }
-    public int getTileY() { return (int)Math.floor(body.getPosition().y);}
+
+    public int getTileY() {
+        return (int) Math.floor(body.getPosition().y);
+    }
+
     public void incBonusCounter() {
         bonusCounter++;
     }
+
     public int getBonusCounter() {
         return bonusCounter;
     }
-    public void setState(Player.State newState){ state = newState; };
+
+    public void setState(Player.State newState) {
+        state = newState;
+    }
+
     public boolean isGrounded(World world) {
         Fixture sensorFixture = body.getFixtureList().get(1);
 
@@ -164,6 +178,11 @@ public abstract class Player {
 
         return false;
     }
+
+    public TimeLine getTimeline() {
+        return timeLine;
+    }
+
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame;

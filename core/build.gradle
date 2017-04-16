@@ -12,8 +12,4 @@ eclipse.project {
 
 dependencies {
     compile 'com.badlogicgames.gdx:gdx-box2d:1.9.5'
-
-    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-
-    compile 'com.badlogicgames.gdx:gdx-freetype:1.9.5'
 }
