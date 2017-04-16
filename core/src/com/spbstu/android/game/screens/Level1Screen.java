@@ -114,11 +114,11 @@ public class Level1Screen extends ScreenAdapter {
 
         ronnie = new Ronnie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 60)));
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 2)));
         ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
                 16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 60)));
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 2)));
 
         player = reggie;
         player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
@@ -405,7 +405,7 @@ public class Level1Screen extends ScreenAdapter {
         ronnie.bonusCounter = 0;
         reggie.bonusCounter = 0;
         changeBroButton.setDisabled(false);
-        restart();
+        game.setScreen(new GameoverScreen(game));
     }
 
     private void restart() {
