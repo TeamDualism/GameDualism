@@ -115,6 +115,7 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.load("Maps/Tiles/dplatform.png", Texture.class);
+        game.assetManager.load("Maps/Tiles/mplatform.png", Texture.class);
         game.assetManager.finishLoading();
 
         Drawable warmBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
@@ -138,7 +139,7 @@ public class Level1Screen extends ScreenAdapter {
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
         gameWorld.initBonuses(map);
-        gameWorld.initDPlatforms(map);
+        gameWorld.initPlatforms(map);
 
 
         //UI
@@ -392,7 +393,7 @@ public class Level1Screen extends ScreenAdapter {
             player.render(batch);
 
             gameWorld.destroyObjects();
-            //box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
+            box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
             handleTrapsCollision(player.getTileX(), player.getTileY());
             score.setText("" + player.getBonusCounter());
         } else {

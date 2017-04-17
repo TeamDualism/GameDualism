@@ -14,6 +14,7 @@ import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.objects.Bonus;
 import com.spbstu.android.game.objects.DisappearingPlatform;
 import com.spbstu.android.game.objects.Exit;
+import com.spbstu.android.game.objects.MovingPlatform;
 import com.spbstu.android.game.objects.Object;
 import com.spbstu.android.game.screens.MenuScreen;
 
@@ -25,6 +26,7 @@ public class GameWorld implements Disposable{
     private Array<Object> objectsToDestroy;
     private Array<Bonus> bonuses;
     private Array<DisappearingPlatform> disappearingPlatformss;
+    private Array<MovingPlatform> movingPlatforms;
     private GameDualism game;
     private Exit exit;
 
@@ -32,6 +34,7 @@ public class GameWorld implements Disposable{
         objectsToDestroy = new Array<Object>();
         bonuses = new Array<Bonus>();
         disappearingPlatformss = new Array<DisappearingPlatform>();
+        movingPlatforms = new Array<MovingPlatform>();
 
         world = new World(GRAVITY, false);
         world.setContactListener(new GameContactListener(this));
@@ -48,13 +51,17 @@ public class GameWorld implements Disposable{
         }
     }
 
-    public void initDPlatforms(TiledMap map) {
+    public void initPlatforms(TiledMap map) {
         MapObjects objects = map.getLayers().get("Platforms").getObjects();
 
         for (MapObject object: objects) {
-            Rectangle rectangle = ((RectangleMapObject)object).getRectangle();
+            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
 
-            disappearingPlatformss.add(new DisappearingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/dplatform.png", Texture.class), world));
+            if (object.getProperties().get("type").equals("d")) {
+                disappearingPlatformss.add(new DisappearingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/dplatform.png", Texture.class), world));
+            } else {
+                movingPlatforms.add(new MovingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/mplatform.png", Texture.class), world, object.getProperties().get("dist", Integer.class)));
+            }
         }
     }
 
@@ -82,6 +89,11 @@ public class GameWorld implements Disposable{
 
         for (int i = 0; i < disappearingPlatformss.size; i++) {
             disappearingPlatformss.get(i).draw(batch);
+        }
+
+        for (int i = 0; i < movingPlatforms.size; i++) {
+            movingPlatforms.get(i).update();
+            movingPlatforms.get(i).draw(batch);
         }
 
         batch.end();
