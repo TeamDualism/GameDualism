@@ -2,12 +2,10 @@ package com.spbstu.android.game.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
 import static com.spbstu.android.game.utils.Constants.DPLATFORM_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 
@@ -27,7 +25,7 @@ public class DisappearingPlatform extends Object{
         body.setUserData(this);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(16.0f / PPM, 16.0f / PPM);
+        shape.setAsBox(16.0f / (2 * PPM), 16.0f / (2 * PPM));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

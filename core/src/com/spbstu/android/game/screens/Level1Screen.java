@@ -114,6 +114,7 @@ public class Level1Screen extends ScreenAdapter {
         //Game
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
+        game.assetManager.load("Maps/Tiles/dplatform.png", Texture.class);
         game.assetManager.finishLoading();
 
         Drawable warmBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
@@ -137,6 +138,7 @@ public class Level1Screen extends ScreenAdapter {
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
         gameWorld.initBonuses(map);
+        gameWorld.initDPlatforms(map);
 
 
         //UI
@@ -382,6 +384,7 @@ public class Level1Screen extends ScreenAdapter {
             renderer.render();
 
             gameWorld.renderBonuses(batch);
+            gameWorld.renderPlatforms(batch);
             gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();
