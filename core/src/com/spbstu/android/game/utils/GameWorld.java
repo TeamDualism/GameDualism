@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.objects.Bonus;
+import com.spbstu.android.game.objects.DisappearingPlatform;
 import com.spbstu.android.game.objects.Exit;
 import com.spbstu.android.game.objects.Object;
 import com.spbstu.android.game.screens.MenuScreen;
@@ -23,12 +24,14 @@ public class GameWorld implements Disposable{
     private World world;
     private Array<Object> objectsToDestroy;
     private Array<Bonus> bonuses;
+    private Array<DisappearingPlatform> disappearingPlatformss;
     private GameDualism game;
     private Exit exit;
 
     public GameWorld(GameDualism game) {
         objectsToDestroy = new Array<Object>();
         bonuses = new Array<Bonus>();
+        disappearingPlatformss = new Array<DisappearingPlatform>();
 
         world = new World(GRAVITY, false);
         world.setContactListener(new GameContactListener(this));
@@ -44,6 +47,17 @@ public class GameWorld implements Disposable{
             bonuses.add(new Bonus(rectangle.getX(), rectangle.getY(), game.assetManager.get("Textures/coin.png", Texture.class), world));
         }
     }
+
+    public void initDPlatforms(TiledMap map) {
+        MapObjects objects = map.getLayers().get("Platforms").getObjects();
+
+        for (MapObject object: objects) {
+            Rectangle rectangle = ((RectangleMapObject)object).getRectangle();
+
+            disappearingPlatformss.add(new DisappearingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/dplatform.png", Texture.class), world));
+        }
+    }
+
     public void initExit(int x, int y) {
         exit = new Exit(x*PPM, y*PPM, new Texture("Textures/exit.png"), world);
     }
@@ -62,6 +76,17 @@ public class GameWorld implements Disposable{
 
         batch.end();
     }
+
+    public void renderPlatforms(Batch batch) {
+        batch.begin();
+
+        for (int i = 0; i < disappearingPlatformss.size; i++) {
+            disappearingPlatformss.get(i).draw(batch);
+        }
+
+        batch.end();
+    }
+
     public void renderExit(Batch batch) {
         batch.begin();
         exit.draw(batch);
@@ -74,6 +99,9 @@ public class GameWorld implements Disposable{
                 world.destroyBody(objectsToDestroy.get(i).getBody());
                 if (objectsToDestroy.get(i) instanceof Bonus) {
                     bonuses.removeValue((Bonus)(objectsToDestroy.get(i)), true);
+                }
+                if (objectsToDestroy.get(i) instanceof DisappearingPlatform) {
+                    disappearingPlatformss.removeValue((DisappearingPlatform)(objectsToDestroy.get(i)), true);
                 }
                 objectsToDestroy.removeIndex(i);
             }
