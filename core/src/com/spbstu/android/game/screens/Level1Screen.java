@@ -104,7 +104,7 @@ public class Level1Screen extends ScreenAdapter {
         //LibGdx
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
-        map = new TmxMapLoader().load("Maps/Level-1.tmx");
+        map = new TmxMapLoader().load("Maps/newLEVEL.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
         //Box2d
@@ -122,11 +122,11 @@ public class Level1Screen extends ScreenAdapter {
         Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
 
         ronnie = new Ronnie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
+                16f / (2 * PPM) + 16 / PPM * 33,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 60)));
         ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
+                16f / (2 * PPM) + 16 / PPM * 33,
                 (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 60)));
 
         player = reggie;
@@ -481,8 +481,7 @@ public class Level1Screen extends ScreenAdapter {
         }
         player.body.setLinearVelocity(0f, 0f);
         player.jumpNumber = 1;
-        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
-
+        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 33, player.body.getAngle());
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
