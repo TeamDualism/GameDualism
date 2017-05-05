@@ -138,7 +138,7 @@ public class Level1Screen extends ScreenAdapter {
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
         gameWorld.initBonuses(map);
-        gameWorld.initDPlatforms(map);
+        //gameWorld.initDPlatforms(map);
 
 
         //UI
@@ -384,7 +384,7 @@ public class Level1Screen extends ScreenAdapter {
             renderer.render();
 
             gameWorld.renderBonuses(batch);
-            gameWorld.renderPlatforms(batch);
+            //gameWorld.renderPlatforms(batch);
             gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();
