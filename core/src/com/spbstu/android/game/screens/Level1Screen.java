@@ -97,14 +97,14 @@ public class Level1Screen extends ScreenAdapter {
     public Level1Screen(GameDualism game) {
         this.game = game;
 
-        layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/layout.ogg"));
+        layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
         layoutMusic.setVolume(0.4f);
         layoutMusic.setLooping(true);
 
         //LibGdx
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
-        map = new TmxMapLoader().load("Maps/newLEVEL.tmx");
+        map = new TmxMapLoader().load("Maps/Level-2.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
         //Box2d
@@ -117,17 +117,19 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Maps/Tiles/dplatform.png", Texture.class);
         game.assetManager.finishLoading();
 
-        Drawable warmBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
-        Drawable coldBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background_cold.png");
         Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
+        Drawable knob_warm = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob_warm.png");
+        Drawable Background = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
+
+
 
         ronnie = new Ronnie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 33,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 60)));
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 360)));
         ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 33,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 60)));
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 360)));
 
         player = reggie;
         player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
@@ -206,7 +208,7 @@ public class Level1Screen extends ScreenAdapter {
         leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
 
         stage.addActor(upButton);
-        upButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        upButton.setBounds(WIDTH *9/10, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -227,7 +229,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(changeBroButton);
-        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.setBounds(WIDTH * 9 / 10, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -481,7 +483,8 @@ public class Level1Screen extends ScreenAdapter {
         }
         player.body.setLinearVelocity(0f, 0f);
         player.jumpNumber = 1;
-        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 33, player.body.getAngle());
+        player.body.setTransform(16f / (2 * PPM),
+                16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
