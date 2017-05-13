@@ -47,7 +47,7 @@ public abstract class Player {
 
     private final TimeLine timeLine;
 
-    private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
+    private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_08.wav"));
 
     public Player(float x, float y, float radius, World world, TimeLine timeLine) {
         BodyDef bodyDef = new BodyDef();
