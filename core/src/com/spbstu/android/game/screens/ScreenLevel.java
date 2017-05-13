@@ -29,7 +29,7 @@ public class ScreenLevel extends ScreenAdapter {
     final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
     public ScreenLevel(final GameDualism game,final MenuScreen menu) {
-        Image image = new Image(new Texture("back2.png"));
+        Image image = new Image(new Texture("levels.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
@@ -37,7 +37,7 @@ public class ScreenLevel extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
-        menuButton.setBounds(999*(WIDTH - maxButtonsSize + 7 )/1000f, 99*(HEIGHT - maxButtonsSize +10)/100f, maxButtonsSize * 2 / 3, maxButtonsSize * 2 / 3);
+        menuButton.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99 * (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);
         menuButton.setVisible(true);
 
 

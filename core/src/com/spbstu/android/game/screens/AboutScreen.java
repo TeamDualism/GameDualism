@@ -32,7 +32,7 @@ public class AboutScreen extends ScreenAdapter {
 
     public AboutScreen(final GameDualism game,final MenuScreen menu) {
         this.game = game;
-        Image image = new Image(new Texture("back3_1.png"));
+        Image image = new Image(new Texture("back3_2.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
@@ -42,7 +42,7 @@ public class AboutScreen extends ScreenAdapter {
         stage.addActor(menuButton);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
+        parameter.size = 38;
         BitmapFont font12 = generator.generateFont(parameter);
         generator.dispose();
         Label label = new Label("Developed by:\n" +

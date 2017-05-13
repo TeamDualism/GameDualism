@@ -56,7 +56,7 @@ public class MenuScreen implements Screen {
         buttonSound.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);
 
         stage = new Stage();
-        Image image = new Image(new Texture("back2.png"));
+        Image image = new Image(new Texture("backgr1.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
