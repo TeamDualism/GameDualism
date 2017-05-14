@@ -47,9 +47,14 @@ public abstract class Player {
 
     private final TimeLine timeLine;
 
-    private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_08.wav"));
+    private final Sound jumpSound;
+    private final Sound bonusSound;
 
     public Player(float x, float y, float radius, World world, TimeLine timeLine) {
+
+        bonusSound = Gdx.audio.newSound(Gdx.files.internal("Audio/bonus.wav"));
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/jump1.wav"));
+
         BodyDef bodyDef = new BodyDef();
 
         this.timeLine = timeLine;
@@ -164,6 +169,7 @@ public abstract class Player {
 
     public void incBonusCounter() {
         bonusCounter++;
+        GameDualism.playSound(bonusSound);
     }
 
     public int getBonusCounter() {

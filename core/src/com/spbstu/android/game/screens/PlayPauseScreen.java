@@ -128,7 +128,6 @@ public class PlayPauseScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked sound");
                 //выключить звуки
-                GameDualism.playSound(buttonEffect);
                 if (game.getIsSoundOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/audioOff.png")));
@@ -139,6 +138,7 @@ public class PlayPauseScreen extends ScreenAdapter {
                             new TextureRegion(new Texture("Buttons/audioOn.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     game.setSoundOn();
+                    GameDualism.playSound(buttonEffect);
                 }
 
             }

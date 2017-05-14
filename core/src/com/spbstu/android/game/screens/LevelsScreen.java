@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -97,14 +98,20 @@ public class LevelsScreen extends ScreenAdapter {
     private final TimeLine.Holder timeLineHolder;
 
     private final Music layoutMusic; //= Gdx.audio.newSound(Gdx.files.internal("Audio/layout.ogg"));
+    private final Sound gameOverSound;
+    private final Sound deathSound;
 
     public LevelsScreen(GameDualism game, int LevelNumber) {
         this.game = game;
         this.LevelNumber = LevelNumber;
 
         layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
-        layoutMusic.setVolume(0.4f);
+
+        layoutMusic.setVolume(0.2f);
         layoutMusic.setLooping(true);
+
+        gameOverSound = Gdx.audio.newSound(Gdx.files.internal("Audio/gameover.wav"));
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("Audio/death.wav"));
 
 
         //Box2d
@@ -238,9 +245,8 @@ public class LevelsScreen extends ScreenAdapter {
                     player.jump(1);
 
                 }
-                if (rope.isExist == true){
-                    rope.isRoped = false;
-                    rope.inFlight = true;
+                if (rope.getRopeState() == Rope.ropeState.isRoped){
+                    rope.setRopeState(Rope.ropeState.inFlight);
                     rope.destroyJoint(gameWorld.getWorld());
                     return true;
                 }
@@ -258,7 +264,10 @@ public class LevelsScreen extends ScreenAdapter {
                 }
 
                 if(player == reggie){
-                    if((!rope.inFlight) && (!rope.isRoped)) {
+                        if(rope.getRopeState() == Rope.ropeState.isRoped) {
+                            rope.setRopeState(Rope.ropeState.inFlight);
+                            rope.destroyJoint(gameWorld.getWorld());
+                        }
                         player = ronnie;
                         ronnie.GetBody().setLinearVelocity(reggie.GetBody().getLinearVelocity().x, reggie.GetBody().getLinearVelocity().y);
                         player.changeBody(player, reggie, ronnie);
@@ -323,15 +332,15 @@ public class LevelsScreen extends ScreenAdapter {
         rightButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (rope.isRoped)
-                    player.moveRightOnRope();
+                if (rope.getRopeState() == Rope.ropeState.isRoped)
+                        player.moveRightOnRope();
                 return true;
             }
         });
         leftButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (rope.isRoped)
+                if (rope.getRopeState() == Rope.ropeState.isRoped)
                     player.moveLeftOnRope();
                 return true;
             }
@@ -449,22 +458,24 @@ public class LevelsScreen extends ScreenAdapter {
             } else {
                 player.setState(STANDING);
             }
-            rope.inFlight = false;
+            if(rope.getRopeState() == Rope.ropeState.inFlight)
+                rope.setRopeState(Rope.ropeState.isRest);
+
         } else {
             player.setState(JUMPING);
         }
 
-        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((!rope.inFlight) && (!rope.isRoped) || (player.isGrounded(gameWorld.getWorld())))) {
+        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((rope.getRopeState() == Rope.ropeState.isRest) || (player.isGrounded(gameWorld.getWorld())))) {
             player.stop();
         }
 
-        if (rightButton.isPressed() && (!rope.isRoped)) {
+        if (rightButton.isPressed() && (rope.getRopeState() != Rope.ropeState.isRoped)) {
             player.moveRight();
         }
 
 
 
-        if (leftButton.isPressed()  && (!rope.isRoped)) {
+        if (leftButton.isPressed()  && (rope.getRopeState() != Rope.ropeState.isRoped)) {
             player.moveLeft();
         }
     }
@@ -494,14 +505,16 @@ public class LevelsScreen extends ScreenAdapter {
         reggie.SetBonusCounter(0);
         changeBroButton.setDisabled(false);
         game.setScreen(new GameoverScreen(game, LevelsScreen.this));
+        game.playSound(gameOverSound);
+        layoutMusic.stop();
     }
 
     private void restart() {
-        if (rope.isExist == true){
-            rope.isRoped = false;
-            rope.inFlight = true;
+        if (rope.getRopeState() != Rope.ropeState.isRest){
+            rope.setRopeState(Rope.ropeState.isRest);//rope test
             rope.destroyJoint(gameWorld.getWorld());
         }
+        GameDualism.playSound(deathSound);
         player.GetBody().setLinearVelocity(0f, 0f);
         player.SetJumpNumber(1);
         switch(LevelNumber) {
