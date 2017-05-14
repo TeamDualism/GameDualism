@@ -30,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.objects.Rope;
@@ -48,7 +49,7 @@ import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
-public class Level1Screen extends ScreenAdapter {
+public class Level1Screen extends LevelScreen {
     private final GameDualism game;
 
     //LibGdx
@@ -97,8 +98,13 @@ public class Level1Screen extends ScreenAdapter {
     private final Sound gameOverSound;
     private final Sound deathSound;
 
+    private ScreenProcesser screenProcesser;
+
     public Level1Screen(GameDualism game) {
+
         this.game = game;
+
+        screenProcesser = game.getScreenProcesser();
 
         layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
 
@@ -280,7 +286,7 @@ public class Level1Screen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                game.setScreen(new PlayPauseScreen(game, Level1Screen.this));
+                screenProcesser.setPlayPauseScreen();
             }
         });
 
@@ -417,10 +423,10 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        gameWorld.dispose();
-        box2DDebugRenderer.dispose();
-        batch.dispose();
-        stage.dispose();
+//          gameWorld.dispose();
+//          box2DDebugRenderer.dispose();
+//          batch.dispose();
+//        stage.dispose();
         layoutMusic.dispose();
     }
 
@@ -483,9 +489,10 @@ public class Level1Screen extends ScreenAdapter {
         ronnie.bonusCounter = 0;
         reggie.bonusCounter = 0;
         changeBroButton.setDisabled(false);
-        game.setScreen(new GameoverScreen(game));
+        screenProcesser.setGameOverScreen();
         game.playSound(gameOverSound);
         layoutMusic.stop();
+        screenProcesser.disposeCurrentLevelScreen();
     }
 
     private void restart() {
