@@ -90,18 +90,18 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked music");
                 //выключить музыку
+                GameDualism.playSound(buttonEffect);
 
-                if (game.getIsSoundOn()) {
+                if (game.getIsMusicOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("Buttons/audioOff.png")));
-                    buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    game.setSoundOff();
+                            new TextureRegion(new Texture("Buttons/musicOff.png")));
+                    buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+                    game.setMusicOff();
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("Buttons/audioOn.png")));
-                    buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    game.setSoundOn();
-                    GameDualism.playSound(buttonEffect);
+                            new TextureRegion(new Texture("Buttons/musicOn.png")));
+                    buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+                    game.setMusicOn();
                 }
             }
         });

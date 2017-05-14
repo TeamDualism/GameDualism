@@ -23,11 +23,11 @@ import static com.spbstu.android.game.utils.Constants.PPM;
 
 public class Rope {
     private Array<Joint> joint = new Array<Joint>();
-    public enum ropeState{
-        isRest, inFlight, isRoped
-    }
 
-    private ropeState state = ropeState.isRest;
+
+    public boolean isExist;
+    public boolean inFlight = false;
+    public boolean isRoped = false;
     private Sprite spriteRope;
     public float yRopedBlock, xRopedBlock;
     private float H, L, alpha, alphaRad;
@@ -47,7 +47,7 @@ public class Rope {
             possibleY = playerBody.getPosition().y*PPM ;// + PPM *(float) Math.sin(alpha);;
             if (playerBody.getPosition().x * PPM > x)
                 alpha = (float) (Math.PI - alpha);
-            for (int i = 0; i < 8*L / PPM + 16; i++) {
+            for (int i = 0; i < 8*L / PPM; i++) {
                 possibleX += PPM/8 * Math.cos(alpha);
                 possibleY += PPM/8 * Math.sin(alpha);
                 if(possibleY > (blocksMap.length-1) *PPM)
@@ -59,10 +59,11 @@ public class Rope {
                 if (blocksMap[(int) Math.floor((possibleY) / PPM)][(int) Math.floor((possibleX) / PPM) ]) {
                     xRopedBlock = possibleX;
                     yRopedBlock = possibleY;
-                    if(state == ropeState.isRoped)
+                    if(isRoped)
                         destroyJoint(world);
-                    state = ropeState.isRoped;
+                    isRoped = true;
                     buildRopeJoints(world,createBox(world,(xRopedBlock /*+ 2*PPM*/) / PPM, yRopedBlock / PPM, 0.2f/PPM, 0.2f/ PPM, false),  playerBody);
+                    isExist = true;
                     break;
                 }
             }
@@ -127,6 +128,7 @@ public class Rope {
         for(int i = 0; i< joint.size; i++)
             world.destroyBody(joint.get(i).getBodyA());
         joint.clear();
+        isExist = false;
     }
     private void getParams(Body body){
         H = yRopedBlock - body.getPosition().y * PPM;
@@ -146,7 +148,7 @@ public class Rope {
 
     public void render(SpriteBatch batch, Body body) { //рисую веревку, рисую, где хочу, законом не запрещено
         float alphaLinks, lLinks = 0;
-        if (state == ropeState.isRoped) {
+        if (isRoped) {
             batch.begin();
             getParams(body);
             for(int i = 0; i < joint.size; i++) {
@@ -168,16 +170,8 @@ public class Rope {
             batch.end();
         }
     }
-    public void setRopeState(ropeState state){
-        this.state = state;
-    }
-    public ropeState getRopeState(){
-        return state;
-    }
 
     public static float norm(double x1, double x2, double y1, double y2) {
         return (float)Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
     }
-
-
 }
