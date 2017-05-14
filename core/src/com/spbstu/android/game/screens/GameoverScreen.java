@@ -30,7 +30,7 @@ public class GameoverScreen extends ScreenAdapter {
     private final SpriteBatch batch = new SpriteBatch();
 
 
-    public GameoverScreen(final GameDualism game) {
+    public GameoverScreen(final GameDualism game, final LevelsScreen levelsScreen) {
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
         Image image= new Image(new Texture("gameover.png"));
@@ -57,10 +57,10 @@ public class GameoverScreen extends ScreenAdapter {
                                }
         );
 
-        Button restartLevel = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/restartButton.png"))));
         int maxButtonsHeight = HEIGHT / 6;
         int maxButtonsWidth = WIDTH / 6;
+        Button restartLevel = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/restartButton.png"))));
         restartLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 2* (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(restartLevel);
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
@@ -68,7 +68,7 @@ public class GameoverScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
-                game.setScreen(new Level1Screen(game));
+                game.setScreen(new LevelsScreen(game, levelsScreen.GetLevelNumber()));
             }
         });
 
