@@ -274,7 +274,7 @@ public class LevelsScreen extends ScreenAdapter {
                         ronnie.SetJumpNumber(reggie.GetJumpNumber());
                         player.setAtlas(ronnie.GetAtlas(), ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                         player.SetBonusCounter(reggie.GetBonusCounter());
-                    }
+
                 } else {
                     player = reggie;
                     reggie.GetBody().setLinearVelocity(ronnie.GetBody().getLinearVelocity().x, ronnie.GetBody().getLinearVelocity().y);
