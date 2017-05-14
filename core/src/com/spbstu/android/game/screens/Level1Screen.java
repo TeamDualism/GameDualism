@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -93,13 +94,19 @@ public class Level1Screen extends ScreenAdapter {
     private final TimeLine.Holder timeLineHolder;
 
     private final Music layoutMusic; //= Gdx.audio.newSound(Gdx.files.internal("Audio/layout.ogg"));
+    private final Sound gameOverSound;
+    private final Sound deathSound;
 
     public Level1Screen(GameDualism game) {
         this.game = game;
 
         layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
-        layoutMusic.setVolume(0.4f);
+
+        layoutMusic.setVolume(0.2f);
         layoutMusic.setLooping(true);
+
+        gameOverSound = Gdx.audio.newSound(Gdx.files.internal("Audio/gameover.wav"));
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("Audio/death.wav"));
 
         //LibGdx
         camera = new OrthographicCamera();
@@ -473,6 +480,8 @@ public class Level1Screen extends ScreenAdapter {
         reggie.bonusCounter = 0;
         changeBroButton.setDisabled(false);
         game.setScreen(new GameoverScreen(game));
+        game.playSound(gameOverSound);
+        layoutMusic.stop();
     }
 
     private void restart() {
@@ -481,6 +490,7 @@ public class Level1Screen extends ScreenAdapter {
             rope.inFlight = true;
             rope.destroyJoint(gameWorld.getWorld());
         }
+        GameDualism.playSound(deathSound);
         player.body.setLinearVelocity(0f, 0f);
         player.jumpNumber = 1;
         player.body.setTransform(16f / (2 * PPM),

@@ -21,6 +21,7 @@ public class GameDualism extends Game {
     }
 
     private GameDualism() {
+
     }
 
     public static GameDualism getInstance() {
