@@ -69,18 +69,18 @@ public class GameContactListener implements ContactListener{
                 }
 
                 if (fixtureA.getFilterData().categoryBits == SENSOR_BIT) {
-                    ((Player)(fixtureA.getBody().getUserData())).jumpNumber = 1;
+                    ((Player)(fixtureA.getBody().getUserData())).SetJumpNumber(1);
                 } else {
-                    ((Player)(fixtureB.getBody().getUserData())).jumpNumber = 1;
+                    ((Player)(fixtureB.getBody().getUserData())).SetJumpNumber(1);
                 }
 
                 break;
 
             case SENSOR_BIT | TILE_BIT:
                 if (fixtureA.getFilterData().categoryBits == SENSOR_BIT) {
-                    ((Player)(fixtureA.getBody().getUserData())).jumpNumber = 1;
+                    ((Player)(fixtureA.getBody().getUserData())).SetJumpNumber(1);
                 } else {
-                    ((Player)(fixtureB.getBody().getUserData())).jumpNumber = 1;
+                    ((Player)(fixtureB.getBody().getUserData())).SetJumpNumber(1);
                 }
                 break;
 

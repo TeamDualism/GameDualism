@@ -28,22 +28,22 @@ import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
 
 public abstract class Player {
-    public TextureAtlas atlas;
-    public Body body;
-    public int jumpNumber;
-    public int bonusCounter = 0;
+    private TextureAtlas atlas;
+    private Body body;
+    private int jumpNumber;
+    private int bonusCounter = 0;
 
     float stateTime;
     public Animation<TextureRegion> runningAnimation;
     public Animation<TextureRegion> standingAnimation;
     public Animation<TextureRegion> jumpingAnimation;
-    public Player.State state;
+    private Player.State state;
 
     public enum State {STANDING, RUNNING, JUMPING}
 
     public enum Direction {LEFT, RIGHT}
 
-    public Player.Direction direction;
+    private Player.Direction direction;
 
     private final TimeLine timeLine;
 
@@ -85,11 +85,21 @@ public abstract class Player {
         state = STANDING;
     }
 
+    public TextureAtlas GetAtlas(){ return atlas; }
+
+    public Body GetBody() { return body; }
+
+    public void SetJumpNumber( int jumpNumber) { this.jumpNumber = jumpNumber; }
+    public int GetJumpNumber() { return jumpNumber; }
+
+    public void SetBonusCounter( int bonusCounter) { this.bonusCounter = bonusCounter; }
+    public int GetBonusCounter() { return bonusCounter; }
+
     public void setAtlas(TextureAtlas atlas, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping) {
         this.atlas = atlas;
-        runningAnimation = running;
-        jumpingAnimation = jumping;
-        standingAnimation = standing;
+        this.runningAnimation = running;
+        this.jumpingAnimation = jumping;
+        this.standingAnimation = standing;
     }
 
     public void changeBody(Player curCharacter, Player prevCharacter, Player nextCharacter) {
