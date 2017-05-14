@@ -26,7 +26,7 @@ public class PlayPauseScreen extends ScreenAdapter {
 
     public PlayPauseScreen(final GameDualism game, final Level1Screen level1Screen) {
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
-        Image image = new Image(new Texture("back2.png"));
+        Image image = new Image(new Texture("levels.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
@@ -34,8 +34,10 @@ public class PlayPauseScreen extends ScreenAdapter {
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
-        int maxButtonsSize = HEIGHT / 6;
-        menuButton.setBounds((WIDTH - maxButtonsSize) / 100f, 2 * (HEIGHT - maxButtonsSize) / 100f, maxButtonsSize, maxButtonsSize);
+        int maxButtonsHeight = HEIGHT /6;
+        int maxButtonsWidth = WIDTH /6;
+
+        menuButton.setBounds((WIDTH - maxButtonsWidth) / 2f, 2 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
@@ -49,8 +51,6 @@ public class PlayPauseScreen extends ScreenAdapter {
 
         Button restartLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/restartButton.png"))));
-        int maxButtonsHeight = HEIGHT / 6;
-        int maxButtonsWidth = WIDTH / 6;
         restartLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 3 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(restartLevel);
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
@@ -63,7 +63,7 @@ public class PlayPauseScreen extends ScreenAdapter {
         });
         Button resumeLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/resumeButton.png"))));
-        resumeLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 2 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        resumeLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 4 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(resumeLevel);
         resumeLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -93,8 +93,8 @@ public class PlayPauseScreen extends ScreenAdapter {
             buttonSound = new ImageButton(new TextureRegionDrawable(
                     new TextureRegion(new Texture("Buttons/audioOff.png"))));
 
-        buttonMusic.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99 * (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);//!квадратная
-        buttonSound.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);
+        buttonMusic.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99 * (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight * 3 / 4, maxButtonsHeight * 3 / 4);//!квадратная
+        buttonSound.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 85 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight * 3 / 4, maxButtonsHeight * 3 / 4);
         stage.addActor(buttonMusic);
         stage.addActor(buttonSound);
         buttonMusic.addListener(new ClickListener(Input.Buttons.LEFT) {
@@ -128,7 +128,6 @@ public class PlayPauseScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked sound");
                 //выключить звуки
-                GameDualism.playSound(buttonEffect);
                 if (game.getIsSoundOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/audioOff.png")));
@@ -139,6 +138,7 @@ public class PlayPauseScreen extends ScreenAdapter {
                             new TextureRegion(new Texture("Buttons/audioOn.png")));
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     game.setSoundOn();
+                    GameDualism.playSound(buttonEffect);
                 }
 
             }

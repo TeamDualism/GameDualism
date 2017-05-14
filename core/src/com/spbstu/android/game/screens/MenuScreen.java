@@ -56,7 +56,7 @@ public class MenuScreen implements Screen {
         buttonSound.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);
 
         stage = new Stage();
-        Image image = new Image(new Texture("back2.png"));
+        Image image = new Image(new Texture("backgr1.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
@@ -90,18 +90,18 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked music");
                 //выключить музыку
-                GameDualism.playSound(buttonEffect);
 
-                if (game.getIsMusicOn()) {
+                if (game.getIsSoundOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("Buttons/musicOff.png")));
-                    buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    game.setMusicOff();
+                            new TextureRegion(new Texture("Buttons/audioOff.png")));
+                    buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+                    game.setSoundOff();
                 } else {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
-                            new TextureRegion(new Texture("Buttons/musicOn.png")));
-                    buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
-                    game.setMusicOn();
+                            new TextureRegion(new Texture("Buttons/audioOn.png")));
+                    buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+                    game.setSoundOn();
+                    GameDualism.playSound(buttonEffect);
                 }
             }
         });
