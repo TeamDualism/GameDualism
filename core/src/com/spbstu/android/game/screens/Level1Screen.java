@@ -122,12 +122,12 @@ public class Level1Screen extends ScreenAdapter {
         Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
 
         ronnie = new Ronnie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 33,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 90)));
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
         ronnie.body.setActive(false);
         reggie = new Reggie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 33,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 90)));
+                16f / (2 * PPM) + 16 / PPM * 3,
+                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
 
         player = reggie;
         player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
