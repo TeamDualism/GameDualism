@@ -216,9 +216,8 @@ public class Level1Screen extends ScreenAdapter {
                     player.jump(1);
 
                 }
-                if (rope.isExist == true){
-                    rope.isRoped = false;
-                    rope.inFlight = true;
+                if (rope.getRopeState() == Rope.ropeState.isRoped){
+                    rope.setRopeState(Rope.ropeState.inFlight);
                     rope.destroyJoint(gameWorld.getWorld());
                     return true;
                 }
@@ -236,14 +235,17 @@ public class Level1Screen extends ScreenAdapter {
                 }
 
                 if(player == reggie){
-                    if((!rope.inFlight) && (!rope.isRoped)) {
+                        if(rope.getRopeState() == Rope.ropeState.isRoped) {
+                            rope.setRopeState(Rope.ropeState.inFlight);
+                            rope.destroyJoint(gameWorld.getWorld());
+                        }
                         player = ronnie;
                         ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
                         player.changeBody(player, reggie, ronnie);
                         ronnie.jumpNumber = reggie.jumpNumber;
                         player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
                         player.bonusCounter = reggie.bonusCounter;
-                    }
+
                 } else {
                     player = reggie;
                     reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x, ronnie.body.getLinearVelocity().y);
@@ -300,7 +302,7 @@ public class Level1Screen extends ScreenAdapter {
         rightButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (rope.isRoped)
+                if (rope.getRopeState() == Rope.ropeState.isRoped)
                         player.moveRightOnRope();
                 return true;
             }
@@ -308,7 +310,7 @@ public class Level1Screen extends ScreenAdapter {
         leftButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (rope.isRoped)
+                if (rope.getRopeState() == Rope.ropeState.isRoped)
                     player.moveLeftOnRope();
                 return true;
             }
@@ -426,22 +428,24 @@ public class Level1Screen extends ScreenAdapter {
             } else {
                 player.setState(STANDING);
             }
-            rope.inFlight = false;
+            if(rope.getRopeState() == Rope.ropeState.inFlight)
+                rope.setRopeState(Rope.ropeState.isRest);
+
         } else {
             player.setState(JUMPING);
         }
 
-        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((!rope.inFlight) && (!rope.isRoped) || (player.isGrounded(gameWorld.getWorld())))) {
+        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((rope.getRopeState() == Rope.ropeState.isRest) || (player.isGrounded(gameWorld.getWorld())))) {
             player.stop();
         }
 
-        if (rightButton.isPressed() && (!rope.isRoped)) {
+        if (rightButton.isPressed() && (rope.getRopeState() != Rope.ropeState.isRoped)) {
             player.moveRight();
         }
 
 
 
-        if (leftButton.isPressed()  && (!rope.isRoped)) {
+        if (leftButton.isPressed()  && (rope.getRopeState() != Rope.ropeState.isRoped)) {
             player.moveLeft();
         }
     }
@@ -474,9 +478,8 @@ public class Level1Screen extends ScreenAdapter {
     }
 
     private void restart() {
-        if (rope.isExist == true){
-            rope.isRoped = false;
-            rope.inFlight = true;
+        if (rope.getRopeState() != Rope.ropeState.isRest){
+            rope.setRopeState(Rope.ropeState.isRest);//rope test
             rope.destroyJoint(gameWorld.getWorld());
         }
         player.body.setLinearVelocity(0f, 0f);
