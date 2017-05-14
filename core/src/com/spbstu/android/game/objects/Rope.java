@@ -47,7 +47,7 @@ public class Rope {
             possibleY = playerBody.getPosition().y*PPM ;// + PPM *(float) Math.sin(alpha);;
             if (playerBody.getPosition().x * PPM > x)
                 alpha = (float) (Math.PI - alpha);
-            for (int i = 0; i < 8*L / PPM + 8; i++) {
+            for (int i = 0; i < 8*L / PPM + 16; i++) {
                 possibleX += PPM/8 * Math.cos(alpha);
                 possibleY += PPM/8 * Math.sin(alpha);
                 if(possibleY > (blocksMap.length-1) *PPM)
