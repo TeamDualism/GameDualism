@@ -75,6 +75,7 @@ public class PlayPauseScreen extends ScreenAdapter {
             }
         });
 
+        ///
 
         final ImageButton buttonSound;
         final ImageButton buttonMusic;
