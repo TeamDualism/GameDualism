@@ -105,6 +105,8 @@ public class Level1Screen extends LevelScreen {
         this.game = game;
         this.LevelNumber = LevelNumber;
 
+        screenProcesser = game.getScreenProcesser();
+
         layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
 
         layoutMusic.setVolume(0.2f);
@@ -305,7 +307,8 @@ public class Level1Screen extends LevelScreen {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                game.setScreen(new PlayPauseScreen(game, LevelNumber));
+                screenProcesser.setPlayPauseScreen();
+                //game.setScreen(new PlayPauseScreen(game, LevelNumber));
             }
         });
 
@@ -509,7 +512,8 @@ public class Level1Screen extends LevelScreen {
         ronnie.SetBonusCounter(0);
         reggie.SetBonusCounter(0);
         changeBroButton.setDisabled(false);
-        game.setScreen(new GameoverScreen(game));
+        screenProcesser.setGameOverScreen();
+        //game.setScreen(new GameoverScreen(game));
         game.playSound(gameOverSound);
         layoutMusic.stop();
         screenProcesser.disposeCurrentLevelScreen();
