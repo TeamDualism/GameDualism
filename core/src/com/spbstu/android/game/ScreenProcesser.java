@@ -57,6 +57,10 @@ public class ScreenProcesser {
         return false;
     }
 
+    public Screen getCurrentLevelScreen(){
+        return currentLevelScreen;
+    }
+
     // Needs to call
 
 

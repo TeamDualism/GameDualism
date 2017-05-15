@@ -83,6 +83,7 @@ public class PlayPauseScreen extends ScreenAdapter {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
                 screenProcesser.setCurrentLevelScreen();
+                screenProcesser.getCurrentLevelScreen().resume();
             }
         });
 
