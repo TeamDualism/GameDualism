@@ -25,7 +25,7 @@ public class ScreenProcesser {
     public ScreenProcesser(GameDualism gameToSet) {
         game = gameToSet;
         menuScreen = new MenuScreen(game);
-        playPauseScreen = new PlayPauseScreen(game);
+        playPauseScreen = new PlayPauseScreen(game,1);
         gameOverScreen = new GameoverScreen(game);
         aboutScreen = new AboutScreen(game);
         screenLevel = new ScreenLevel(game);

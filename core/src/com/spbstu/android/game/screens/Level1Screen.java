@@ -51,7 +51,7 @@ import static com.spbstu.android.game.utils.Constants.WIDTH;
 
 public class Level1Screen extends LevelScreen {
     private final GameDualism game;
-
+    private int LevelNumber;
     //LibGdx
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -100,11 +100,10 @@ public class Level1Screen extends LevelScreen {
 
     private ScreenProcesser screenProcesser;
 
-    public Level1Screen(GameDualism game) {
+    public Level1Screen(GameDualism game, int LevelNumber) {
 
         this.game = game;
-
-        screenProcesser = game.getScreenProcesser();
+        this.LevelNumber = LevelNumber;
 
         layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
 
@@ -135,17 +134,37 @@ public class Level1Screen extends LevelScreen {
         Drawable Background = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
 
 
-
-        ronnie = new Ronnie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
-        ronnie.body.setActive(false);
-        reggie = new Reggie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+        switch(LevelNumber) {
+            case 2: {  // Nastya's lvl
+                map = new TmxMapLoader().load("Maps/Level-2.tmx");
+                ronnie = new Ronnie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 3,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                ronnie.GetBody().setActive(false);
+                reggie = new Reggie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 3,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                break;
+            }
+            default: { // Misha's lvl
+                map = new TmxMapLoader().load("Maps/Level-1.tmx");
+                ronnie = new Ronnie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 33,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                ronnie.GetBody().setActive(false);
+                reggie = new Reggie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 33,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                break;
+            }
+        }
+        //LibGdx
+        camera = new OrthographicCamera();
+        batch = new SpriteBatch();
+        renderer = new OrthogonalTiledMapRenderer(map);
 
         player = reggie;
-        player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+        player.setAtlas(reggie.GetAtlas(), reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
         timeLineHolder = new TimeLine.Holder(reggie.getTimeline());
         stage.addActor(timeLineHolder);
 
@@ -255,19 +274,19 @@ public class Level1Screen extends LevelScreen {
                             rope.destroyJoint(gameWorld.getWorld());
                         }
                         player = ronnie;
-                        ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
+                        ronnie.GetBody().setLinearVelocity(reggie.GetBody().getLinearVelocity().x, reggie.GetBody().getLinearVelocity().y);
                         player.changeBody(player, reggie, ronnie);
-                        ronnie.jumpNumber = reggie.jumpNumber;
-                        player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
-                        player.bonusCounter = reggie.bonusCounter;
+                        ronnie.SetJumpNumber(reggie.GetJumpNumber());
+                        player.setAtlas(ronnie.GetAtlas(), ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
+                        player.SetBonusCounter(reggie.GetBonusCounter());
 
                 } else {
                     player = reggie;
-                    reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x, ronnie.body.getLinearVelocity().y);
+                    reggie.GetBody().setLinearVelocity(ronnie.GetBody().getLinearVelocity().x, ronnie.GetBody().getLinearVelocity().y);
                     player.changeBody(player, ronnie, reggie);
-                    reggie.jumpNumber = ronnie.jumpNumber;
-                    player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
-                    player.bonusCounter = ronnie.bonusCounter;
+                    reggie.SetJumpNumber(ronnie.GetJumpNumber());
+                    player.setAtlas(reggie.GetAtlas(), reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+                    player.SetBonusCounter(ronnie.GetBonusCounter());
                 }
 
                 timeLineHolder.change(player.getTimeline());
@@ -286,7 +305,7 @@ public class Level1Screen extends LevelScreen {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                screenProcesser.setPlayPauseScreen();
+                game.setScreen(new PlayPauseScreen(game, LevelNumber));
             }
         });
 
@@ -304,13 +323,14 @@ public class Level1Screen extends LevelScreen {
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
         stage.addActor(score);
     }
+    public int GetLevelNumber(){ return LevelNumber; }
 
     public void listeners() {
         stage.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {// создаю слушатаеля касания к экрану
                 if( player == reggie)
                     rope.buildJoint(gameWorld.getWorld(), x / width * camera.viewportWidth + camera.position.x - camera.viewportWidth / 2,
-                        y / height * camera.viewportHeight + camera.position.y - camera.viewportHeight / 2, player.body,blocksMap);
+                            y / height * camera.viewportHeight + camera.position.y - camera.viewportHeight / 2, player.GetBody(),blocksMap);
                 return true;
             }
         });
@@ -405,7 +425,7 @@ public class Level1Screen extends LevelScreen {
             gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();
-            rope.render(batch, player.body);
+            rope.render(batch, player.GetBody());
             player.render(batch);
 
             gameWorld.destroyObjects();
@@ -438,7 +458,7 @@ public class Level1Screen extends LevelScreen {
 
     private void inputUpdate() {
         if (player.isGrounded(gameWorld.getWorld())) {
-            if (player.body.getLinearVelocity().x != 0f) {
+            if (player.GetBody().getLinearVelocity().x != 0f) {
                 player.setState(RUNNING);
             } else {
                 player.setState(STANDING);
@@ -466,18 +486,18 @@ public class Level1Screen extends LevelScreen {
     }
 
     private void moveCamera() {
-        camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
+        camera.position.set(player.GetBody().getPosition().x * PPM, player.GetBody().getPosition().y * PPM, camera.position.z);
 
-        if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
+        if (player.GetBody().getPosition().x - WidthSize / (2f * PPM) < 0)
             camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM)
+        if (player.GetBody().getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM)
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
+        if (player.GetBody().getPosition().y - HeightSize / (2f * PPM) < 0)
             camera.position.set(camera.position.x, HeightSize / 2f, camera.position.z);
 
-        if (player.body.getPosition().y + HeightSize / (2f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
+        if (player.GetBody().getPosition().y + HeightSize / (2f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - HeightSize / 2f, camera.position.z);
     }
 
@@ -486,10 +506,10 @@ public class Level1Screen extends LevelScreen {
         ronnie.getTimeline().reset();
 
         // TODO: Avoid using of public non-final fields
-        ronnie.bonusCounter = 0;
-        reggie.bonusCounter = 0;
+        ronnie.SetBonusCounter(0);
+        reggie.SetBonusCounter(0);
         changeBroButton.setDisabled(false);
-        screenProcesser.setGameOverScreen();
+        game.setScreen(new GameoverScreen(game));
         game.playSound(gameOverSound);
         layoutMusic.stop();
         screenProcesser.disposeCurrentLevelScreen();
@@ -501,10 +521,19 @@ public class Level1Screen extends LevelScreen {
             rope.destroyJoint(gameWorld.getWorld());
         }
         GameDualism.playSound(deathSound);
-        player.body.setLinearVelocity(0f, 0f);
-        player.jumpNumber = 1;
-        player.body.setTransform(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
+        player.GetBody().setLinearVelocity(0f, 0f);
+        player.SetJumpNumber(1);
+        switch(LevelNumber) {
+            case 2: { // Nastya's lvl
+                player.GetBody().setTransform(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 3, player.GetBody().getAngle());
+                break;
+            }
+            default: { // Misha's lvl
+                player.GetBody().setTransform(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 33, player.GetBody().getAngle());
+            }
+        }
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
@@ -516,7 +545,7 @@ public class Level1Screen extends LevelScreen {
     private void initTrapsMap() {
         TiledMapTileLayer traps[] = new TiledMapTileLayer[3];
 
-        traps[0] = (TiledMapTileLayer) map.getLayers().get("Background-Water&amp;Lava");
+        traps[0] = (TiledMapTileLayer) map.getLayers().get("Background-Water;Lava");
         traps[1] = (TiledMapTileLayer) map.getLayers().get("Traps-second-bro");
         traps[2] = (TiledMapTileLayer) map.getLayers().get("Traps-first-bro");
 
