@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 import com.spbstu.android.game.objects.Bonus;
 import com.spbstu.android.game.objects.DisappearingPlatform;
 import com.spbstu.android.game.objects.Exit;
@@ -27,12 +28,14 @@ public class GameWorld implements Disposable{
     private Array<DisappearingPlatform> disappearingPlatformss;
     private GameDualism game;
     private Exit exit;
+    private ScreenProcesser screenProcesser;
 
     public GameWorld(GameDualism game) {
         objectsToDestroy = new Array<Object>();
         bonuses = new Array<Bonus>();
         disappearingPlatformss = new Array<DisappearingPlatform>();
 
+        screenProcesser = game.getScreenProcesser();
         world = new World(GRAVITY, false);
         world.setContactListener(new GameContactListener(this));
         this.game = game;
@@ -65,7 +68,7 @@ public class GameWorld implements Disposable{
     public void onExit()
     {
         destroyObjects();
-        game.setScreen(new MenuScreen(game));
+        screenProcesser.setMenuScreen();
     }
     public void renderBonuses(Batch batch) {
         batch.begin();

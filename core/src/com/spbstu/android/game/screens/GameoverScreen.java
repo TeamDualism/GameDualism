@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 
 import java.awt.Menu;
 
@@ -28,9 +29,12 @@ public class GameoverScreen extends ScreenAdapter {
     private Button menuButton;
     private Texture texture;
     private final SpriteBatch batch = new SpriteBatch();
+    private GameDualism game;
+    private ScreenProcesser screenProcesser;
 
 
     public GameoverScreen(final GameDualism game) {
+        this.game = game;
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
         Image image= new Image(new Texture("gameover.png"));
@@ -52,7 +56,7 @@ public class GameoverScreen extends ScreenAdapter {
                                    @Override
                                    public void clicked(InputEvent event, float x, float y) {
                                        GameDualism.playSound(buttonEffect);
-                                       game.setScreen(new MenuScreen(game));
+                                       screenProcesser.setMenuScreen();
                                    }
                                }
         );
@@ -68,12 +72,17 @@ public class GameoverScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
-                game.setScreen(new Level1Screen(game));
+                screenProcesser.setCurrentLevelScreen();
             }
         });
 
 
     }
+
+    public void setScreenProcesser(){
+        screenProcesser = game.getScreenProcesser();
+    }
+
     @Override
     public void show() {
         System.out.println("show");

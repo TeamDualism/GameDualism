@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -24,7 +25,15 @@ public class PlayPauseScreen extends ScreenAdapter {
 
     private Button menuButton;
 
-    public PlayPauseScreen(final GameDualism game, final Level1Screen level1Screen) {
+    private ScreenProcesser screenProcesser;
+
+    private GameDualism game;
+
+    final ImageButton buttonSound;
+    final ImageButton buttonMusic;
+
+    public PlayPauseScreen(final GameDualism game, final int LevelNumber) {
+        this.game = game;
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
         Image image = new Image(new Texture("levels.png"));
         image.setHeight(HEIGHT);
@@ -43,7 +52,8 @@ public class PlayPauseScreen extends ScreenAdapter {
                                    @Override
                                    public void clicked(InputEvent event, float x, float y) {
                                        GameDualism.playSound(buttonEffect);
-                                       game.setScreen(new MenuScreen(game));
+                                       screenProcesser.setMenuScreen();
+                                       screenProcesser.disposeCurrentLevelScreen();
                                    }
                                }
         );
@@ -58,7 +68,9 @@ public class PlayPauseScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
-                game.setScreen(new Level1Screen(game));
+                screenProcesser.disposeCurrentLevelScreen();
+                screenProcesser.setLevelScreen(new Level1Screen(game, LevelNumber));
+                screenProcesser.setCurrentLevelScreen();
             }
         });
         Button resumeLevel = new ImageButton(new TextureRegionDrawable(
@@ -70,14 +82,11 @@ public class PlayPauseScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
-                game.setScreen(level1Screen);
-                level1Screen.resume();
+                screenProcesser.setCurrentLevelScreen();
+                screenProcesser.getCurrentLevelScreen().resume();
             }
         });
 
-
-        final ImageButton buttonSound;
-        final ImageButton buttonMusic;
 
         if (game.getIsMusicOn())
             buttonMusic = new ImageButton(new TextureRegionDrawable(
@@ -105,7 +114,6 @@ public class PlayPauseScreen extends ScreenAdapter {
                 System.out.println("clicked music");
                 //выключить музыку
 
-                GameDualism.playSound(buttonEffect);
                 if (game.getIsMusicOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
                             new TextureRegion(new Texture("Buttons/musicOff.png")));
@@ -117,6 +125,8 @@ public class PlayPauseScreen extends ScreenAdapter {
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     game.setMusicOn();
                 }
+
+                GameDualism.playSound(buttonEffect);
             }
         });
 
@@ -144,6 +154,32 @@ public class PlayPauseScreen extends ScreenAdapter {
             }
 
         });
+    }
+
+    public void drawCurrentSoundButtons(){
+        if (game.getIsMusicOn()) {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/musicOn.png")));
+            buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        } else {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/musicOff.png")));
+            buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        }
+
+        if (game.getIsSoundOn()) {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/audioOn.png")));
+            buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        } else {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/audioOff.png")));
+            buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        }
+    }
+
+    public void setScreenProcesser(){
+        screenProcesser = game.getScreenProcesser();
     }
 
     @Override

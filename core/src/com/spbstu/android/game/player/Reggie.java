@@ -14,7 +14,7 @@ import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
 
 
 public class Reggie extends Player {
-
+    private TextureAtlas atlas;
     public Reggie(float x, float y, float radius, World world, TimeLine timeLine) {
         super(x, y, radius, world, timeLine);
         atlas = new TextureAtlas(Gdx.files.internal("Textures/hero.pack"));
@@ -23,7 +23,7 @@ public class Reggie extends Player {
         jumpingAnimation = new Animation<TextureRegion>(0.2f, atlas.findRegions("jumping"), Animation.PlayMode.LOOP);
     }
 
-    public void moveRight() {
+    /*public void moveRight() {
         direction = RIGHT;
 
         body.applyLinearImpulse(IMPULSE, 0, body.getPosition().x, body.getPosition().y, false);
@@ -40,5 +40,5 @@ public class Reggie extends Player {
         if (Math.abs(body.getLinearVelocity().x) > MAX_VELOCITY) {
             body.setLinearVelocity(-MAX_VELOCITY, body.getLinearVelocity().y);
         }
-    }
+    }*/
 }

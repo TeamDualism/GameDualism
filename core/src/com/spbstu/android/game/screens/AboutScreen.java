@@ -3,6 +3,7 @@ package com.spbstu.android.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -30,8 +32,14 @@ public class AboutScreen extends ScreenAdapter {
 
     private final BitmapFont font = new BitmapFont();
 
-    public AboutScreen(final GameDualism game,final MenuScreen menu) {
+    private ScreenProcesser screenProcesser;
+
+    public AboutScreen(final GameDualism game) {
         this.game = game;
+
+        final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
+
+        screenProcesser = game.getScreenProcesser();
         Image image = new Image(new Texture("back3_2.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
@@ -62,12 +70,18 @@ public class AboutScreen extends ScreenAdapter {
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(menu);
+                screenProcesser.setMenuScreen();
+                GameDualism.playSound(buttonEffect);
             }
         });
 
 
     }
+
+    public void setScreenProcesser(){
+        screenProcesser = game.getScreenProcesser();
+    }
+
     @Override
     public void show() {
         System.out.println("show");

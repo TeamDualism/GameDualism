@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -23,12 +24,16 @@ public class ScreenLevel extends ScreenAdapter {
     private int maxButtonsWidth = WIDTH / 6;
     private final Stage stage = new Stage();
     private Button menuButton;
+    private ScreenProcesser screenProcesser;
 
     private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
 
     final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
-    public ScreenLevel(final GameDualism game,final MenuScreen menu) {
+    private GameDualism game;
+
+    public ScreenLevel(final GameDualism game) {
+        this.game = game;
         Image image = new Image(new Texture("levels.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
@@ -46,12 +51,17 @@ public class ScreenLevel extends ScreenAdapter {
         buttonLevel1.setBounds((WIDTH - maxButtonsWidth) / 2f, 3*(HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth , maxButtonsHeight);
         stage.addActor(buttonLevel1);
 
+        Button buttonLevel2 = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/level2.png"))));
+        buttonLevel2.setBounds((WIDTH - maxButtonsWidth) / 2f, 2*(HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth , maxButtonsHeight);
+        stage.addActor(buttonLevel2);
+
 
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
-                game.setScreen(menu);
+                screenProcesser.setMenuScreen();
             }
         }
         );
@@ -60,11 +70,27 @@ public class ScreenLevel extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
-                game.setScreen(new Level1Screen(game));
+                if (!screenProcesser.setLevelScreen(new Level1Screen(game,1)))
+                    System.exit(1);
+                screenProcesser.setCurrentLevelScreen();
             }
         });
-
+        buttonLevel2.addListener(new ClickListener(Input.Buttons.LEFT) {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameDualism.playSound(buttonEffect);
+                System.out.println("clicked");
+                if (!screenProcesser.setLevelScreen(new Level1Screen(game,2)))
+                    System.exit(1);
+                screenProcesser.setCurrentLevelScreen();
+            }
+        });
     }
+
+    public void setScreenProcesser(){
+        screenProcesser = game.getScreenProcesser();
+    }
+
     @Override
     public void show() {
         System.out.println("show");

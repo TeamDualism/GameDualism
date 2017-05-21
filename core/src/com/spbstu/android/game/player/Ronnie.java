@@ -9,7 +9,7 @@ import com.spbstu.android.game.component.TimeLine;
 
 
 public class Ronnie extends Player {
-
+    private TextureAtlas atlas;
     public Ronnie(float x, float y, float radius, World world, TimeLine timeLine) {
         super(x, y, radius, world, timeLine);
         atlas = new TextureAtlas(Gdx.files.internal("Textures/player.pack"));
