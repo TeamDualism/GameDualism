@@ -307,7 +307,7 @@ public class Level1Screen extends LevelScreen {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                screenProcesser.setPlayPauseScreen();
+                screenProcesser.setPlayPauseScreen(LevelNumber);
                 //game.setScreen(new PlayPauseScreen(game, LevelNumber));
             }
         });

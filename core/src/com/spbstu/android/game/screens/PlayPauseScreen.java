@@ -32,8 +32,11 @@ public class PlayPauseScreen extends ScreenAdapter {
     final ImageButton buttonSound;
     final ImageButton buttonMusic;
 
-    public PlayPauseScreen(final GameDualism game, final int LevelNumber) {
+    private int lvlNumber;
+
+    public PlayPauseScreen(final GameDualism game) {
         this.game = game;
+
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
         Image image = new Image(new Texture("levels.png"));
         image.setHeight(HEIGHT);
@@ -69,7 +72,7 @@ public class PlayPauseScreen extends ScreenAdapter {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
                 screenProcesser.disposeCurrentLevelScreen();
-                screenProcesser.setLevelScreen(new Level1Screen(game, LevelNumber));
+                screenProcesser.setLevelScreen(new Level1Screen(game, lvlNumber));
                 screenProcesser.setCurrentLevelScreen();
             }
         });
@@ -177,6 +180,8 @@ public class PlayPauseScreen extends ScreenAdapter {
             buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
         }
     }
+
+    public void SetLevelNumber(int LevelNumber) { lvlNumber = LevelNumber; }
 
     public void setScreenProcesser(){
         screenProcesser = game.getScreenProcesser();
