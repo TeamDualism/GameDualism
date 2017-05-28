@@ -28,28 +28,33 @@ import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
 
 public abstract class Player {
-    public TextureAtlas atlas;
-    public Body body;
-    public int jumpNumber;
-    public int bonusCounter = 0;
+    private TextureAtlas atlas;
+    private Body body;
+    private int jumpNumber;
+    private int bonusCounter = 0;
 
     float stateTime;
     public Animation<TextureRegion> runningAnimation;
     public Animation<TextureRegion> standingAnimation;
     public Animation<TextureRegion> jumpingAnimation;
-    public Player.State state;
+    private Player.State state;
 
     public enum State {STANDING, RUNNING, JUMPING}
 
     public enum Direction {LEFT, RIGHT}
 
-    public Player.Direction direction;
+    private Player.Direction direction;
 
     private final TimeLine timeLine;
 
-    private final Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Jump/jump_01.wav"));
+    private final Sound jumpSound;
+    private final Sound bonusSound;
 
     public Player(float x, float y, float radius, World world, TimeLine timeLine) {
+
+        bonusSound = Gdx.audio.newSound(Gdx.files.internal("Audio/bonus.wav"));
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/jump1.wav"));
+
         BodyDef bodyDef = new BodyDef();
 
         this.timeLine = timeLine;
@@ -84,6 +89,16 @@ public abstract class Player {
         stateTime = 0f;
         state = STANDING;
     }
+
+    public TextureAtlas GetAtlas(){ return atlas; }
+
+    public Body GetBody() { return body; }
+
+    public void SetJumpNumber( int jumpNumber) { this.jumpNumber = jumpNumber; }
+    public int GetJumpNumber() { return jumpNumber; }
+
+    public void SetBonusCounter( int bonusCounter) { this.bonusCounter = bonusCounter; }
+    public int GetBonusCounter() { return bonusCounter; }
 
     public void setAtlas(TextureAtlas atlas, Animation<TextureRegion> running, Animation<TextureRegion> standing, Animation<TextureRegion> jumping) {
         this.atlas = atlas;
@@ -154,6 +169,7 @@ public abstract class Player {
 
     public void incBonusCounter() {
         bonusCounter++;
+        GameDualism.playSound(bonusSound);
     }
 
     public int getBonusCounter() {
@@ -208,4 +224,5 @@ public abstract class Player {
                 currentFrame.getRegionHeight());
         batch.end();
     }
+
 }

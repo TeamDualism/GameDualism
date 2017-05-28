@@ -15,8 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
-
-import java.awt.Menu;
+import com.spbstu.android.game.ScreenProcesser;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -28,9 +27,12 @@ public class GameoverScreen extends ScreenAdapter {
     private Button menuButton;
     private Texture texture;
     private final SpriteBatch batch = new SpriteBatch();
+    private GameDualism game;
+    private ScreenProcesser screenProcesser;
 
 
     public GameoverScreen(final GameDualism game) {
+        this.game = game;
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
         Image image= new Image(new Texture("gameover.png"));
@@ -38,29 +40,24 @@ public class GameoverScreen extends ScreenAdapter {
         image.setWidth(WIDTH);
         stage.addActor(image);
 
-
-
-
-
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
-        int maxButtonsSize = HEIGHT / 6;
-        menuButton.setBounds((WIDTH - maxButtonsSize) / 100f, 2 * (HEIGHT - maxButtonsSize) / 100f, maxButtonsSize, maxButtonsSize);
+        int maxButtonsHeight = HEIGHT /6;
+        int maxButtonsWidth = WIDTH /6;
+        menuButton.setBounds((WIDTH - maxButtonsWidth) / 2f, (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
                                    public void clicked(InputEvent event, float x, float y) {
                                        GameDualism.playSound(buttonEffect);
-                                       game.setScreen(new MenuScreen(game));
+                                       screenProcesser.setMenuScreen();
                                    }
                                }
         );
 
         Button restartLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/restartButton.png"))));
-        int maxButtonsHeight = HEIGHT / 6;
-        int maxButtonsWidth = WIDTH / 6;
         restartLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 2* (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(restartLevel);
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
@@ -68,12 +65,17 @@ public class GameoverScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
-                game.setScreen(new Level1Screen(game));
+                screenProcesser.setCurrentLevelScreen();
             }
         });
 
 
     }
+
+    public void setScreenProcesser(){
+        screenProcesser = game.getScreenProcesser();
+    }
+
     @Override
     public void show() {
         System.out.println("show");

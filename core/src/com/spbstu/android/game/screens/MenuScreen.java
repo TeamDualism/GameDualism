@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
@@ -26,14 +27,23 @@ public class MenuScreen implements Screen {
     private int maxButtonsHeight = HEIGHT / 6;
     private int maxButtonsWidth = WIDTH / 6;
 
+    public ScreenProcesser screenProcesser;
+
+    private GameDualism game;
+
+    final ImageButton buttonSound;
+    final ImageButton buttonMusic;
+
     public MenuScreen(final GameDualism game) {
+
+        this.game = game;
 
         Button buttonLevelScreen = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/playButton.png"))));
         Button about = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/about.png"))));
-        final ImageButton buttonSound;
-        final ImageButton buttonMusic;
+        Button help = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/help.png"))));
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
         if (game.getIsMusicOn())
@@ -52,11 +62,13 @@ public class MenuScreen implements Screen {
 
         buttonLevelScreen.setBounds((WIDTH - maxButtonsWidth) / 2f, 3 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         about.setBounds((WIDTH - maxButtonsWidth) / 2f, 2 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        help.setBounds((WIDTH - maxButtonsWidth) / 2f, (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+
         buttonMusic.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99 * (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);//!квадратная
         buttonSound.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);
 
         stage = new Stage();
-        Image image = new Image(new Texture("back2.png"));
+        Image image = new Image(new Texture("backgr1.png"));
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
@@ -64,12 +76,13 @@ public class MenuScreen implements Screen {
         stage.addActor(buttonSound);
         stage.addActor(about);
         stage.addActor(buttonLevelScreen);
+        stage.addActor(help);
 
         buttonLevelScreen.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked");
-                game.setScreen(new ScreenLevel(game, MenuScreen.this));
+                screenProcesser.setScreenLevelScreen();
                 GameDualism.playSound(buttonEffect);
             }
         });
@@ -78,7 +91,16 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked");
-                game.setScreen(new AboutScreen(game, MenuScreen.this));
+                screenProcesser.setAboutScreen();
+                GameDualism.playSound(buttonEffect);
+            }
+        });
+
+        help.addListener(new ClickListener(Input.Buttons.LEFT) {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("clicked");
+                screenProcesser.setHelpScreen();
                 GameDualism.playSound(buttonEffect);
             }
         });
@@ -90,7 +112,6 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked music");
                 //выключить музыку
-                GameDualism.playSound(buttonEffect);
 
                 if (game.getIsMusicOn()) {
                     TextureRegionDrawable drawable = new TextureRegionDrawable(
@@ -102,7 +123,9 @@ public class MenuScreen implements Screen {
                             new TextureRegion(new Texture("Buttons/musicOn.png")));
                     buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                     game.setMusicOn();
+                    GameDualism.playSound(buttonEffect);
                 }
+
             }
         });
 
@@ -115,7 +138,6 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked sound");
                 //выключить звуки
-                GameDualism.playSound(buttonEffect);
 
                 if (game.getIsSoundOn()) {
                     game.setSoundOff();
@@ -129,9 +151,36 @@ public class MenuScreen implements Screen {
                     buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
                 }
 
+                GameDualism.playSound(buttonEffect);
             }
 
         });
+    }
+
+    public void drawCurrentSoundButtons(){
+        if (game.getIsMusicOn()) {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/musicOn.png")));
+            buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        } else {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/musicOff.png")));
+            buttonMusic.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        }
+
+        if (game.getIsSoundOn()) {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/audioOn.png")));
+            buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        } else {
+            TextureRegionDrawable drawable = new TextureRegionDrawable(
+                    new TextureRegion(new Texture("Buttons/audioOff.png")));
+            buttonSound.setStyle(new ImageButton.ImageButtonStyle(drawable, drawable, drawable, drawable, drawable, drawable));
+        }
+    }
+
+    public void setScreenProcesser(){
+        screenProcesser = game.getScreenProcesser();
     }
 
     @Override

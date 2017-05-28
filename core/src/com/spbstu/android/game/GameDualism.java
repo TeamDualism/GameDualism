@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.spbstu.android.game.screens.MenuScreen;
 
 public class GameDualism extends Game {
 
@@ -16,11 +15,14 @@ public class GameDualism extends Game {
     private static boolean isMusicOn = true;
     private static boolean isSoundOn = true;
 
+    private ScreenProcesser screenProcesser;
+
     private static class Holder {
         private static GameDualism INSTANCE = new GameDualism();
     }
 
     private GameDualism() {
+
     }
 
     public static GameDualism getInstance() {
@@ -30,12 +32,20 @@ public class GameDualism extends Game {
     @Override
     public void create() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        setScreen(new MenuScreen(this));
+        screenProcesser = new ScreenProcesser(this);
+        screenProcesser.setThisToScreens();
+        screenProcesser.setMenuScreen();
     }
 
     @Override
     public void dispose() {
+
         assetManager.dispose();
+        screenProcesser.dispose();
+    }
+
+    public ScreenProcesser getScreenProcesser(){
+        return screenProcesser;
     }
 
     public void setMusicOn() {

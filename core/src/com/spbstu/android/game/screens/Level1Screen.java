@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.spbstu.android.game.GameDualism;
+import com.spbstu.android.game.ScreenProcesser;
 import com.spbstu.android.game.component.TimeLine;
 import com.spbstu.android.game.component.TimeOverListener;
 import com.spbstu.android.game.objects.Rope;
@@ -47,9 +48,9 @@ import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
-public class Level1Screen extends ScreenAdapter {
+public class Level1Screen extends LevelScreen {
     private final GameDualism game;
-
+    private int LevelNumber;
     //LibGdx
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -81,7 +82,7 @@ public class Level1Screen extends ScreenAdapter {
     private Button menuButton;
     private Button changeBroButton;
     private Label score;
-    private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
+    private int maxButtonsSize = HEIGHT / 24 * 5 ; // не размер, а коэффициент!
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
 
@@ -93,19 +94,31 @@ public class Level1Screen extends ScreenAdapter {
     private final TimeLine.Holder timeLineHolder;
 
     private final Music layoutMusic; //= Gdx.audio.newSound(Gdx.files.internal("Audio/layout.ogg"));
+    private final Sound gameOverSound;
+    private final Sound deathSound;
 
-    public Level1Screen(GameDualism game) {
+    private ScreenProcesser screenProcesser;
+
+    public Level1Screen(GameDualism game, int LevelNumber) {
+
         this.game = game;
+        this.LevelNumber = LevelNumber;
 
-        layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/layout.ogg"));
-        layoutMusic.setVolume(0.4f);
+        screenProcesser = game.getScreenProcesser();
+
+        layoutMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/Jumping bat.wav"));
+
+        layoutMusic.setVolume(0.2f);
         layoutMusic.setLooping(true);
+
+        gameOverSound = Gdx.audio.newSound(Gdx.files.internal("Audio/gameover.wav"));
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("Audio/death.wav"));
 
         //LibGdx
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
-        map = new TmxMapLoader().load("Maps/Level-1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+
+
 
         //Box2d
         gameWorld = new GameWorld(game);
@@ -118,20 +131,65 @@ public class Level1Screen extends ScreenAdapter {
         game.assetManager.load("Maps/Tiles/mplatform.png", Texture.class);
         game.assetManager.finishLoading();
 
-        Drawable warmBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
-        Drawable coldBackground = TextureUtil.getDrawableByFilename("Textures/progress_bar_background_cold.png");
         Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
+        Drawable knob_warm = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob_warm.png");
+        Drawable Background = TextureUtil.getDrawableByFilename("Textures/progress_bar_background.png");
 
-        ronnie = new Ronnie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(warmBackground, knob, 60)));
-        ronnie.body.setActive(false);
-        reggie = new Reggie(16f / (2 * PPM),
-                16f / (2 * PPM) + 16 / PPM * 3,
-                (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(coldBackground, knob, 60)));
+
+        switch(LevelNumber) {
+            case 2: {  // Nastya's lvl
+                map = new TmxMapLoader().load("Maps/Level-2.tmx");
+                //gameWorld.initExit(numberWidthBlocks -20,numberHeightBlocks-20);
+                ronnie = new Ronnie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 3,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 90)));
+                ronnie.GetBody().setActive(false);
+                reggie = new Reggie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 3,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 90)));
+            numberWidthBlocks = map.getProperties().get("width", Integer.class);
+            numberHeightBlocks = map.getProperties().get("height", Integer.class);
+            gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit3.png"));
+            break;
+        }
+        case 3: {  // Dee's lvl
+            map = new TmxMapLoader().load("Maps/forest1.tmx");
+            ronnie = new Ronnie(16f / (2 * PPM),
+                    16f / (2 * PPM) + 16 / PPM * 5,
+                    (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+            ronnie.GetBody().setActive(false);
+            reggie = new Reggie(16f / (2 * PPM),
+                    16f / (2 * PPM) + 16 / PPM * 5,
+                    (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+            numberWidthBlocks = map.getProperties().get("width", Integer.class);
+            numberHeightBlocks = map.getProperties().get("height", Integer.class);
+            gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-10, new Texture("Textures/exit3.png"));
+            break;
+        }
+
+            default: { // Misha's lvl
+                map = new TmxMapLoader().load("Maps/Level-1.tmx");
+                ronnie = new Ronnie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 33,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                ronnie.GetBody().setActive(false);
+                reggie = new Reggie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 33,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                numberWidthBlocks = map.getProperties().get("width", Integer.class);
+                numberHeightBlocks = map.getProperties().get("height", Integer.class);
+                gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit.png"));
+                break;
+            }
+        }
+
+        //LibGdx
+        camera = new OrthographicCamera();
+        batch = new SpriteBatch();
+        renderer = new OrthogonalTiledMapRenderer(map);
 
         player = reggie;
-        player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+        player.setAtlas(reggie.GetAtlas(), reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
         timeLineHolder = new TimeLine.Holder(reggie.getTimeline());
         stage.addActor(timeLineHolder);
 
@@ -139,7 +197,7 @@ public class Level1Screen extends ScreenAdapter {
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
         gameWorld.initBonuses(map);
-        gameWorld.initPlatforms(map);
+        //gameWorld.initDPlatforms(map);
 
 
         //UI
@@ -172,14 +230,13 @@ public class Level1Screen extends ScreenAdapter {
             layoutMusic.pause();
 
         //for Rope
-        numberWidthBlocks = map.getProperties().get("width", Integer.class);
-        numberHeightBlocks = map.getProperties().get("height", Integer.class);
+
         blocksMap = new boolean[numberHeightBlocks][numberWidthBlocks];
         initBlocks();
         listeners();
         rope = new Rope();
-        //for exit
-        gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4);
+
+
     }
 
     private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
@@ -201,13 +258,13 @@ public class Level1Screen extends ScreenAdapter {
         maxButtonsSizeDeterminate();
 
         stage.addActor(rightButton);
-        rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize , maxButtonsSize );
 
         stage.addActor(leftButton);
-        leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize , maxButtonsSize );
 
         stage.addActor(upButton);
-        upButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        upButton.setBounds(WIDTH * (float)0.87, maxButtonsSize / 4, maxButtonsSize , maxButtonsSize );
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -217,9 +274,8 @@ public class Level1Screen extends ScreenAdapter {
                     player.jump(1);
 
                 }
-                if (rope.isExist == true){
-                    rope.isRoped = false;
-                    rope.inFlight = true;
+                if (rope.getRopeState() == Rope.ropeState.isRoped){
+                    rope.setRopeState(Rope.ropeState.inFlight);
                     rope.destroyJoint(gameWorld.getWorld());
                     return true;
                 }
@@ -228,7 +284,7 @@ public class Level1Screen extends ScreenAdapter {
         });
 
         stage.addActor(changeBroButton);
-        changeBroButton.setBounds(WIDTH - maxButtonsSize * 3 / 2, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.setBounds(WIDTH * (float)0.87, 1.5f * maxButtonsSize, maxButtonsSize , maxButtonsSize );
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -237,21 +293,24 @@ public class Level1Screen extends ScreenAdapter {
                 }
 
                 if(player == reggie){
-                    if((!rope.inFlight) && (!rope.isRoped)) {
+                        if(rope.getRopeState() == Rope.ropeState.isRoped) {
+                            rope.setRopeState(Rope.ropeState.inFlight);
+                            rope.destroyJoint(gameWorld.getWorld());
+                        }
                         player = ronnie;
-                        ronnie.body.setLinearVelocity(reggie.body.getLinearVelocity().x, reggie.body.getLinearVelocity().y);
+                        ronnie.GetBody().setLinearVelocity(reggie.GetBody().getLinearVelocity().x, reggie.GetBody().getLinearVelocity().y);
                         player.changeBody(player, reggie, ronnie);
-                        ronnie.jumpNumber = reggie.jumpNumber;
-                        player.setAtlas(ronnie.atlas, ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
-                        player.bonusCounter = reggie.bonusCounter;
-                    }
+                        ronnie.SetJumpNumber(reggie.GetJumpNumber());
+                        player.setAtlas(ronnie.GetAtlas(), ronnie.runningAnimation, ronnie.standingAnimation, ronnie.jumpingAnimation);
+                        player.SetBonusCounter(reggie.GetBonusCounter());
+
                 } else {
                     player = reggie;
-                    reggie.body.setLinearVelocity(ronnie.body.getLinearVelocity().x, ronnie.body.getLinearVelocity().y);
+                    reggie.GetBody().setLinearVelocity(ronnie.GetBody().getLinearVelocity().x, ronnie.GetBody().getLinearVelocity().y);
                     player.changeBody(player, ronnie, reggie);
-                    reggie.jumpNumber = ronnie.jumpNumber;
-                    player.setAtlas(reggie.atlas, reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
-                    player.bonusCounter = ronnie.bonusCounter;
+                    reggie.SetJumpNumber(ronnie.GetJumpNumber());
+                    player.setAtlas(reggie.GetAtlas(), reggie.runningAnimation, reggie.standingAnimation, reggie.jumpingAnimation);
+                    player.SetBonusCounter(ronnie.GetBonusCounter());
                 }
 
                 timeLineHolder.change(player.getTimeline());
@@ -270,7 +329,8 @@ public class Level1Screen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                game.setScreen(new PlayPauseScreen(game, Level1Screen.this));
+                screenProcesser.setPlayPauseScreen(LevelNumber);
+                //game.setScreen(new PlayPauseScreen(game, LevelNumber));
             }
         });
 
@@ -288,20 +348,21 @@ public class Level1Screen extends ScreenAdapter {
         score.setPosition(score.getWidth() / 2, HEIGHT - score.getHeight());
         stage.addActor(score);
     }
+    public int GetLevelNumber(){ return LevelNumber; }
 
     public void listeners() {
         stage.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {// создаю слушатаеля касания к экрану
                 if( player == reggie)
                     rope.buildJoint(gameWorld.getWorld(), x / width * camera.viewportWidth + camera.position.x - camera.viewportWidth / 2,
-                        y / height * camera.viewportHeight + camera.position.y - camera.viewportHeight / 2, player.body,blocksMap);
+                            y / height * camera.viewportHeight + camera.position.y - camera.viewportHeight / 2, player.GetBody(),blocksMap);
                 return true;
             }
         });
         rightButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (rope.isRoped)
+                if (rope.getRopeState() == Rope.ropeState.isRoped)
                         player.moveRightOnRope();
                 return true;
             }
@@ -309,7 +370,7 @@ public class Level1Screen extends ScreenAdapter {
         leftButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (rope.isRoped)
+                if (rope.getRopeState() == Rope.ropeState.isRoped)
                     player.moveLeftOnRope();
                 return true;
             }
@@ -385,11 +446,11 @@ public class Level1Screen extends ScreenAdapter {
             renderer.render();
 
             gameWorld.renderBonuses(batch);
-            gameWorld.renderPlatforms(batch);
+            //gameWorld.renderPlatforms(batch);
             gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();
-            rope.render(batch, player.body);
+            rope.render(batch, player.GetBody());
             player.render(batch);
 
             gameWorld.destroyObjects();
@@ -407,10 +468,10 @@ public class Level1Screen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        gameWorld.dispose();
-        box2DDebugRenderer.dispose();
-        batch.dispose();
-        stage.dispose();
+//          gameWorld.dispose();
+//          box2DDebugRenderer.dispose();
+//          batch.dispose();
+//        stage.dispose();
         layoutMusic.dispose();
     }
 
@@ -422,44 +483,46 @@ public class Level1Screen extends ScreenAdapter {
 
     private void inputUpdate() {
         if (player.isGrounded(gameWorld.getWorld())) {
-            if (player.body.getLinearVelocity().x != 0f) {
+            if (player.GetBody().getLinearVelocity().x != 0f) {
                 player.setState(RUNNING);
             } else {
                 player.setState(STANDING);
             }
-            rope.inFlight = false;
+            if(rope.getRopeState() == Rope.ropeState.inFlight)
+                rope.setRopeState(Rope.ropeState.isRest);
+
         } else {
             player.setState(JUMPING);
         }
 
-        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((!rope.inFlight) && (!rope.isRoped) || (player.isGrounded(gameWorld.getWorld())))) {
+        if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((rope.getRopeState() == Rope.ropeState.isRest) || (player.isGrounded(gameWorld.getWorld())))) {
             player.stop();
         }
 
-        if (rightButton.isPressed() && (!rope.isRoped)) {
+        if (rightButton.isPressed() && (rope.getRopeState() != Rope.ropeState.isRoped)) {
             player.moveRight();
         }
 
 
 
-        if (leftButton.isPressed()  && (!rope.isRoped)) {
+        if (leftButton.isPressed()  && (rope.getRopeState() != Rope.ropeState.isRoped)) {
             player.moveLeft();
         }
     }
 
     private void moveCamera() {
-        camera.position.set(player.body.getPosition().x * PPM, player.body.getPosition().y * PPM, camera.position.z);
+        camera.position.set(player.GetBody().getPosition().x * PPM, player.GetBody().getPosition().y * PPM, camera.position.z);
 
-        if (player.body.getPosition().x - WidthSize / (2f * PPM) < 0)
+        if (player.GetBody().getPosition().x - WidthSize / (2f * PPM) < 0)
             camera.position.set(WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM)
+        if (player.GetBody().getPosition().x + WidthSize / (2f * PPM) > map.getProperties().get("width", Integer.class) * 16f / PPM)
             camera.position.set(map.getProperties().get("width", Integer.class) * 16f - WidthSize / 2f, camera.position.y, camera.position.z);
 
-        if (player.body.getPosition().y - HeightSize / (2f * PPM) < 0)
+        if (player.GetBody().getPosition().y - HeightSize / (2f * PPM) < 0)
             camera.position.set(camera.position.x, HeightSize / 2f, camera.position.z);
 
-        if (player.body.getPosition().y + HeightSize / (2f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
+        if (player.GetBody().getPosition().y + HeightSize / (2f * PPM) > map.getProperties().get("height", Integer.class) * 16f / PPM)
             camera.position.set(camera.position.x, map.getProperties().get("height", Integer.class) * 16f - HeightSize / 2f, camera.position.z);
     }
 
@@ -468,22 +531,40 @@ public class Level1Screen extends ScreenAdapter {
         ronnie.getTimeline().reset();
 
         // TODO: Avoid using of public non-final fields
-        ronnie.bonusCounter = 0;
-        reggie.bonusCounter = 0;
+        ronnie.SetBonusCounter(0);
+        reggie.SetBonusCounter(0);
         changeBroButton.setDisabled(false);
-        game.setScreen(new GameoverScreen(game));
+        screenProcesser.setGameOverScreen();
+        //game.setScreen(new GameoverScreen(game));
+        game.playSound(gameOverSound);
+        layoutMusic.stop();
+        screenProcesser.disposeCurrentLevelScreen();
     }
 
     private void restart() {
-        if (rope.isExist == true){
-            rope.isRoped = false;
-            rope.inFlight = true;
+        if (rope.getRopeState() != Rope.ropeState.isRest){
+            rope.setRopeState(Rope.ropeState.isRest);//rope test
             rope.destroyJoint(gameWorld.getWorld());
         }
-        player.body.setLinearVelocity(0f, 0f);
-        player.jumpNumber = 1;
-        player.body.setTransform(16f / (2 * PPM), 16f / (2 * PPM) + 16 / PPM * 3, player.body.getAngle());
-
+        GameDualism.playSound(deathSound);
+        player.GetBody().setLinearVelocity(0f, 0f);
+        player.SetJumpNumber(1);
+        switch(LevelNumber) {
+            case 2: { // Nastya's lvl
+                player.GetBody().setTransform(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 3, player.GetBody().getAngle());
+                break;
+            }
+            case 3: { // Dee's lvl
+                player.GetBody().setTransform(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 5, player.GetBody().getAngle());
+                break;
+            }
+            default: { // Misha's lvl
+                player.GetBody().setTransform(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 33, player.GetBody().getAngle());
+            }
+        }
     }
 
     private void handleTrapsCollision(int playerX, int playerY) {
@@ -495,7 +576,7 @@ public class Level1Screen extends ScreenAdapter {
     private void initTrapsMap() {
         TiledMapTileLayer traps[] = new TiledMapTileLayer[3];
 
-        traps[0] = (TiledMapTileLayer) map.getLayers().get("Background-Water&amp;Lava");
+        traps[0] = (TiledMapTileLayer) map.getLayers().get("Background-Water;Lava");
         traps[1] = (TiledMapTileLayer) map.getLayers().get("Traps-second-bro");
         traps[2] = (TiledMapTileLayer) map.getLayers().get("Traps-first-bro");
 
