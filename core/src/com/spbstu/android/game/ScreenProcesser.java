@@ -4,6 +4,9 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
 import com.spbstu.android.game.screens.AboutScreen;
 import com.spbstu.android.game.screens.GameoverScreen;
+import com.spbstu.android.game.screens.Help2Screen;
+import com.spbstu.android.game.screens.Help3Screen;
+import com.spbstu.android.game.screens.HelpScreen;
 import com.spbstu.android.game.screens.LevelScreen;
 import com.spbstu.android.game.screens.MenuScreen;
 import com.spbstu.android.game.screens.PlayPauseScreen;
@@ -22,6 +25,10 @@ public class ScreenProcesser {
     private ScreenLevel screenLevel;
     private GameDualism game;
 
+    private HelpScreen helpScreen;
+    private Help2Screen help2Screen;
+    private Help3Screen help3Screen;
+
     public ScreenProcesser(GameDualism gameToSet) {
         game = gameToSet;
         menuScreen = new MenuScreen(game);
@@ -30,6 +37,10 @@ public class ScreenProcesser {
         aboutScreen = new AboutScreen(game);
         screenLevel = new ScreenLevel(game);
         isCurrentLevelScreenSetted = false;
+
+        helpScreen = new HelpScreen(game);
+        help2Screen = new Help2Screen(game);
+        help3Screen = new Help3Screen(game);
     }
 
     public void setThisToScreens(){
@@ -38,6 +49,10 @@ public class ScreenProcesser {
         aboutScreen.setScreenProcesser();
         gameOverScreen.setScreenProcesser();
         screenLevel.setScreenProcesser();
+
+        helpScreen.setScreenProcesser();
+        help2Screen.setScreenProcesser();
+        help3Screen.setScreenProcesser();
     }
 
     /**
@@ -80,6 +95,10 @@ public class ScreenProcesser {
         menuScreen.drawCurrentSoundButtons();
         game.setScreen(menuScreen);
     }
+
+    public void setHelpScreen(){ game.setScreen(helpScreen); }
+    public void setHelp2Screen(){ game.setScreen(help2Screen); }
+    public void setHelp3Screen(){ game.setScreen(help3Screen); }
 
     public void setPlayPauseScreen(int LevelNumber ){
         playPauseScreen.drawCurrentSoundButtons();

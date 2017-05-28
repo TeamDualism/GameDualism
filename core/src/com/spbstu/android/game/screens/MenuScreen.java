@@ -42,6 +42,8 @@ public class MenuScreen implements Screen {
                 new TextureRegion(new Texture("Buttons/playButton.png"))));
         Button about = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/about.png"))));
+        Button help = new ImageButton(new TextureRegionDrawable(
+                new TextureRegion(new Texture("Buttons/simple1.png"))));
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
         if (game.getIsMusicOn())
@@ -60,6 +62,7 @@ public class MenuScreen implements Screen {
 
         buttonLevelScreen.setBounds((WIDTH - maxButtonsWidth) / 2f, 3 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
         about.setBounds((WIDTH - maxButtonsWidth) / 2f, 2 * (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
+        help.setBounds((WIDTH - maxButtonsWidth) / 2f, (HEIGHT - maxButtonsHeight) / 5f, maxButtonsWidth, maxButtonsHeight);
 
         buttonMusic.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 99 * (HEIGHT - maxButtonsHeight + 10) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);//!квадратная
         buttonSound.setBounds(999 * (WIDTH - maxButtonsWidth + 60) / 1000f, 83 * (HEIGHT - maxButtonsHeight) / 100f, maxButtonsHeight * 2 / 3, maxButtonsHeight * 2 / 3);
@@ -73,6 +76,7 @@ public class MenuScreen implements Screen {
         stage.addActor(buttonSound);
         stage.addActor(about);
         stage.addActor(buttonLevelScreen);
+        stage.addActor(help);
 
         buttonLevelScreen.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
@@ -88,6 +92,15 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("clicked");
                 screenProcesser.setAboutScreen();
+                GameDualism.playSound(buttonEffect);
+            }
+        });
+
+        help.addListener(new ClickListener(Input.Buttons.LEFT) {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("clicked");
+                screenProcesser.setHelpScreen();
                 GameDualism.playSound(buttonEffect);
             }
         });

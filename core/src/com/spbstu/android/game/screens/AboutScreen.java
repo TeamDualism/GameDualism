@@ -44,9 +44,9 @@ public class AboutScreen extends ScreenAdapter {
         image.setHeight(HEIGHT);
         image.setWidth(WIDTH);
         stage.addActor(image);
+
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/menu.png"))));
-
         stage.addActor(menuButton);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -74,7 +74,6 @@ public class AboutScreen extends ScreenAdapter {
                 GameDualism.playSound(buttonEffect);
             }
         });
-
 
     }
 
