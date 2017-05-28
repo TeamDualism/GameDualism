@@ -128,6 +128,7 @@ public class Level1Screen extends LevelScreen {
         game.assetManager.load("Textures/character.png", Texture.class);
         game.assetManager.load("Textures/coin.png", Texture.class);
         game.assetManager.load("Maps/Tiles/dplatform.png", Texture.class);
+        game.assetManager.load("Maps/Tiles/mplatform.png", Texture.class);
         game.assetManager.finishLoading();
 
         Drawable knob = TextureUtil.getDrawableByFilename("Textures/progress_bar_knob.png");
@@ -196,7 +197,7 @@ public class Level1Screen extends LevelScreen {
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
         gameWorld.initBonuses(map);
-        //gameWorld.initDPlatforms(map);
+        gameWorld.initPlatforms(map);
 
 
         //UI
@@ -445,7 +446,7 @@ public class Level1Screen extends LevelScreen {
             renderer.render();
 
             gameWorld.renderBonuses(batch);
-            //gameWorld.renderPlatforms(batch);
+            gameWorld.renderPlatforms(batch);
             gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();
@@ -453,7 +454,7 @@ public class Level1Screen extends LevelScreen {
             player.render(batch);
 
             gameWorld.destroyObjects();
-            //box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
+            box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
             handleTrapsCollision(player.getTileX(), player.getTileY());
             score.setText("" + player.getBonusCounter());
         } else {
