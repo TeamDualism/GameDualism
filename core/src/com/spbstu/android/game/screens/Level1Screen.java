@@ -484,7 +484,7 @@ public class Level1Screen extends LevelScreen {
     private void inputUpdate() {
         if (player.isGrounded(gameWorld.getWorld())) {
             if (player.GetBody().getLinearVelocity().x != 0f) {
-                player.setState(RUNNING);
+                //player.setState(RUNNING);
             } else {
                 player.setState(STANDING);
             }
@@ -492,7 +492,7 @@ public class Level1Screen extends LevelScreen {
                 rope.setRopeState(Rope.ropeState.isRest);
 
         } else {
-            player.setState(JUMPING);
+            //player.setState(JUMPING);
         }
 
         if (!(rightButton.isPressed()) && !(leftButton.isPressed()) && ((rope.getRopeState() == Rope.ropeState.isRest) || (player.isGrounded(gameWorld.getWorld())))) {
@@ -500,12 +500,14 @@ public class Level1Screen extends LevelScreen {
         }
 
         if (rightButton.isPressed() && (rope.getRopeState() != Rope.ropeState.isRoped)) {
+            player.setState(RUNNING);
             player.moveRight();
         }
 
 
 
         if (leftButton.isPressed()  && (rope.getRopeState() != Rope.ropeState.isRoped)) {
+            player.setState(RUNNING);
             player.moveLeft();
         }
     }
