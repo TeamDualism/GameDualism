@@ -42,10 +42,6 @@ public class GameoverScreen extends ScreenAdapter {
         image.setWidth(WIDTH);
         stage.addActor(image);
 
-
-
-
-
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
@@ -64,8 +60,6 @@ public class GameoverScreen extends ScreenAdapter {
 
         Button restartLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/restartButton.png"))));
-        int maxButtonsHeight = HEIGHT / 6;
-        int maxButtonsWidth = WIDTH / 6;
         restartLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 2* (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(restartLevel);
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
