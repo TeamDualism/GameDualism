@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
 import static com.spbstu.android.game.utils.Constants.EXIT_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 

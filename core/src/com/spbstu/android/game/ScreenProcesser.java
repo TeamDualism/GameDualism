@@ -1,6 +1,5 @@
 package com.spbstu.android.game;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
 import com.spbstu.android.game.screens.AboutScreen;
 import com.spbstu.android.game.screens.GameoverScreen;
