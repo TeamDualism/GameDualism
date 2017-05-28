@@ -10,9 +10,12 @@ import com.spbstu.android.game.objects.Bonus;
 import com.spbstu.android.game.objects.DisappearingPlatform;
 import com.spbstu.android.game.player.Player;
 
+import static com.spbstu.android.game.player.Player.State.RUNNING;
+import static com.spbstu.android.game.player.Player.State.STANDING;
 import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
 import static com.spbstu.android.game.utils.Constants.DPLATFORM_BIT;
 import static com.spbstu.android.game.utils.Constants.EXIT_BIT;
+import static com.spbstu.android.game.utils.Constants.MPLATFORM_BIT;
 import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
 import static com.spbstu.android.game.utils.Constants.TILE_BIT;
@@ -71,6 +74,16 @@ public class GameContactListener implements ContactListener{
                     ((Player)(fixtureB.getBody().getUserData())).SetJumpNumber(1);
                 }
 
+                break;
+
+            case SENSOR_BIT | MPLATFORM_BIT:
+                if (fixtureA.getFilterData().categoryBits == SENSOR_BIT) {
+                    ((Player)(fixtureA.getBody().getUserData())).setState (STANDING);
+                    ((Player)(fixtureA.getBody().getUserData())).SetJumpNumber(1);
+                } else {
+                    ((Player)(fixtureB.getBody().getUserData())).setState (STANDING);
+                    ((Player)(fixtureB.getBody().getUserData())).SetJumpNumber(1);
+                }
                 break;
 
             case SENSOR_BIT | TILE_BIT:

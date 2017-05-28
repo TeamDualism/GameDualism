@@ -15,14 +15,19 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.component.TimeLine;
+import com.spbstu.android.game.objects.DisappearingPlatform;
 
 import static com.spbstu.android.game.player.Player.Direction.LEFT;
 import static com.spbstu.android.game.player.Player.Direction.RIGHT;
+import static com.spbstu.android.game.player.Player.State.JUMPING;
 import static com.spbstu.android.game.player.Player.State.STANDING;
+import static com.spbstu.android.game.utils.Constants.DPLATFORM_BIT;
 import static com.spbstu.android.game.utils.Constants.IMPULSE;
 import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
+import static com.spbstu.android.game.utils.Constants.MPLATFORM_BIT;
 import static com.spbstu.android.game.utils.Constants.PLAYER_BIT;
 import static com.spbstu.android.game.utils.Constants.PPM;
 import static com.spbstu.android.game.utils.Constants.SENSOR_BIT;
@@ -147,6 +152,14 @@ public abstract class Player {
 
     public void jump(int jumpNumber) {
         if (this.jumpNumber <= jumpNumber) {
+            Timer timer = new Timer();
+
+                timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        setState (JUMPING);
+                    }
+                }, Gdx.graphics.getDeltaTime ());
             body.setLinearVelocity(body.getLinearVelocity().x, 0f);
             body.applyLinearImpulse(0, body.getMass() * 10f, body.getPosition().x, body.getPosition().y, false);
             GameDualism.playSound(jumpSound);
@@ -186,8 +199,18 @@ public abstract class Player {
         Array<Contact> contactList = world.getContactList();
 
         for (Contact contact : contactList) {
-            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture))
+            if (contact.isTouching() && (contact.getFixtureA() == sensorFixture || contact.getFixtureB() == sensorFixture)) {
+
+                if (contact.getFixtureA ().getFilterData ().categoryBits == MPLATFORM_BIT) {
+                    body.setTransform(new Vector2 (contact.getFixtureB ().getBody ().getPosition ().x + contact.getFixtureA ().getBody ().getLinearVelocity ().x * Gdx.graphics.getDeltaTime (),
+                            contact.getFixtureB ().getBody ().getPosition ().y), 0);
+                }
+                if (contact.getFixtureB ().getFilterData ().categoryBits == MPLATFORM_BIT) {
+                    body.setTransform(new Vector2 (contact.getFixtureA ().getBody ().getPosition ().x + contact.getFixtureB ().getBody ().getLinearVelocity ().x * Gdx.graphics.getDeltaTime (),
+                            contact.getFixtureA ().getBody ().getPosition ().y ), 0);
+                }
                 return true;
+            }
         }
 
         return false;

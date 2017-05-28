@@ -64,7 +64,10 @@ public class GameWorld implements Disposable{
             if (object.getProperties().get("type").equals("d")) {
                 disappearingPlatformss.add(new DisappearingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/dplatform.png", Texture.class), world));
             } else {
-                movingPlatforms.add(new MovingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/mplatform.png", Texture.class), world, object.getProperties().get("dist", Integer.class)));
+                movingPlatforms.add(new MovingPlatform(rectangle.getX(), rectangle.getY(), game.assetManager.get("Maps/Tiles/mplatform.png", Texture.class), world,
+                        object.getProperties().get("dist", Integer.class),
+                        object.getProperties().get("vx", Float.class),
+                        object.getProperties().get("vy", Float.class)));
             }
         }
     }
