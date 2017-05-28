@@ -83,7 +83,7 @@ public class Level1Screen extends LevelScreen {
     private Button menuButton;
     private Button changeBroButton;
     private Label score;
-    private int maxButtonsSize = HEIGHT / 6; // не размер, а коэффициент!
+    private int maxButtonsSize = HEIGHT / 24 * 5 ; // не размер, а коэффициент!
     private final int height = Gdx.graphics.getHeight();
     private final int width = Gdx.graphics.getWidth();
 
@@ -118,8 +118,8 @@ public class Level1Screen extends LevelScreen {
         //LibGdx
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
-        map = new TmxMapLoader().load("Maps/Level-2.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+
+
 
         //Box2d
         gameWorld = new GameWorld(game);
@@ -146,6 +146,23 @@ public class Level1Screen extends LevelScreen {
                 reggie = new Reggie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
                         (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                numberWidthBlocks = map.getProperties().get("width", Integer.class);
+                numberHeightBlocks = map.getProperties().get("height", Integer.class);
+                gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit3.png"));
+                break;
+            }
+            case 3: {  // Dee's lvl
+                map = new TmxMapLoader().load("Maps/forest1.tmx");
+                ronnie = new Ronnie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 5,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                ronnie.GetBody().setActive(false);
+                reggie = new Reggie(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 5,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                numberWidthBlocks = map.getProperties().get("width", Integer.class);
+                numberHeightBlocks = map.getProperties().get("height", Integer.class);
+                gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-10, new Texture("Textures/exit3.png"));
                 break;
             }
             default: { // Misha's lvl
@@ -157,9 +174,13 @@ public class Level1Screen extends LevelScreen {
                 reggie = new Reggie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 33,
                         (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                numberWidthBlocks = map.getProperties().get("width", Integer.class);
+                numberHeightBlocks = map.getProperties().get("height", Integer.class);
+                gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit.png"));
                 break;
             }
         }
+
         //LibGdx
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
@@ -207,14 +228,13 @@ public class Level1Screen extends LevelScreen {
             layoutMusic.pause();
 
         //for Rope
-        numberWidthBlocks = map.getProperties().get("width", Integer.class);
-        numberHeightBlocks = map.getProperties().get("height", Integer.class);
+
         blocksMap = new boolean[numberHeightBlocks][numberWidthBlocks];
         initBlocks();
         listeners();
         rope = new Rope();
-        //for exit
-        gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4);
+
+
     }
 
     private void maxButtonsSizeDeterminate() {// у новых крутых мобильников очень большие разрешения,( 3840x2160 и больше), разрешение картинки кнопок конечно, эта функция учитывает это
@@ -236,13 +256,13 @@ public class Level1Screen extends LevelScreen {
         maxButtonsSizeDeterminate();
 
         stage.addActor(rightButton);
-        rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        rightButton.setBounds(WIDTH / 10 + maxButtonsSize / 2, maxButtonsSize / 4, maxButtonsSize , maxButtonsSize );
 
         stage.addActor(leftButton);
-        leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        leftButton.setBounds(WIDTH / 10 - maxButtonsSize * 3 / 4, maxButtonsSize / 4, maxButtonsSize , maxButtonsSize );
 
         stage.addActor(upButton);
-        upButton.setBounds(WIDTH *9/10, maxButtonsSize / 4, maxButtonsSize, maxButtonsSize);
+        upButton.setBounds(WIDTH * (float)0.87, maxButtonsSize / 4, maxButtonsSize , maxButtonsSize );
         upButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -262,7 +282,7 @@ public class Level1Screen extends LevelScreen {
         });
 
         stage.addActor(changeBroButton);
-        changeBroButton.setBounds(WIDTH * 9 / 10, 1.5f * maxButtonsSize, maxButtonsSize, maxButtonsSize);
+        changeBroButton.setBounds(WIDTH * (float)0.87, 1.5f * maxButtonsSize, maxButtonsSize , maxButtonsSize );
         changeBroButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -531,6 +551,11 @@ public class Level1Screen extends LevelScreen {
             case 2: { // Nastya's lvl
                 player.GetBody().setTransform(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3, player.GetBody().getAngle());
+                break;
+            }
+            case 3: { // Dee's lvl
+                player.GetBody().setTransform(16f / (2 * PPM),
+                        16f / (2 * PPM) + 16 / PPM * 5, player.GetBody().getAngle());
                 break;
             }
             default: { // Misha's lvl

@@ -61,8 +61,8 @@ public class GameWorld implements Disposable{
         }
     }
 
-    public void initExit(int x, int y) {
-        exit = new Exit(x*PPM, y*PPM, new Texture("Textures/exit.png"), world);
+    public void initExit(int x, int y,Texture texture) {
+        exit = new Exit(x*PPM, y*PPM, texture, world);
     }
 
     public void onExit()
