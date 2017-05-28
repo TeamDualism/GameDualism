@@ -17,8 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.spbstu.android.game.GameDualism;
 import com.spbstu.android.game.ScreenProcesser;
 
-import java.awt.Menu;
-
 import static com.spbstu.android.game.utils.Constants.HEIGHT;
 import static com.spbstu.android.game.utils.Constants.WIDTH;
 
@@ -42,15 +40,12 @@ public class GameoverScreen extends ScreenAdapter {
         image.setWidth(WIDTH);
         stage.addActor(image);
 
-
-
-
-
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
-        int maxButtonsSize = HEIGHT / 6;
-        menuButton.setBounds((WIDTH - maxButtonsSize) / 100f, 2 * (HEIGHT - maxButtonsSize) / 100f, maxButtonsSize, maxButtonsSize);
+        int maxButtonsHeight = HEIGHT /6;
+        int maxButtonsWidth = WIDTH /6;
+        menuButton.setBounds((WIDTH - maxButtonsWidth) / 2f, (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
@@ -63,8 +58,6 @@ public class GameoverScreen extends ScreenAdapter {
 
         Button restartLevel = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/restartButton.png"))));
-        int maxButtonsHeight = HEIGHT / 6;
-        int maxButtonsWidth = WIDTH / 6;
         restartLevel.setBounds((WIDTH - maxButtonsWidth) / 2f, 2* (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         stage.addActor(restartLevel);
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {

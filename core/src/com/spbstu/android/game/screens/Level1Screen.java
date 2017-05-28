@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -139,30 +138,14 @@ public class Level1Screen extends LevelScreen {
         switch(LevelNumber) {
             case 2: {  // Nastya's lvl
                 map = new TmxMapLoader().load("Maps/Level-2.tmx");
+                //gameWorld.initExit(numberWidthBlocks -20,numberHeightBlocks-20);
                 ronnie = new Ronnie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 90)));
                 ronnie.GetBody().setActive(false);
                 reggie = new Reggie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
-                numberWidthBlocks = map.getProperties().get("width", Integer.class);
-                numberHeightBlocks = map.getProperties().get("height", Integer.class);
-                gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit3.png"));
-                break;
-            }
-            case 3: {  // Dee's lvl
-                map = new TmxMapLoader().load("Maps/forest1.tmx");
-                ronnie = new Ronnie(16f / (2 * PPM),
-                        16f / (2 * PPM) + 16 / PPM * 5,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
-                ronnie.GetBody().setActive(false);
-                reggie = new Reggie(16f / (2 * PPM),
-                        16f / (2 * PPM) + 16 / PPM * 5,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
-                numberWidthBlocks = map.getProperties().get("width", Integer.class);
-                numberHeightBlocks = map.getProperties().get("height", Integer.class);
-                gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-10, new Texture("Textures/exit3.png"));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 90)));
                 break;
             }
             default: { // Misha's lvl
@@ -327,7 +310,7 @@ public class Level1Screen extends LevelScreen {
             public void clicked(InputEvent event, float x, float y) {
                 pauseMode();
                 pause();
-                screenProcesser.setPlayPauseScreen();
+                screenProcesser.setPlayPauseScreen(LevelNumber);
                 //game.setScreen(new PlayPauseScreen(game, LevelNumber));
             }
         });

@@ -1,6 +1,5 @@
 package com.spbstu.android.game;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
 import com.spbstu.android.game.screens.AboutScreen;
 import com.spbstu.android.game.screens.GameoverScreen;
@@ -25,7 +24,7 @@ public class ScreenProcesser {
     public ScreenProcesser(GameDualism gameToSet) {
         game = gameToSet;
         menuScreen = new MenuScreen(game);
-        playPauseScreen = new PlayPauseScreen(game,1);
+        playPauseScreen = new PlayPauseScreen(game);
         gameOverScreen = new GameoverScreen(game);
         aboutScreen = new AboutScreen(game);
         screenLevel = new ScreenLevel(game);
@@ -81,8 +80,9 @@ public class ScreenProcesser {
         game.setScreen(menuScreen);
     }
 
-    public void setPlayPauseScreen(){
+    public void setPlayPauseScreen(int LevelNumber ){
         playPauseScreen.drawCurrentSoundButtons();
+        playPauseScreen.SetLevelNumber(LevelNumber);
         game.setScreen(playPauseScreen);
     }
 

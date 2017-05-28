@@ -6,11 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.spbstu.android.game.component.TimeLine;
-import com.spbstu.android.game.utils.TextureUtil;
-import static com.spbstu.android.game.player.Player.Direction.LEFT;
-import static com.spbstu.android.game.player.Player.Direction.RIGHT;
-import static com.spbstu.android.game.utils.Constants.IMPULSE;
-import static com.spbstu.android.game.utils.Constants.MAX_VELOCITY;
 
 
 public class Reggie extends Player {

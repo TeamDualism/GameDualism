@@ -1,17 +1,14 @@
 package com.spbstu.android.game.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.spbstu.android.game.objects.DisappearingPlatform;
-import com.spbstu.android.game.objects.Object;
-import com.spbstu.android.game.player.Player;
+import com.badlogic.gdx.utils.Timer;
 import com.spbstu.android.game.objects.Bonus;
-import com.spbstu.android.game.screens.MenuScreen;
+import com.spbstu.android.game.objects.DisappearingPlatform;
+import com.spbstu.android.game.player.Player;
 
 import static com.spbstu.android.game.utils.Constants.BONUS_BIT;
 import static com.spbstu.android.game.utils.Constants.DPLATFORM_BIT;
