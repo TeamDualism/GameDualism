@@ -49,8 +49,9 @@ public class GameoverScreen extends ScreenAdapter {
         menuButton = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/home.png"))));
         stage.addActor(menuButton);
-        int maxButtonsSize = HEIGHT / 6;
-        menuButton.setBounds((WIDTH - maxButtonsSize) / 100f, 2 * (HEIGHT - maxButtonsSize) / 100f, maxButtonsSize, maxButtonsSize);
+        int maxButtonsHeight = HEIGHT /6;
+        int maxButtonsWidth = WIDTH /6;
+        menuButton.setBounds((WIDTH - maxButtonsWidth) / 2f, (HEIGHT - maxButtonsHeight) / 7f, maxButtonsWidth, maxButtonsHeight);
         menuButton.setVisible(true);
         menuButton.addListener(new ClickListener(Input.Buttons.LEFT) {
                                    @Override
