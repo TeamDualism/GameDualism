@@ -36,7 +36,6 @@ public class Rope {
     public void buildJoint(World world, float x, float y, Body playerBody, boolean blocksMap[][]) {
         float possibleX ,possibleY;
         if ((y > playerBody.getPosition().y * PPM + 1.5 * PPM) && (Math.abs(x - playerBody.getPosition().x * PPM) < 7 * PPM)) {
-
             L = norm(playerBody.getPosition().x * PPM, x, playerBody.getPosition().y * PPM, y);
             H = y - playerBody.getPosition().y * PPM;
             alpha = (float) (Math.asin(H / L));
@@ -50,10 +49,10 @@ public class Rope {
                 if(possibleY > (blocksMap.length-1) *PPM)
                     possibleY =  (blocksMap.length-1) *PPM;
                 if(possibleX > (blocksMap[0].length-1) *PPM)
-                    xRopedBlock =  (blocksMap[0].length-1) *PPM;
+                    possibleX =  (blocksMap[0].length-1) *PPM;
                 if(possibleX < 0)
-                    xRopedBlock =  0;
-                if (blocksMap[(int) Math.floor((possibleY) / PPM)][(int) Math.floor((possibleX) / PPM) ]) {
+                    possibleX =  0;
+                if (blocksMap[(int) Math.floor((possibleY) / PPM)][(int) (Math.floor((possibleX) / PPM)) ]) {
                     xRopedBlock = possibleX;
                     yRopedBlock = possibleY;
                     if(state == ropeState.isRoped)
