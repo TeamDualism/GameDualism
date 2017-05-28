@@ -146,8 +146,26 @@ public class Level1Screen extends LevelScreen {
                 reggie = new Reggie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
                         (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 90)));
-                break;
-            }
+            numberWidthBlocks = map.getProperties().get("width", Integer.class);
+            numberHeightBlocks = map.getProperties().get("height", Integer.class);
+            gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit3.png"));
+            break;
+        }
+        case 3: {  // Dee's lvl
+            map = new TmxMapLoader().load("Maps/forest1.tmx");
+            ronnie = new Ronnie(16f / (2 * PPM),
+                    16f / (2 * PPM) + 16 / PPM * 5,
+                    (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+            ronnie.GetBody().setActive(false);
+            reggie = new Reggie(16f / (2 * PPM),
+                    16f / (2 * PPM) + 16 / PPM * 5,
+                    (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+            numberWidthBlocks = map.getProperties().get("width", Integer.class);
+            numberHeightBlocks = map.getProperties().get("height", Integer.class);
+            gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-10, new Texture("Textures/exit3.png"));
+            break;
+        }
+
             default: { // Misha's lvl
                 map = new TmxMapLoader().load("Maps/Level-1.tmx");
                 ronnie = new Ronnie(16f / (2 * PPM),
