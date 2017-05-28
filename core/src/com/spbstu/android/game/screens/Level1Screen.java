@@ -197,7 +197,7 @@ public class Level1Screen extends LevelScreen {
         trapsMap = new boolean[map.getProperties().get("height", Integer.class)][map.getProperties().get("width", Integer.class)];
         initTrapsMap();
         gameWorld.initBonuses(map);
-        //gameWorld.initDPlatforms(map);
+        gameWorld.initPlatforms(map);
 
 
         //UI
@@ -446,7 +446,7 @@ public class Level1Screen extends LevelScreen {
             renderer.render();
 
             gameWorld.renderBonuses(batch);
-            //gameWorld.renderPlatforms(batch);
+            gameWorld.renderPlatforms(batch);
             gameWorld.renderExit(batch);
             stage.act(delta);
             stage.draw();

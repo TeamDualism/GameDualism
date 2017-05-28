@@ -18,6 +18,8 @@ import com.spbstu.android.game.objects.Exit;
 import com.spbstu.android.game.objects.MovingPlatform;
 import com.spbstu.android.game.objects.Object;
 
+import java.util.Iterator;
+
 import static com.spbstu.android.game.utils.Constants.GRAVITY;
 import static com.spbstu.android.game.utils.Constants.PPM;
 
@@ -110,13 +112,13 @@ public class GameWorld implements Disposable{
     public void destroyObjects() {
         if (objectsToDestroy.size > 0) {
             for (int i = 0; i < objectsToDestroy.size; i++) {
-                world.destroyBody(objectsToDestroy.get(i).getBody());
                 if (objectsToDestroy.get(i) instanceof Bonus) {
                     bonuses.removeValue((Bonus)(objectsToDestroy.get(i)), true);
                 }
                 if (objectsToDestroy.get(i) instanceof DisappearingPlatform) {
                     disappearingPlatformss.removeValue((DisappearingPlatform)(objectsToDestroy.get(i)), true);
                 }
+                world.destroyBody(objectsToDestroy.get(i).getBody());
                 objectsToDestroy.removeIndex(i);
             }
         }
