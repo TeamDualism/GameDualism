@@ -141,7 +141,7 @@ public class Level1Screen extends LevelScreen {
                 map = new TmxMapLoader().load("Maps/Level-2.tmx");
                 ronnie = new Ronnie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 90)));
                 ronnie.GetBody().setActive(false);
                 reggie = new Reggie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
