@@ -1,0 +1,28 @@
+DUALISM TEAM(c) END USER LICENCSE AGREEMENT
+
+THE “SOFTWARE” INCLUDES ALL SOFTWARE INCLUDED WITH THIS AGREEMENT, THE ACCOMPANYING MANUAL(S), PACKAGING, AND OTHER WRITTEN FILES, ELECTRONIC OR ON-LINE MATERIALS OR DOCUMENTATION, AND ANY AND ALL COPIES OF SUCH SOFTWARE AND ITS MATERIALS.
+
+THE SOFTWARE IS LICENSED, NOT SOLD. BY OPENING, DOWNLOADING, INSTALLING, COPYING, OR OTHERWISE USING THE SOFTWARE, AND ANY OTHER MATERIALS INCLUDED WITH THE SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT WITH THE DUALISM TEAM (“LICENSOR”).
+
+PLEASE READ THIS AGREEMENT CAREFULLY. IF YOU DO NOT AGREE TO ALL THE TERMS OF THIS AGREEMENT, YOU ARE NOT PERMITTED TO OPEN, DOWNLOAD, INSTALL, COPY, OR USE THE SOFTWARE.
+
+Subject to this Agreement and its terms and conditions, Licensor hereby grants you a nonexclusive, non-transferable, limited, and revocable right and license to use one copy of the Software for your personal, non-commercial use for gameplay on a single mobile device running the operating system Android(OS Android). Your license rights are subject to your compliance with this Agreement. The term of your license under this Agreement shall commence on the date that you install or otherwise use the Software and ends on the earlier date of either your disposal of the Software or the termination of this Agreement (see below).
+
+The Software is licensed, not sold, to you, and you hereby acknowledge that no title or ownership in the Software is being transferred or assigned and this Agreement should not be construed as a sale of any rights in the Software. Licensor retains all right, title, and interest to the Software, including, but not limited to, all copyrights, trademarks, trade secrets, trade names, proprietary rights, patents, titles, computer codes, audiovisual effects, themes, characters, character names, stories, dialog, settings, artwork, sounds effects, musical works, and moral rights.
+
+You agree not to:
+
+1) commercially exploit the Software;
+2) distribute, lease, license, sell, rent, convert into convertible currency, or otherwise transfer or assign the Software, or any copies of the Software, including but not limited to Virtual Goods or Virtual Currency (defined below) without the express prior written consent of Licensor or as expressly set forth in this Agreement;
+3) make a copy of the Software or any part thereof (other than as set forth herein);
+4) make a copy of the Software available on a network for use or download by multiple users;
+5) copy the Software onto a hard drive or other storage device in order to bypass the requirement to run the Software from the included CD-ROM or DVD-ROM (this prohibition does not apply to copies in whole or in part that may be made by the Software itself during installation in order to run more efficiently);
+6) use or copy the Software at a computer gaming center or any other location-based site; provided, that Licensor may offer you a separate license agreement to make the Software available for commercial use;
+reverse engineer, decompile, disassemble, display, perform, prepare derivative works based on, or otherwise modify the Software, in whole or in part;
+7) remove or modify any proprietary notices, marks, or labels contained on or within the Software;
+restrict or inhibit any other user from using and enjoying any online features of the Software;
+8) cheat or utilize any unauthorized robot, spider, or other program in connection with any online features of the Software;
+9) violate any terms, policies, licenses, or code of conduct for any online features of the Software; or
+
+
+DISCLAIMER OF WARRANTY. The software is provided "as is," without any warranty or representation of any kind. To the maximum extent permitted by applicable law, the software is provided by Dualism team and its suppliers "as is" without any condition or warranty whatsoever.  All conditions and warranties, whether express or implied, are disclaimed by Dualism team and its suppliers, including, without limitation, the implied conditions and/or warranties of merchantability, title, noninfringement and fitness for a particular purpose.  In the event of any actual breach of this license by preemptive, licensee's sole and exclusive remedy shall be the recission of this license and recover of any sums paid by licensee to Dualism team.
