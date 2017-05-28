@@ -48,7 +48,7 @@ public class AboutScreen extends ScreenAdapter {
                 new TextureRegion(new Texture("Buttons/menu.png"))));
 
         stage.addActor(menuButton);
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
+        /*FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 38;
         BitmapFont font12 = generator.generateFont(parameter);
@@ -63,7 +63,7 @@ public class AboutScreen extends ScreenAdapter {
                 "Polytechnic University\n" +
                 "May, 2017" , new Label.LabelStyle(font12, Color.WHITE));
         label.setPosition(Gdx.graphics.getWidth()/3f, 2*Gdx.graphics.getHeight()/ 5f);
-        stage.addActor(label);
+        stage.addActor(label);*/
 
         menuButton.setBounds(999*(WIDTH - maxButtonsSize + 7 )/1000f, 99*(HEIGHT - maxButtonsSize +10)/100f, maxButtonsSize * 2 / 3, maxButtonsSize * 2 / 3);
         menuButton.setVisible(true);
