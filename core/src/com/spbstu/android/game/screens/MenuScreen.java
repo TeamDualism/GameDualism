@@ -43,7 +43,7 @@ public class MenuScreen implements Screen {
         Button about = new ImageButton(new TextureRegionDrawable(
                 new TextureRegion(new Texture("Buttons/about.png"))));
         Button help = new ImageButton(new TextureRegionDrawable(
-                new TextureRegion(new Texture("Buttons/simple1.png"))));
+                new TextureRegion(new Texture("Buttons/help.png"))));
         final Sound buttonEffect = Gdx.audio.newSound(Gdx.files.internal("Audio/menu_button.wav"));
 
         if (game.getIsMusicOn())
