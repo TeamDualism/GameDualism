@@ -1,84 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="17" tilewidth="16" tileheight="16" nextobjectid="152">
- <tileset firstgid="1" name="environment-tiles" tilewidth="16" tileheight="16" tilecount="672" columns="42">
-  <image source="Tiles/environment-tiles.png" width="672" height="256"/>
- </tileset>
+<map version="2017.05.26" orientation="orthogonal" renderorder="right-down" width="120" height="17" tilewidth="16" tileheight="16" nextobjectid="152">
+ <tileset firstgid="1" source="environment-tiles.tsx"/>
  <tileset firstgid="673" name="environment-background" tilewidth="16" tileheight="16" tilecount="280" columns="28">
   <image source="Tiles/environment-background.png" width="448" height="160"/>
  </tileset>
- <tileset firstgid="953" name="lava-water" tilewidth="16" tileheight="16" tilecount="40" columns="8">
-  <image source="Tiles/lava-water.png" width="128" height="80"/>
-  <tile id="3">
-   <animation>
-    <frame tileid="2" duration="200"/>
-    <frame tileid="1" duration="200"/>
-    <frame tileid="0" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="7">
-   <animation>
-    <frame tileid="6" duration="200"/>
-    <frame tileid="5" duration="200"/>
-    <frame tileid="4" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="11">
-   <animation>
-    <frame tileid="10" duration="200"/>
-    <frame tileid="9" duration="200"/>
-    <frame tileid="8" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="15">
-   <animation>
-    <frame tileid="14" duration="200"/>
-    <frame tileid="13" duration="200"/>
-    <frame tileid="12" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="19">
-   <animation>
-    <frame tileid="18" duration="200"/>
-    <frame tileid="17" duration="200"/>
-    <frame tileid="16" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="23">
-   <animation>
-    <frame tileid="22" duration="200"/>
-    <frame tileid="21" duration="200"/>
-    <frame tileid="20" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="27">
-   <animation>
-    <frame tileid="26" duration="200"/>
-    <frame tileid="25" duration="200"/>
-    <frame tileid="24" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="31">
-   <animation>
-    <frame tileid="30" duration="200"/>
-    <frame tileid="29" duration="200"/>
-    <frame tileid="28" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="35">
-   <animation>
-    <frame tileid="34" duration="200"/>
-    <frame tileid="33" duration="200"/>
-    <frame tileid="32" duration="200"/>
-   </animation>
-  </tile>
-  <tile id="39">
-   <animation>
-    <frame tileid="38" duration="200"/>
-    <frame tileid="37" duration="200"/>
-    <frame tileid="36" duration="200"/>
-   </animation>
-  </tile>
- </tileset>
+ <tileset firstgid="953" source="lava-water.tsx"/>
  <objectgroup name="Line">
   <object id="1" x="0" y="224">
    <polyline points="0,0 48,0 48,48"/>
@@ -258,7 +184,7 @@
    <polyline points="0,0 16,0 16,8 0,8 0,0"/>
   </object>
  </objectgroup>
- <objectgroup name="Platforms">
+ <objectgroup name="Platforms" visible="0">
   <object id="143" x="1504" y="144" width="16" height="16">
    <properties>
     <property name="type" value="d"/>
@@ -459,7 +385,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name=" Main obstacles" width="120" height="17">
+ <layer name=" Main obstacles" width="120" height="17" visible="0">
   <data encoding="csv">
 297,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,298,299,0,0,298,349,350,349,350,349,350,349,350,349,350,349,350,349,350,349,350,54,350,275,276,275,276,275,276,275,276,89,93,89,93,89,93,89,93,89,88,89,88,89,88,89,88,89,88,89,88,89,88,89,88,89,88,89,88,89,346,347,93,347,346,347,346,93,346,347,346,347,346,347,346,347,93,347,346,347,346,347,93,347,346,347,346,347,346,347,346,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,174,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,346,347,93,347,346,347,346,347,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
