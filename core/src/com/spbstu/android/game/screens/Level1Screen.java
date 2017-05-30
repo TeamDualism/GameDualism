@@ -166,6 +166,20 @@ public class Level1Screen extends LevelScreen {
             gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-10, new Texture("Textures/exit3.png"));
             break;
         }
+            case 4: {  // Dima's level
+                map = new TmxMapLoader().load("Maps/castle.tmx");
+                ronnie = new Ronnie(16f / (2 * PPM) + 16f / (2 * PPM)*5,
+                        16f / (2 * PPM) + 16 / PPM * 21,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                ronnie.GetBody().setActive(false);
+                reggie = new Reggie(16f / (2 * PPM)  + 16f / (2 * PPM)*5,
+                        16f / (2 * PPM) + 16 / PPM * 21,
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                numberWidthBlocks = map.getProperties().get("width", Integer.class);
+                numberHeightBlocks = map.getProperties().get("height", Integer.class);
+                gameWorld.initExit(numberWidthBlocks - 5,numberHeightBlocks-5, new Texture("Textures/exit3.png"));
+                break;
+            }
 
             default: { // Misha's lvl
                 map = new TmxMapLoader().load("Maps/Level-1.tmx");
@@ -560,6 +574,11 @@ public class Level1Screen extends LevelScreen {
             case 3: { // Dee's lvl
                 player.GetBody().setTransform(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 5, player.GetBody().getAngle());
+                break;
+            }
+            case 4: { // Dima's lvl
+                player.GetBody().setTransform(16f / (2 * PPM) * 6,
+                        16f / (2 * PPM) + 16 / PPM * 21, player.GetBody().getAngle());
                 break;
             }
             default: { // Misha's lvl
