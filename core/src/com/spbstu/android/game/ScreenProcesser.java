@@ -6,6 +6,7 @@ import com.spbstu.android.game.screens.GameoverScreen;
 import com.spbstu.android.game.screens.Help2Screen;
 import com.spbstu.android.game.screens.Help3Screen;
 import com.spbstu.android.game.screens.HelpScreen;
+import com.spbstu.android.game.screens.Level1Screen;
 import com.spbstu.android.game.screens.LevelScreen;
 import com.spbstu.android.game.screens.MenuScreen;
 import com.spbstu.android.game.screens.PlayPauseScreen;
@@ -16,7 +17,7 @@ import com.spbstu.android.game.screens.ScreenLevel;
  */
 public class ScreenProcesser {
     private MenuScreen menuScreen;
-    private Screen currentLevelScreen;
+    private Level1Screen currentLevelScreen;
     private boolean isCurrentLevelScreenSetted;
     private PlayPauseScreen playPauseScreen;
     private GameoverScreen gameOverScreen;
@@ -62,7 +63,7 @@ public class ScreenProcesser {
      *          false if currentLevelScreen is setted
      */
 
-    public boolean setLevelScreen(LevelScreen newCurrentLevelScreen){
+    public boolean setLevelScreen(Level1Screen newCurrentLevelScreen){
         if(!isCurrentLevelScreenSetted){
             currentLevelScreen = newCurrentLevelScreen;
             isCurrentLevelScreenSetted = true;
@@ -71,7 +72,7 @@ public class ScreenProcesser {
         return false;
     }
 
-    public Screen getCurrentLevelScreen(){
+    public Level1Screen getCurrentLevelScreen(){
         return currentLevelScreen;
     }
 

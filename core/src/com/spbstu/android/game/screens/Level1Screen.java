@@ -468,7 +468,7 @@ public class Level1Screen extends LevelScreen {
             player.render(batch);
 
             gameWorld.destroyObjects();
-            box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
+            //box2DDebugRenderer.render(gameWorld.getWorld(), camera.combined.scl(PPM));//надо только в дебаге
             handleTrapsCollision(player.getTileX(), player.getTileY());
             score.setText("" + player.getBonusCounter());
         } else {
@@ -554,7 +554,10 @@ public class Level1Screen extends LevelScreen {
         //game.setScreen(new GameoverScreen(game));
         game.playSound(gameOverSound);
         layoutMusic.stop();
-        screenProcesser.disposeCurrentLevelScreen();
+    }
+
+    public int getLvlNumber(){
+        return LevelNumber;
     }
 
     private void restart() {

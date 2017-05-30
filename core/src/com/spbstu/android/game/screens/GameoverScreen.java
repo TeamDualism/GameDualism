@@ -51,6 +51,7 @@ public class GameoverScreen extends ScreenAdapter {
                                    @Override
                                    public void clicked(InputEvent event, float x, float y) {
                                        GameDualism.playSound(buttonEffect);
+                                       screenProcesser.disposeCurrentLevelScreen();
                                        screenProcesser.setMenuScreen();
                                    }
                                }
@@ -63,8 +64,11 @@ public class GameoverScreen extends ScreenAdapter {
         restartLevel.addListener(new ClickListener(Input.Buttons.LEFT) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                int lvlNumber = screenProcesser.getCurrentLevelScreen().getLvlNumber();
                 GameDualism.playSound(buttonEffect);
                 System.out.println("clicked");
+                screenProcesser.disposeCurrentLevelScreen();
+                screenProcesser.setLevelScreen(new Level1Screen(game, lvlNumber));
                 screenProcesser.setCurrentLevelScreen();
             }
         });
