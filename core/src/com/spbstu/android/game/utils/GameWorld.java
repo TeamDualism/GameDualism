@@ -79,8 +79,10 @@ public class GameWorld implements Disposable{
     public void onExit()
     {
         destroyObjects();
+        screenProcesser.disposeCurrentLevelScreen();
         screenProcesser.setMenuScreen();
     }
+
     public void renderBonuses(Batch batch) {
         batch.begin();
 
