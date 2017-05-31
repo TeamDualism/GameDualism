@@ -142,11 +142,11 @@ public class Level1Screen extends LevelScreen {
                 //gameWorld.initExit(numberWidthBlocks -20,numberHeightBlocks-20);
                 ronnie = new Ronnie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 90)));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 150)));
                 ronnie.GetBody().setActive(false);
                 reggie = new Reggie(16f / (2 * PPM),
                         16f / (2 * PPM) + 16 / PPM * 3,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 90)));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 150)));
             numberWidthBlocks = map.getProperties().get("width", Integer.class);
             numberHeightBlocks = map.getProperties().get("height", Integer.class);
             gameWorld.initExit(numberWidthBlocks - 2,numberHeightBlocks-4, new Texture("Textures/exit3.png"));
@@ -170,11 +170,11 @@ public class Level1Screen extends LevelScreen {
                 map = new TmxMapLoader().load("Maps/castle.tmx");
                 ronnie = new Ronnie(16f / (2 * PPM) + 16f / (2 * PPM)*5,
                         16f / (2 * PPM) + 16 / PPM * 21,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 180)));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob, 120)));
                 ronnie.GetBody().setActive(false);
                 reggie = new Reggie(16f / (2 * PPM)  + 16f / (2 * PPM)*5,
                         16f / (2 * PPM) + 16 / PPM * 21,
-                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 180)));
+                        (16 / PPM - 0.1f) / 2, gameWorld.getWorld(), prepareTimeLine(new TimeLine(Background, knob_warm, 120)));
                 numberWidthBlocks = map.getProperties().get("width", Integer.class);
                 numberHeightBlocks = map.getProperties().get("height", Integer.class);
                 gameWorld.initExit(numberWidthBlocks - 5,numberHeightBlocks-5, new Texture("Textures/exit3.png"));
