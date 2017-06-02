@@ -139,6 +139,8 @@ public class GameWorld implements Disposable{
     }
 
     public void addToDestroy(Object toDestroy) {
-        objectsToDestroy.add(toDestroy);
+        if (toDestroy != null) {
+            objectsToDestroy.add(toDestroy);
+        }
     }
 }
